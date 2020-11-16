@@ -12,6 +12,7 @@ import {BackEndDOMHelper} from './BackEndDOMHelper.js';
 import {SchemaHelper} from './SchemaHelper.js';
 import {LayoutHelper} from './LayoutHelper.js';
 import {TimelineHelper} from './TimelineHelper.js';
+import {MalformationRepairHelper} from './MalformationRepairHelper.js';
 import {ALL_RESPONSIVE_SIZE_REGEX, ALL_RESPONSIVE_OFFSET_REGEX, FORWARD_STYLE_TO_CHILDREN_CLASS_LIST, INHERITING_COMPONENT_RESERVED_ATTRIBUTE_NAMES, INHERITING_COMPONENT_RESERVED_STYLE_NAMES, BACKEND_DATA_EXTENSIONS} from '../../Constants.js';
 
 declare let js_beautify;
@@ -21,7 +22,7 @@ declare let html_beautify;
 const merging_beautify = (beautified_content: string) => {
 	if (!beautified_content) return beautified_content;
 	
-	return beautified_content.replace(/\n[ \t]+</g, '\n<').replace(/ ([a-zA-Z0-9\_\-]+=")/g, '\n    $1');
+	return beautified_content.replace(/\n[ \t]+</g, '\n<').replace(/></g, '>\n<').replace(/ ([a-zA-Z0-9\_\-]+=")/g, '\n    $1');
 };
 
 let cacheOfGeneratedFrontEndCodeForAllPages: any = {};
@@ -51,7 +52,10 @@ let InternalAnimations = {};
 let backEndControllerBlobSHADict = {};
 let frontEndComponentsBlobSHADict = {};
 let viewBlobSHADict = {};
-let version = 1.1;
+let routeBlobSHA = null;
+let controllerBlobSHA = null;
+let siteBundleBlobSHA = null;
+let version = 1.2;
 
 const DEFAULT_FLOW_PAGE_HTML = `<body><div class="container-fluid internal-fsb-begin" internal-fsb-guid="0"><div class="row internal-fsb-strict-layout internal-fsb-begin-layout internal-fsb-allow-cursor"></div></div></body>`.split('\n');
 const DEFAULT_SINGLE_ITEM_EDITING_HTML = `<body><div class="container-fluid internal-fsb-begin" internal-fsb-guid="0"><div class="row internal-fsb-strict-layout internal-fsb-begin-layout"></div></div></body>`.split('\n');
@@ -95,7 +99,10 @@ var WorkspaceHelper = {
 	    }, removeSHADict ? {} : {
 	      backEndControllerBlobSHADict: backEndControllerBlobSHADict,
 	      frontEndComponentsBlobSHADict: frontEndComponentsBlobSHADict,
-	      viewBlobSHADict: viewBlobSHADict
+	      viewBlobSHADict: viewBlobSHADict,
+				routeBlobSHA: routeBlobSHA,
+				controllerBlobSHA: controllerBlobSHA,
+				siteBundleBlobSHA: siteBundleBlobSHA
 	    }
    	);
   },
@@ -113,29 +120,64 @@ var WorkspaceHelper = {
     backEndControllerBlobSHADict = data.backEndControllerBlobSHADict || {};
     frontEndComponentsBlobSHADict = data.frontEndComponentsBlobSHADict || {};
     viewBlobSHADict = data.viewBlobSHADict || {};
+    routeBlobSHA = data.routeBlobSHA || null;
+    controllerBlobSHA = data.controllerBlobSHA || null;
+    siteBundleBlobSHA = data.siteBundleBlobSHA || null;
     
     InternalProjectSettings.currentMode = 'site';
     
     if (data) {
-    	if (!data.version || data.version == 1) {
-	    	for (let key in InternalSites) {
-	    		if (InternalSites.hasOwnProperty(key)) {
-	    			InternalSites[key].body = html_beautify(InternalSites[key].body || '').split('\n');
-	    		}
-	    	}
-	    	for (let key in InternalComponents) {
-	    		if (InternalComponents.hasOwnProperty(key)) {
-	    			InternalComponents[key].html = html_beautify(InternalComponents[key].html || '').split('\n');
-	    		}
-	    	}
-	    	for (let key in InternalPopups) {
-	    		if (InternalPopups.hasOwnProperty(key)) {
-	    			InternalPopups[key].html = html_beautify(InternalPopups[key].html || '').split('\n');
-	    		}
-	    	}
-	    	InternalDataFlows.default = html_beautify(InternalDataFlows.default || '').split('\n');
-	    	InternalServices.default = html_beautify(InternalServices.default || '').split('\n');
-	   	}
+      if (!data.version || data.version == 1) {
+        for (let key in InternalSites) {
+          if (InternalSites.hasOwnProperty(key)) {
+            InternalSites[key].body = html_beautify(InternalSites[key].body || '').split('\n');
+          }
+        }
+        for (let key in InternalComponents) {
+          if (InternalComponents.hasOwnProperty(key)) {
+            InternalComponents[key].html = html_beautify(InternalComponents[key].html || '').split('\n');
+          }
+        }
+        for (let key in InternalPopups) {
+          if (InternalPopups.hasOwnProperty(key)) {
+            InternalPopups[key].html = html_beautify(InternalPopups[key].html || '').split('\n');
+          }
+        }
+        InternalDataFlows.default = html_beautify(InternalDataFlows.default || '').split('\n');
+        InternalServices.default = html_beautify(InternalServices.default || '').split('\n');
+      }
+      if (!data.version || data.version <= 1.1) {
+        for (let key in InternalSites) {
+          if (InternalSites.hasOwnProperty(key)) {
+            for (let extension of BACKEND_DATA_EXTENSIONS) {
+              if (InternalSites[key].extensions && InternalSites[key].extensions.hasOwnProperty(extension)) {
+                InternalSites[key].extensions[extension] = InternalSites[key].extensions[extension] &&
+                	InternalSites[key].extensions[extension].split('\n') || null;
+              }
+            }
+          }
+        }
+        for (let key in InternalComponents) {
+          if (InternalComponents.hasOwnProperty(key)) {
+            for (let extension of BACKEND_DATA_EXTENSIONS) {
+              if (InternalComponents[key].extensions && InternalComponents[key].extensions.hasOwnProperty(extension)) {
+                InternalComponents[key].extensions[extension] = InternalComponents[key].extensions[extension] &&
+                	InternalComponents[key].extensions[extension].split('\n') || null;
+              }
+            }
+          }
+        }
+        for (let key in InternalPopups) {
+          if (InternalPopups.hasOwnProperty(key)) {
+            for (let extension of BACKEND_DATA_EXTENSIONS) {
+              if (InternalPopups[key].extensions && InternalPopups[key].extensions.hasOwnProperty(extension)) {
+                InternalPopups[key].extensions[extension] = InternalPopups[key].extensions[extension] &&
+                	InternalPopups[key].extensions[extension].split('\n') || null;
+              }
+            }
+          }
+        }
+      }
     }
     
     WorkspaceHelper.loadWorkspaceData();
@@ -180,10 +222,15 @@ var WorkspaceHelper = {
       //
       if (HTMLHelper.getNextSibling(document.head).tagName == 'HEAD') HTMLHelper.getNextSibling(document.head).remove();
       
-      Object.assign(InternalProjectSettings, page.extensions);
+      for (let key of BACKEND_DATA_EXTENSIONS) {
+      	if (page.extensions.hasOwnProperty(key)) {
+        	InternalProjectSettings[key] = page.extensions[key] && page.extensions[key].join('\n') || null;
+        }
+      }
       
       WorkspaceHelper.updateInPageComponents();
       WorkspaceHelper.updateInheritingComponents();
+      MalformationRepairHelper.repair();
       
       FontHelper.initializeFontData(page.head.fonts);
       StylesheetHelper.initializeStylesheetData(InternalStylesheets);
@@ -224,9 +271,9 @@ var WorkspaceHelper = {
       if (component == null) return;
       
       document.body.outerHTML = (DEFAULT_SINGLE_ITEM_EDITING_HTML).join('\n');
-      document.body.firstChild.firstChild.innerHTML = (component.html || DEFAULT_COMPONENT_HTML).join('\n');
+      document.body.firstElementChild.firstElementChild.innerHTML = (component.html || DEFAULT_COMPONENT_HTML).join('\n');
       
-      HTMLHelper.setAttribute(document.body.firstChild.firstChild.firstChild, 'internal-fsb-guid', InternalProjectSettings.editingComponentID);
+      HTMLHelper.setAttribute(document.body.firstElementChild.firstElementChild.firstElementChild, 'internal-fsb-guid', InternalProjectSettings.editingComponentID);
       
       // The second head element did appear after setting content to the outerHTML of body element.
       // Remove the extra one.
@@ -235,6 +282,7 @@ var WorkspaceHelper = {
       
       WorkspaceHelper.updateInPageComponents();
       WorkspaceHelper.updateInheritingComponents();
+      MalformationRepairHelper.repair();
       
       StylesheetHelper.initializeStylesheetData(InternalStylesheets);
       AnimationHelper.initializeStylesheetData(InternalAnimations);
@@ -250,9 +298,9 @@ var WorkspaceHelper = {
       if (popup == null) return;
       
       document.body.outerHTML = (DEFAULT_SINGLE_ITEM_EDITING_HTML).join('\n');
-      document.body.firstChild.firstChild.innerHTML = (popup.html || DEFAULT_POPUP_HTML).join('\n');
+      document.body.firstElementChild.firstElementChild.innerHTML = (popup.html || DEFAULT_POPUP_HTML).join('\n');
       
-      HTMLHelper.setAttribute(document.body.firstChild.firstChild.firstChild, 'internal-fsb-guid', InternalProjectSettings.editingPopupID)
+      HTMLHelper.setAttribute(document.body.firstElementChild.firstElementChild.firstElementChild, 'internal-fsb-guid', InternalProjectSettings.editingPopupID)
       
       // The second head element did appear after setting content to the outerHTML of body element.
       // Remove the extra one.
@@ -261,6 +309,7 @@ var WorkspaceHelper = {
       
       WorkspaceHelper.updateInPageComponents();
       WorkspaceHelper.updateInheritingComponents();
+      MalformationRepairHelper.repair();
       
       StylesheetHelper.initializeStylesheetData(InternalStylesheets);
       AnimationHelper.initializeStylesheetData(InternalAnimations);
@@ -278,6 +327,8 @@ var WorkspaceHelper = {
     SchemaHelper.invalidate();
   },
   saveWorkspaceData: (reinit: boolean=true, force: boolean=false) => {
+  	HTMLHelper.sortAttributes();
+  	
     if (InternalProjectSettings.currentMode == 'site') {
       if (InternalProjectSettings.editingPageID == null) return;
       
@@ -295,7 +346,9 @@ var WorkspaceHelper = {
       
       page.extensions = {};
       for (let key of BACKEND_DATA_EXTENSIONS) {
-        page.extensions[key] = InternalProjectSettings[key];
+      	if (InternalProjectSettings.hasOwnProperty(key)) {
+        	page.extensions[key] = InternalProjectSettings[key] && InternalProjectSettings[key].split('\n') || null;
+        }
       }
       
       page.notations = SchemaHelper.generateTreeOfDotNotations();
@@ -449,8 +502,8 @@ var WorkspaceHelper = {
 		      let element = document.createElement('div');
 		      let parentNode = component.parentNode;
 		      element.innerHTML = componentInfo.html.join('\n');
-		      let firstChild = element.firstChild;
-		      parentNode.insertBefore(firstChild, component);
+		      let firstElementChild = element.firstElementChild;
+		      parentNode.insertBefore(firstElementChild, component);
 		      parentNode.removeChild(component);
 	      }
 	    }
@@ -474,10 +527,10 @@ var WorkspaceHelper = {
       let element = document.createElement('div');
       let parentNode = component.parentNode;
       element.innerHTML = WorkspaceHelper.cleanupComponentHTMLData(componentInfo.html.join('\n'));
-      let firstChild = element.firstChild;
-      parentNode.insertBefore(firstChild, component);
+      let firstElementChild = element.firstElementChild;
+      parentNode.insertBefore(firstElementChild, component);
       parentNode.removeChild(component);
-      component = firstChild;
+      component = firstElementChild;
       
       for (let i=0; i<INHERITING_COMPONENT_RESERVED_ATTRIBUTE_NAMES.length; i++) {
         if (reservedAttributeValues[i]) {
@@ -581,9 +634,16 @@ var WorkspaceHelper = {
     
     return cacheOfGeneratedBackEndCodeForAllPages;
  	},
- 	clearFullStackCodeForAllPages: () => {
+ 	clearFullStackCodeForAllPages: (data: any) => {
  		cacheOfGeneratedFrontEndCodeForAllPages = {};
  		cacheOfGeneratedBackEndCodeForAllPages = {};
+    
+    backEndControllerBlobSHADict = data.backEndControllerBlobSHADict || {};
+    frontEndComponentsBlobSHADict = data.frontEndComponentsBlobSHADict || {};
+    viewBlobSHADict = data.viewBlobSHADict || {};
+    routeBlobSHA = data.routeBlobSHA || null;
+    controllerBlobSHA = data.controllerBlobSHA || null;
+    siteBundleBlobSHA = data.siteBundleBlobSHA || null;
  	},
   getCommonExpandingFeatureScripts: () => {
   	let container = document.createElement('div');

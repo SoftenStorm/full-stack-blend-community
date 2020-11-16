@@ -3,17 +3,19 @@
 
 // Auto[Import]--->
 import {Request, Response} from "express";
-import {SourceType, ActionType, HierarchicalDataTable, HierarchicalDataRow, Input, DatabaseHelper} from './../helpers/DatabaseHelper.js';
-import {ValidationInfo, ValidationHelper} from './../helpers/ValidationHelper.js';
-import {RequestHelper} from './../helpers/RequestHelper.js';
-import {RenderHelper} from './../helpers/RenderHelper.js';
-import {DataTableSchema} from './../helpers/SchemaHelper.js';
-import {Base} from './Base.js';
+import {SourceType, ActionType, HierarchicalDataTable, HierarchicalDataRow, Input, DatabaseHelper} from '../../../helpers/DatabaseHelper.js';
+import {ValidationInfo, ValidationHelper} from '../../../helpers/ValidationHelper.js';
+import {RequestHelper} from '../../../helpers/RequestHelper.js';
+import {RenderHelper} from '../../../helpers/RenderHelper.js';
+import {DataTableSchema} from '../../../helpers/SchemaHelper.js';
+import {Base} from '../../Base.js';
 
 // <---Auto[Import]
 
 // Import additional modules here:
 //
+import passport from "passport";
+import {UserDocument, User} from "../../../../models/User";
 
 // Auto[Declare]--->
 /*enum SourceType {
@@ -84,6 +86,28 @@ class Controller extends Base {
   	// The message of thrown error will be the validation message.
   	//
  		ValidationHelper.validate(data);
+        
+    let email, password, confirmPassword;
+  	
+  	for (let input of data) {
+    	switch (input.name) {
+    	  case 'email':
+    	    email = input.value;
+    	    break;
+    	  case 'password':
+    	    password = input.value;
+    	    break;
+    	  case 'confirmPassword':
+    	    confirmPassword = input.value;
+    	    break;
+    	}
+  	}
+  	
+  	if (email && !email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+  	  throw new Error("You have entered a wrong email."); 
+  	}
+  	
+  	if ((!!password && !!confirmPassword) && password !== confirmPassword) throw new Error("Password confirmation doesn't match password."); 
   }
   
   protected async accessories(data: Input[]): Promise<any> {
@@ -111,7 +135,13 @@ class Controller extends Base {
   protected async get(data: Input[]): Promise<{[Identifier: string]: HierarchicalDataTable}> {
     return new Promise(async (resolve, reject) => {
       try {
-        resolve(await super.get(data));
+        const user = this.request.user as UserDocument;
+        if (user) {
+          this.response.redirect('/account/settings');
+          resolve({});
+        } else {
+          resolve(await super.get(data));
+        }
       } catch(error) {
         reject(error);
       }
@@ -207,8 +237,73 @@ class Controller extends Base {
   protected async navigate(data: Input[], schema: DataTableSchema): Promise<string> {
     return new Promise(async (resolve, reject) => {
     	try {
-      	throw new Error("Not Implemented Error");
-        // resolve('/');
+    	  let email, password, confirmPassword;
+      	
+      	for (let input of data) {
+        	switch (input.name) {
+        	  case 'email':
+        	    email = input.value;
+        	    break;
+        	  case 'password':
+        	    password = input.value;
+        	    break;
+        	  case 'confirmPassword':
+        	    confirmPassword = input.value;
+        	    break;
+        	}
+      	}
+      	
+      	if (!!password && !!confirmPassword) {
+      	  const user = new User({
+            email: email,
+            password: password
+          });
+
+          User.findOne({email: email}, (err, existingUser) => {
+            if (err) {
+              reject(new Error('There was an internal server error, please try again. (1001)'));
+              return;
+            }
+            if (existingUser) {
+              reject(new Error('Account with that email address already exists.'));
+              return;
+            }
+            
+            user.save((err) => {
+              if (err) {
+                reject(new Error('There was an internal server error, please try again. (1002)'));
+                return;
+              }
+              
+              this.request.logIn(user, (err) => {
+                if (err) {
+                  reject(new Error('There was an internal server error, please try again. (1003)'));
+                  return;
+                }
+                resolve('/editor');
+              });
+            });
+          });
+      	} else {
+      	  User.findOne({email: email}, (err, existingUser) => {
+            if (err) {
+              reject(new Error('There was an internal server error, please try again. (1101)'));
+              return;
+            }
+            if (!existingUser) {
+              reject(new Error('An account with the email address doesn\'t exist.'));
+              return;
+            }
+            
+            this.request.logIn(existingUser, (err) => {
+              if (err) {
+                reject(new Error('There was an internal server error, please try again. (1103)'));
+                return;
+              }
+              resolve('/editor');
+            });
+          });
+      	}
       } catch(error) {
         reject(error);
       }
@@ -224,9 +319,40 @@ class Controller extends Base {
 	  // <---Auto[MergingBegin]
 	  
 	  // Auto[Merging]--->
-    RequestHelper.registerSubmit("index", "651393e4", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("index", "d85b2bd4", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("index", "57bd398a", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
+    RequestHelper.registerSubmit("9e885d49", "d7d59dd2", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
+    RequestHelper.registerSubmit("9e885d49", "875ac000", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
+    RequestHelper.registerSubmit("9e885d49", "954a291a", "navigate", ["1b650e66","22d343bd"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
+    RequestHelper.registerSubmit("9e885d49", "b2b66792", "navigate", ["1b650e66","22d343bd","d3de6c93"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
+		RequestHelper.registerInput('1b650e66', "document", "User", "email");
+		ValidationHelper.registerInput('1b650e66', "Textbox 1", true, "Please enter your email");
+    for (let i=-1; i<128; i++) {
+      input = RequestHelper.getInput(this.pageId, request, '1b650e66' + ((i == -1) ? '' : '[' + i + ']'));
+    
+      // Override data parsing and manipulation of Textbox 1 here:
+      // 
+      
+      if (input != null) data.push(input);
+    }
+		RequestHelper.registerInput('22d343bd', "document", "User", "password");
+		ValidationHelper.registerInput('22d343bd', "Textbox 2", true, "Please enter your password");
+    for (let i=-1; i<128; i++) {
+      input = RequestHelper.getInput(this.pageId, request, '22d343bd' + ((i == -1) ? '' : '[' + i + ']'));
+    
+      // Override data parsing and manipulation of Textbox 2 here:
+      // 
+      
+      if (input != null) data.push(input);
+    }
+		RequestHelper.registerInput('d3de6c93', "document", "User", "confirmPassword");
+		ValidationHelper.registerInput('d3de6c93', "Textbox 3", true, "Please confirm your password");
+    for (let i=-1; i<128; i++) {
+      input = RequestHelper.getInput(this.pageId, request, 'd3de6c93' + ((i == -1) ? '' : '[' + i + ']'));
+    
+      // Override data parsing and manipulation of Textbox 3 here:
+      // 
+      
+      if (input != null) data.push(input);
+    }
 
 	  // <---Auto[Merging]
 	  

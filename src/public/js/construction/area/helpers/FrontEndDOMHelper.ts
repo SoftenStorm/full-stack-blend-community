@@ -276,6 +276,8 @@ ${rootScript}`;
         }
         
         for (let attribute of _attributes) {
+        	if (attribute.value === null) continue;
+        	
           switch (attribute.name) {
             case 'class':
               classes = attribute.value.trim().replace(/[\ ]+/g, ' ');
@@ -534,6 +536,8 @@ ${rootScript}`;
           if (reactData) _attributes.push('row=' + _nodeData);
           if (inheritingID) _attributes.push(`forward={${inheritingAttributes.join(', ')}}`);
           
+          _attributes = Array.from(new Set(_attributes));
+          
           composed = indent;
           composed += '_' + (reactNamespace + '.' + reactClass).split('.').join('_') + '_(' + _attributes.join(', ') + ')';
           lines.push(composed);
@@ -580,6 +584,9 @@ ${rootScript}`;
             attributes.splice(0, 0, 'style=Object.assign({}, this.props.forward && this.props.forward.styles || {})');
           }
           if (composed == indent) composed += 'div';
+          
+          attributes = Array.from(new Set(attributes));
+          
           if (attributes.length != 0) composed += '(' + attributes.join(', ').replace(/___DATA___/g, _nodeData) + ')';
           
           if (!dangerouslySetInnerHTML) {
@@ -667,10 +674,13 @@ ${rootScript}`;
         }
         
         if (FORWARD_STYLE_TO_CHILDREN_CLASS_LIST.indexOf(HTMLHelper.getAttribute(element, 'internal-fsb-class')) != -1) {
+        	bindingStyles = {}; // Disable custom binding.
           bindingStyles['padding'] = bindingStyles['padding'] || "'0px'";
         }
         
         for (let attribute of _attributes) {
+        	if (attribute.value === null) continue;
+        	
           switch (attribute.name) {
             case 'class':
               classes = attribute.value.replace(/(internal-fsb-allow-cursor)/g, '').trim();
@@ -779,6 +789,14 @@ ${rootScript}`;
           attributes.push(`onClick="internalFsbSubmit('${reactClassComposingInfoGUID}', null, event, null)"`);
         }
         
+        for (let key in bindingStyles) {
+          if (bindingStyles.hasOwnProperty(key)) {
+            if (styles == null) styles = [];
+            let camelKey = key.replace(/\-([a-z])/g, (matched) => { return matched[1].toUpperCase(); });
+            styles.push(camelKey + ': ' + bindingStyles[key]);
+          }
+        }
+        
         if (isForChildren && classes.indexOf('internal-fsb-element') != -1) {
           classes = CodeHelper.getInternalClasses(classes);
         }
@@ -841,6 +859,9 @@ ${rootScript}`;
           if (reactClassComposingInfoGUID != null) attributes.push('internal-fsb-guid="' + reactClassComposingInfoGUID + '"');
           if (styles != null) attributes.splice(0, 0, 'style={' + styles.join(', ') + '}');
           if (composed == indent) composed += 'div';
+          
+          attributes = Array.from(new Set(attributes));
+          
           if (attributes.length != 0) composed += '(' + attributes.join(', ') + ')';
           
           lines.push(composed);

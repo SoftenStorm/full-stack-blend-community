@@ -80,10 +80,10 @@ var HTMLHelper = {
       
       if (reverseForwarding && HTMLHelper.isForChildren(element)) {
         for (let attributeName of FORWARED_ATTRIBUTES_FOR_CHILDREN) {
-          if (HTMLHelper.hasAttribute(element.firstChild, attributeName)) {
+          if (HTMLHelper.hasAttribute(element.firstElementChild, attributeName)) {
             elementAttributes.push({
               name: attributeName,
-              value: HTMLHelper.getAttribute(element.firstChild, attributeName)
+              value: HTMLHelper.getAttribute(element.firstElementChild, attributeName)
             });
           }
         }
@@ -115,12 +115,26 @@ var HTMLHelper = {
         });
       }
       
-      return elementAttributes;
+      elementAttributes.sort((a: any, b: any) => {
+      	return (a.name > b.name) ? 1 : -1;
+      });
+      
+      const _elementAttributes = [];
+      const _insertedKeys = {};
+      
+      for (let _element of elementAttributes) {
+      	if (_insertedKeys[_element.name] === true) continue;
+      	_insertedKeys[_element.name] = true;
+      	
+      	_elementAttributes.push(_element);
+      }
+      
+      return _elementAttributes;
     } else {
       if (reverseForwarding && HTMLHelper.isForChildren(element)) {
         for (let attributeName of FORWARED_ATTRIBUTES_FOR_CHILDREN) {
-          if (HTMLHelper.hasAttribute(element.firstChild, attributeName)) {
-            mergeAttributes[attributeName] = HTMLHelper.getAttribute(element.firstChild, attributeName);
+          if (HTMLHelper.hasAttribute(element.firstElementChild, attributeName)) {
+            mergeAttributes[attributeName] = HTMLHelper.getAttribute(element.firstElementChild, attributeName);
           }
         }
       }
@@ -134,6 +148,8 @@ var HTMLHelper = {
         }
       }
       
+      CodeHelper.sortHashtable(mergeAttributes);
+      
       return mergeAttributes;
     }
   },
@@ -143,11 +159,11 @@ var HTMLHelper = {
   getAttribute: (element: HTMLElement, name: string) => {
   	if (!element || !element.getAttribute) return null;
   	if (name == 'style' && HTMLHelper.isForChildren(element)) {
-  		return element.firstChild.getAttribute(name);
+  		return element.firstElementChild.getAttribute(name);
   	} else if (name == 'class' && HTMLHelper.isForChildren(element)) {
-  		return [element.getAttribute(name) || '', element.firstChild.getAttribute(name) || ''].join(' ');
+  		return [element.getAttribute(name) || '', element.firstElementChild.getAttribute(name) || ''].join(' ');
   	} else if (FORWARED_ATTRIBUTES_FOR_CHILDREN.indexOf(name) != -1 && HTMLHelper.isForChildren(element)) {
-  		return element.firstChild.getAttribute(name);
+  		return element.firstElementChild.getAttribute(name);
   	} else {
   		return element.getAttribute(name);
   	}
@@ -156,12 +172,12 @@ var HTMLHelper = {
   	if (!element || !element.getAttribute || !element.setAttribute) return;
   	if (name == 'style' && HTMLHelper.getInlineStyle(value, '-fsb-for-children') == 'true') {
   		element.setAttribute(name, '-fsb-empty');
-  		return element.firstChild.setAttribute(name, value);
+  		return element.firstElementChild.setAttribute(name, value);
   	} else if (name == 'class' && HTMLHelper.isForChildren(element)) {
   		element.setAttribute(name, CodeHelper.getInternalClasses(value));
-  		return element.firstChild.setAttribute(name, CodeHelper.getCustomClasses(value));
+  		return element.firstElementChild.setAttribute(name, CodeHelper.getCustomClasses(value));
   	} else if (FORWARED_ATTRIBUTES_FOR_CHILDREN.indexOf(name) != -1 && HTMLHelper.isForChildren(element)) {
-  		return element.firstChild.setAttribute(name, value);
+  		return element.firstElementChild.setAttribute(name, value);
   	} else {
   		return element.setAttribute(name, value);
   	}
@@ -170,9 +186,9 @@ var HTMLHelper = {
   	if (!element || !element.getAttribute || !element.removeAttribute) return;
   	if (name == 'style' && element.getAttribute(name) == '-fsb-empty') {
   		element.removeAttribute(name);
-  		element.firstChild.removeAttribute(name);
+  		element.firstElementChild.removeAttribute(name);
   	} else if (FORWARED_ATTRIBUTES_FOR_CHILDREN.indexOf(name) != -1 && HTMLHelper.isForChildren(element)) {
-  		return element.firstChild.removeAttribute(name);
+  		return element.firstElementChild.removeAttribute(name);
   	} else {
   		return element.removeAttribute(name);
   	}
@@ -180,9 +196,9 @@ var HTMLHelper = {
   hasAttribute: (element: HTMLElement, name: string) => {
   	if (!element || !element.getAttribute || !element.hasAttribute) return null;
   	if (name == 'style' && element.getAttribute(name) == '-fsb-empty') {
-  		return element.firstChild.hasAttribute(name);
+  		return element.firstElementChild.hasAttribute(name);
   	} else if (FORWARED_ATTRIBUTES_FOR_CHILDREN.indexOf(name) != -1 && HTMLHelper.isForChildren(element)) {
-  		return element.firstChild.hasAttribute(name);
+  		return element.firstElementChild.hasAttribute(name);
   	} else {
   		return element.hasAttribute(name);
   	}
@@ -251,7 +267,7 @@ var HTMLHelper = {
     if (index != -1) {
       splited.splice(index, 1);
     }
-    element.className = HTMLHelper.cleanArray(splited).join(' ');
+    element.className = HTMLHelper.cleanArray(splited).sort().join(' ');
   },
   addClass: (element: HTMLElement, name: string) => {
     let classAttributeValue: string = element;
@@ -263,7 +279,7 @@ var HTMLHelper = {
     if (splited.indexOf(name) == -1) {
       splited.push(name);
     }
-    element.className = HTMLHelper.cleanArray(splited).join(' ');
+    element.className = HTMLHelper.cleanArray(splited).sort().join(' ');
   },
   cleanArray: (splited: string[]) => {
     let results = [];
@@ -295,7 +311,7 @@ var HTMLHelper = {
       splited.push(styleName + ': ' + styleValue);
     }
     
-    return splited.join('; ');
+    return splited.sort().join('; ');
   },
   getInlineStyle: (inlineStyle: string, styleName: string) => {
   	if (!inlineStyle) return null;
@@ -331,7 +347,7 @@ var HTMLHelper = {
         results.push(key + ': ' + hash[key]);
       }
     }
-    return results.join('; ');
+    return results.sort().join('; ');
   },
   
   getPosition: (object: HTMLElement, ofDocument: boolean=true, ofOrigin: boolean=false) => {
@@ -398,7 +414,57 @@ var HTMLHelper = {
   },
   hasVendorPrefix: (prefix: string, name: string) => {
     return vendor_prefixes_hash[prefix + name] === true;
-  }
+  },
+  sortAttributes: (container: HTMLElement=document) => {
+  	HTMLHelper.recursiveSortAttributes([document.body]);
+  },
+	recursiveSortAttributes: (elements: any) => {
+    for (let j = 0; j < elements.length; j++) {
+    	if (!elements[j].setAttribute || !elements[j].removeAttribute) continue;
+    	
+    	const attributes = [];
+    	if (elements[j].hasAttributes()) {
+        let attrs = elements[j].attributes;
+        for (let attr of attrs) {
+          attributes.push({
+            name: attr.name,
+            value: attr.value
+          });
+        }
+      }
+			
+      for (let i = 0; i < attributes.length; i++) {
+        elements[j].removeAttribute(attributes[i].name);
+      }
+
+      for (let i = 0; i < attributes.length; i++) {
+      	HTMLHelper.sortAttributeValues(attributes[i]);
+      	
+        elements[j].setAttribute(attributes[i].name, attributes[i].value);
+      }
+      
+      elements[j].children && HTMLHelper.recursiveSortAttributes(elements[j].children);
+    }
+	},
+	sortAttributeValues: (attribute: any) => {
+		switch (attribute.name) {
+  		case 'style':
+  			if (attribute.value) {
+  				attribute.value = attribute.value.split('; ').sort().join('; ');
+  			}
+  			break;
+  		case 'class':
+  			if (attribute.value) {
+  				attribute.value = attribute.value.split(' ').sort().join(' ');
+  			}
+  			break;
+  		case 'internal-fsb-data-controls':
+  			if (attribute.value) {
+  				attribute.value = attribute.value.trim().split(' ').sort().join(' ');
+  			}
+  			break;
+  	}
+	}
 };
 
 export {HTMLHelper};

@@ -24,14 +24,14 @@
         "watch-bundle": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"watchify dist/public/js/construction/editor/Editor.js -o dist/public/js/construction/Editor.bundle.js\" \"watchify dist/public/js/construction/editor/Worker.js -o dist/public/js/construction/Worker.bundle.js\" \"watchify dist/public/js/construction/area/Html.js -o dist/public/js/construction/Html.bundle.js\" \"watchify dist/public/js/construction/distribution/Embed.js -o dist/public/js/Embed.bundle.js\" \"watchify dist/public/js/Site.js -o dist/public/js/Site.bundle.js\"",
         "build-sass": "node-sass src/public/css/main.scss dist/public/css/main.css && node-sass src/public/css/construction/distribution/embed.scss -o dist/public/css/ && node-sass src/public/css/construction/area/area.scss -o dist/public/css/construction/ && node-sass src/public/css/construction/area/settings.scss -o dist/public/css/construction/ && node-sass src/public/css/construction/editor/editor.scss -o dist/public/css/construction/",
         "watch-sass": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"node-sass -w src/public/css/main.scss -o dist/public/css/main.css\" \"node-sass -w src/public/css/construction/distribution/embed.scss -o dist/public/css/\" \"node-sass -w src/public/css/construction/area/area.scss -o dist/public/css/construction/\" \"node-sass -w src/public/css/construction/area/settings.scss -o dist/public/css/construction/\" \"node-sass -w src/public/css/construction/editor/editor.scss -o dist/public/css/construction/\"",
-        "lint": "eslint \"src/**/*.{js,ts}\" --quiet --fix",
+        "lint": "eslint \"src/**/*.{js,ts}\" --quiet --fix-dry-run",
         "copy-static-assets": "ts-node copyStaticAssets.ts",
         "debug": "npm run watch-debug",
         "serve-debug": "nodemon --inspect dist/server.js",
         "watch-debug": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-sass-area\" \"npm run watch-ts\" \"npm run serve-debug\""
     },
     "dependencies": {
-        "@babel/runtime": "^7.10.3",
+        "@babel/runtime": "^7.0.0-beta.55",
         "@types/socket.io": "^2.1.11",
         "amd-module": "0.0.20151203",
         "assert": "^2.0.0",
