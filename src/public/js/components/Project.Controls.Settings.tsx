@@ -8,7 +8,13 @@ import {EventHelper} from '../helpers/EventHelper';
 import {HTMLHelper} from '../helpers/HTMLHelper';
 import {AnimationHelper} from '../helpers/AnimationHelper';
 import {TestHelper} from '../helpers/TestHelper';
-import {IBaseProps, IBaseState, DefaultBaseProps, DefaultBaseState, Button as $Button, Base} from './Base';
+import {SourceType, HierarchicalDataTable, HierarchicalDataRow} from '../helpers/DataManipulationHelper';
+import {IBaseProps, IBaseState, DefaultBaseProps, DefaultBaseState, Button as $Button, Base as $Base} from './Base';
+
+// Assign to an another one to override the base class.
+// 
+let Base: any = $Base;
+
 // <---Auto[Import]
 
 // Import additional modules here:
@@ -25,12 +31,31 @@ declare let pug: any;
 let Button = $Button;
 let Project = $Project;
 
+/*enum SourceType {
+  Relational,
+  PrioritizedWorker,
+  Document,
+  VolatileMemory,
+  RESTful,
+  Dictionary,
+  Collection
+}*/
 // <---Auto[Declare]
 
 // Declare private static variables here:
 //
 
 // Auto[Interface]--->
+/*interface HierarchicalDataTable {
+	source: SourceType;
+	group: string;
+  rows: HierarchicalDataRow[];
+}
+interface HierarchicalDataRow {
+  keys: {[Identifier: string]: any};
+  columns: {[Identifier: string]: any};
+  relations: {[Identifier: string]: HierarchicalDataTable};
+}*/
 interface IAutoBaseProps extends IBaseProps {
   forward: {classes: String, styles: any};
 }
@@ -119,7 +144,7 @@ class Settings extends Base {
     
   }
 
-  protected onButtonSubmitting_ea9268d1(event: Event) {
+  protected onButtonSubmitting_ea9268d1(event: CustomEvent) {
 
     // Handle the event of onButtonSubmitting (Button 2) here:
     // 
@@ -127,7 +152,7 @@ class Settings extends Base {
     
   }
 
-  protected onButtonSubmitted_ea9268d1(event: Event) {
+  protected onButtonSubmitted_ea9268d1(event: CustomEvent) {
 
     // Handle the event of onButtonSubmitted (Button 2) here:
     // 
@@ -188,7 +213,7 @@ class Settings extends Base {
   protected render(): any {
     TestHelper.identify();
     return pug `
-      div(style=Object.assign({}, this.props.forward && this.props.forward.styles || {}), className="-fsb-self-245bc127 internal-fsb-element " + (this.props.forward && this.props.forward.classes || ''), internal-fsb-guid="245bc127")
+      div(style=Object.assign({}, this.props.forward && this.props.forward.styles || {}), internal-fsb-class="FlowLayout", className="-fsb-self-245bc127 internal-fsb-element " + (this.props.forward && this.props.forward.classes || ''), internal-fsb-guid="245bc127")
         .container-fluid
           .internal-fsb-strict-layout.row
             .col-3.internal-fsb-element(style={'MsFlexDirection': 'column', 'WebkitFlexDirection': 'column', 'bottom': '0px', 'display': 'flex', 'flexDirection': 'column', 'left': '0px', 'paddingLeft': '0px', 'paddingRight': '0px', 'position': 'absolute', 'top': '0px'}, internal-fsb-guid="e2601245")
@@ -208,16 +233,16 @@ class Settings extends Base {
                   | 🔐 
                 .internal-fsb-element(style={'FsbInheritedPresets': '', 'color': (()=>{return (this.state.currentTab == 2) ? 'rgba(3, 115, 252, 1)' : 'rgba(255, 255, 255, 1)';})() || 'rgba(255, 255, 255, 1)', 'display': 'inline-block'}, internal-fsb-guid="c7844719")
                   | Account
-            .col-9.internal-fsb-element.offset-3(style={'WebkitBorderRadius': '0px 8px 0px 0px', 'background': 'rgba(255, 255, 255, 0.95)', 'borderRadius': '0px 8px 0px 0px', 'height': '45px', 'left': '0px', 'paddingRight': '10px', 'paddingTop': '10px', 'position': 'absolute', 'right': '0px', 'top': '0px', 'zIndex': '900'}, internal-fsb-guid="ea965490")
+            .col-9.internal-fsb-element.offset-3(style={'WebkitBorderRadius': '0px 8px 0px 0px', 'background': 'rgba(255, 255, 255, 0.95)', 'borderRadius': '0px 8px 0px 0px', 'height': '45px', 'left': '0px', 'paddingRight': '10px', 'paddingTop': '10px', 'position': 'absolute', 'right': '0px', 'top': '0px', 'zIndex': '900'}, internal-fsb-class="FlowLayout", internal-fsb-guid="ea965490")
               .container-fluid
                 .internal-fsb-strict-layout.row
                   Button.btn.btn-primary.btn-sm.col-2.internal-fsb-element.offset-10(onClick=((event) => { window.internalFsbSubmit('ea9268d1', 'User', event, ((results) => { this.manipulate('ea9268d1', 'User', results); }).bind(this)); }).bind(this), disabled=this.state.submitting, type="button", onSubmitted=this.onButtonSubmitted_ea9268d1.bind(this), onSubmitting=this.onButtonSubmitting_ea9268d1.bind(this), internal-fsb-guid="ea9268d1")
                     .internal-fsb-element(internal-fsb-guid="ea9268d1-text")
                       | Save
-            .col-9.internal-fsb-element.offset-3(style={'MsOverflowX': 'hidden', 'MsOverflowY': 'scroll', 'background': 'rgba(255, 255, 255, 0)', 'bottom': '0px', 'overflowX': 'hidden', 'overflowY': 'scroll', 'paddingTop': '10px', 'position': 'absolute', 'right': '0px', 'top': '0px'}, internal-fsb-guid="3096eb71")
+            .col-9.internal-fsb-element.offset-3(style={'MsOverflowX': 'hidden', 'MsOverflowY': 'scroll', 'background': 'rgba(255, 255, 255, 0)', 'bottom': '0px', 'overflowX': 'hidden', 'overflowY': 'scroll', 'paddingTop': '10px', 'position': 'absolute', 'right': '0px', 'top': '0px'}, internal-fsb-class="FlowLayout", internal-fsb-guid="3096eb71")
               .container-fluid
                 .internal-fsb-strict-layout.row
-                  .col-12.internal-fsb-element(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 0) ? 'block' : 'none';})()}, internal-fsb-guid="ce3c1a1c")
+                  .col-12.internal-fsb-element(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 0) ? 'block' : 'none';})()}, internal-fsb-class="FlowLayout", internal-fsb-guid="ce3c1a1c")
                     .container-fluid
                       .internal-fsb-strict-layout.row
                         .-fsb-self-7003c7d5.col-8.internal-fsb-element.offset-2(internal-fsb-guid="7003c7d5")
@@ -229,16 +254,16 @@ class Settings extends Base {
                             .internal-fsb-strict-layout.row
                               .-fsb-self-c8d71ae6.col-4.internal-fsb-element(internal-fsb-guid="c8d71ae6")
                                 | Email address:
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="27d35136")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="27d35136")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.email"))
                         label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae'}, internal-fsb-guid="81ce8063")
                           .container-fluid
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="e40410b7")
                                 | Full name:
-                              .col-7.internal-fsb-element.offset-0(style={padding: '0px'}, internal-fsb-guid="ece2d619")
+                              .col-7.internal-fsb-element.offset-0(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="ece2d619")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.name"))
-                  .col-12.internal-fsb-element(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 1) ? 'block' : 'none';})()}, internal-fsb-guid="17704a94")
+                  .col-12.internal-fsb-element(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 1) ? 'block' : 'none';})()}, internal-fsb-class="FlowLayout", internal-fsb-guid="17704a94")
                     .container-fluid
                       .internal-fsb-strict-layout.row
                         .-fsb-preset-7003c7d5.col-8.internal-fsb-element.offset-2(style={'FsbInheritedPresets': '7003c7d5', 'fontSize': '18px', 'textAlign': 'center'}, internal-fsb-guid="36835b75")
@@ -259,14 +284,14 @@ class Settings extends Base {
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="d72eb9ad")
                                 | Organization or user alias:
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="d3e700b6")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="d3e700b6")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.alias"))
                         label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae', display: (()=>{return (this.getDataFromNotation('User.github')) ? 'block' : 'none';})()}, internal-fsb-guid="2b6d3336")
                           .container-fluid
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="4654b0a7")
                                 | Project name:
-                              .col-7.internal-fsb-element.offset-0(style={padding: '0px'}, internal-fsb-guid="0762b97d")
+                              .col-7.internal-fsb-element.offset-0(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="0762b97d")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.project"))
                         .-fsb-preset-12bc19e4.col-12.internal-fsb-element(style={'FsbInheritedPresets': '12bc19e4', display: (()=>{return (this.getDataFromNotation('User.github')) ? 'block' : 'none';})()}, internal-fsb-guid="c7437d56")
                           | Branching and Saving
@@ -275,21 +300,21 @@ class Settings extends Base {
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="16ce21b0")
                                 | Feature branch (isolate):
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="098c6ea6")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="098c6ea6")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.feature"))
                         label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae', display: (()=>{return (this.getDataFromNotation('User.github')) ? 'block' : 'none';})()}, internal-fsb-guid="234685a2")
                           .container-fluid
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="1a8d1591")
                                 | Develop branch (merge):
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="25254217")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="25254217")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.develop"))
                         label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae', display: (()=>{return (this.getDataFromNotation('User.github')) ? 'block' : 'none';})()}, internal-fsb-guid="682d4659")
                           .container-fluid
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="c5b93d69")
                                 | Staging branch (deploy):
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="1da99335")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="1da99335")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.staging"))
                         .-fsb-preset-12bc19e4.col-12.internal-fsb-element(style={'FsbInheritedPresets': '12bc19e4', display: (()=>{return (this.getDataFromNotation('User.github')) ? 'block' : 'none';})()}, internal-fsb-guid="41645776")
                           | Testing
@@ -298,9 +323,9 @@ class Settings extends Base {
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="eaad3e05")
                                 | Endpoint Root URL:
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="74d68ec6")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="74d68ec6")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.endpoint"))
-                  .col-12.internal-fsb-element(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 2) ? 'block' : 'none';})()}, internal-fsb-guid="d7b6b2c3")
+                  .col-12.internal-fsb-element(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 2) ? 'block' : 'none';})()}, internal-fsb-class="FlowLayout", internal-fsb-guid="d7b6b2c3")
                     .container-fluid
                       .internal-fsb-strict-layout.row
                         .-fsb-preset-7003c7d5.col-8.internal-fsb-element.offset-2(style={'FsbInheritedPresets': '7003c7d5', 'fontSize': '18px', 'textAlign': 'center'}, internal-fsb-guid="4e0342bd")
@@ -312,14 +337,14 @@ class Settings extends Base {
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="0bd07ebe")
                                 | New password:
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="3478b9ac")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="3478b9ac")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="password", disabled=this.state.submitting)
                         label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae'}, internal-fsb-guid="76574a2d")
                           .container-fluid
                             .internal-fsb-strict-layout.row
                               .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, internal-fsb-guid="b4d97ce1")
                                 | Confirm password:
-                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-guid="33832ba7")
+                              .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="33832ba7")
                                 input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="password", disabled=this.state.submitting)
                         .-fsb-preset-12bc19e4.col-12.internal-fsb-element(style={'FsbInheritedPresets': '12bc19e4'}, internal-fsb-guid="d577da61")
                           | Delete Account

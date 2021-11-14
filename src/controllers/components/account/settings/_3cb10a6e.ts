@@ -8,8 +8,12 @@ import {ProjectConfigurationHelper} from '../../../helpers/ProjectConfigurationH
 import {ValidationInfo, ValidationHelper} from '../../../helpers/ValidationHelper';
 import {RequestHelper} from '../../../helpers/RequestHelper';
 import {RenderHelper} from '../../../helpers/RenderHelper';
-import {DataTableSchema} from '../../../helpers/SchemaHelper';
-import {Base} from '../../Base';
+import {SchemaHelper, DataTableSchema} from '../../../helpers/SchemaHelper';
+import {Base as $Base} from '../../Base';
+
+// Assign to an another one to override the base class.
+// 
+let Base: any = $Base;
 
 // <---Auto[Import]
 
@@ -364,13 +368,7 @@ class Controller extends Base {
 	  // <---Auto[MergingBegin]
 	  
 	  // Auto[Merging]--->
-    RequestHelper.registerSubmit("3cb10a6e", "ea9268d1", "update", ["0762b97d","098c6ea6","1da99335","25254217","27d35136","33832ba7","3478b9ac","74d68ec6","d3e700b6","ece2d619"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("3cb10a6e", "68840b17", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("3cb10a6e", "b391283e", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("3cb10a6e", "187c250b", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("3cb10a6e", "551c67a8", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("3cb10a6e", "82975b43", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
-    RequestHelper.registerSubmit("3cb10a6e", "4e677128", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false});
+    RequestHelper.registerSubmit("3cb10a6e", "ea9268d1", "update", ["0762b97d","098c6ea6","1da99335","25254217","27d35136","33832ba7","3478b9ac","74d68ec6","d3e700b6","ece2d619"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Button 2"});
 		RequestHelper.registerInput('27d35136', "document", "User", "email");
 		ValidationHelper.registerInput('27d35136', "Textbox 1", false, undefined, undefined, null);
     for (let input of RequestHelper.getInputs(this.pageId, request, '27d35136')) {

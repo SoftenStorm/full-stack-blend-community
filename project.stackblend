@@ -16,7 +16,7 @@ d0e675b7      "groupState": null
 d0e675b7    }
   },
   "backEndControllerBlobSHADict": {
-    "3cb10a6e": "541f9636c684def5488a88412591b1c78d07ab8b#-306252438",
+    "3cb10a6e": "a48a08854ccd60ff64150270954ddc867e64f773#1156580262",
     "9e885d49": "4339efe8394ec83c5fe81b1343e379eac4179088#-2107443872",
     "b160aa0e": "6ccbcb4263feb53442094922db039968e89cb16e#-848467370",
     "index": "e44e44d3901efc947a77f2a6e4ab4d676c3c616d#-261302794"
@@ -1360,11 +1360,14 @@ d0e675b7    }
 4d816ba8        "</div>",
 4d816ba8        "</div>"
 4d816ba8      ],
+4d816ba8      "id": "4d816ba8",
 4d816ba8      "klass": "FlowLayout_4d816ba8",
-4d816ba8      "namespace": "Project.Controls"
+4d816ba8      "name": "Authenticator",
+4d816ba8      "namespace": "Project.Controls",
+4d816ba8      "state": "create"
 4d816ba8    }
   },
-  "controllerBlobSHA": "412073fbb81cba1ed429a2aaeb557a9cd42cc8d7#39405662",
+  "controllerBlobSHA": "cd92c846c90726e02eb6a2ffbe1647416beb2d42#-2104013774",
   "currentPersistingFiles": [
     "src/controllers/components/account/settings/_3cb10a6e.ts",
     "src/controllers/components/account/authenticate/_9e885d49.ts",
@@ -2555,7 +2558,7 @@ ce8b8488          }
   "footerBlobSHA": "f62ff6ae4800495a536946a73ccfab73a845c7b3#923347631",
   "frontEndComponentsBlobSHADict": {
     "Project.Controls.FlowLayout_4d816ba8": "731dc2126c5417c404c2dae72969fe4910b16ed1#-1372569252",
-    "Project.Controls.Settings": "262794a2dd5dfb4559de877d36a3f7389329037a#1995362511"
+    "Project.Controls.Settings": "79798563a74214419dab6aa6c227a0717858c5e5#307902257"
   },
   "globalSettings": {
     "colorSwatches": [
@@ -2648,9 +2651,9 @@ ce8b8488          }
     ],
     "popups": []
   },
-  "headerBlobSHA": "0a27085d048be0c4146fec95c0a3761c7086cc7f#-822192136",
+  "headerBlobSHA": "fd646a2ae3367cdf1a55f24cef4e84b1b88ea039#-2039291774",
   "popups": {},
-  "routeBlobSHA": "13575ac5090269503bf43366f4067b7d3300720a#1089952362",
+  "routeBlobSHA": "0f684434e19e65e24f74c9718614fddbde47f62a#-1117206934",
   "services": {
     "default": [
       "<body class=\"internal-fsb-disabled-guide\">",
@@ -2742,11 +2745,11 @@ ce8b8488          }
 3cb10a6e        "    class=\"\"",
 3cb10a6e        "    style=\"-webkit-background-size: cover; background-image: url(https://stackblend-static-files.s3-us-west-1.amazonaws.com/galaxy_full.jpg); background-position: center center; background-size: cover; position: relative\">",
 3cb10a6e        "<div",
-3cb10a6e        "    class=\"container-fluid internal-fsb-begin\"",
-3cb10a6e        "    internal-fsb-animation=\"animation-group-d0e675b7 animation-group-ad445a62\"",
+3cb10a6e        "    class=\"internal-fsb-begin\"",
+3cb10a6e        "    internal-fsb-animation=\"animation-group-ad445a62 animation-group-d0e675b7\"",
 3cb10a6e        "    internal-fsb-guid=\"0\">",
 3cb10a6e        "<div",
-3cb10a6e        "    class=\"internal-fsb-allow-cursor internal-fsb-begin-layout internal-fsb-strict-layout row\"",
+3cb10a6e        "    class=\"internal-fsb-allow-cursor internal-fsb-begin-layout internal-fsb-strict-layout\"",
 3cb10a6e        "    internal-fsb-event-no-propagate=\"1\">",
 3cb10a6e        "",
 3cb10a6e        "<a",
@@ -2767,7 +2770,7 @@ ce8b8488          }
 3cb10a6e        "    style=\"\">Back to Editor</div>",
 3cb10a6e        "</a>",
 3cb10a6e        "<div",
-3cb10a6e        "    class=\"-fsb-self-245bc127 col-12 internal-fsb-element\"",
+3cb10a6e        "    class=\"-fsb-self-245bc127 col-12 internal-fsb-allow-cursor internal-fsb-element internal-fsb-strict-layout\"",
 3cb10a6e        "    internal-fsb-guid=\"245bc127\"",
 3cb10a6e        "    internal-fsb-name=\"Settings\"",
 3cb10a6e        "    internal-fsb-react-mode=\"Site\">",
@@ -3094,6 +3097,9 @@ ce8b8488          }
 3cb10a6e        }
 3cb10a6e      },
 3cb10a6e      "path": "/account/settings",
+3cb10a6e      "references": [
+3cb10a6e        "245bc127"
+3cb10a6e      ],
 3cb10a6e      "state": "update"
 3cb10a6e    },
 9e885d49    "9e885d49": {
@@ -4247,7 +4253,7 @@ b351d3a2    },
   },
   "version": 1.3,
   "viewBlobSHADict": {
-    "3cb10a6e": "fd1d1b5adb946b191a850c251787e1777245ba74#-444633186",
+    "3cb10a6e": "3f52af8ce90830c1e682db2d71782f494edec4b9#-585307307",
     "9e885d49": "c6b848afe3f89eb235f2dc5f5e3c4007fc903d5f#2051014217",
     "b160aa0e": "71770886d072fc2bfbf47c3fbc9b093d62d2538e#-94149044",
     "index": "bbaf04eb1048bfc4b9651a80e78996d05442a506#-2078317430"
