@@ -8,8 +8,12 @@ import {ProjectConfigurationHelper} from '../../../helpers/ProjectConfigurationH
 import {ValidationInfo, ValidationHelper} from '../../../helpers/ValidationHelper';
 import {RequestHelper} from '../../../helpers/RequestHelper';
 import {RenderHelper} from '../../../helpers/RenderHelper';
-import {DataTableSchema} from '../../../helpers/SchemaHelper';
-import {Base} from '../../Base';
+import {SchemaHelper, DataTableSchema} from '../../../helpers/SchemaHelper';
+import {Base as $Base} from '../../Base';
+
+// Assign to an another one to override the base class.
+// 
+let Base: any = $Base;
 
 // <---Auto[Import]
 
@@ -329,8 +333,6 @@ class Controller extends Base {
 	  // <---Auto[MergingBegin]
 	  
 	  // Auto[Merging]--->
-    RequestHelper.registerSubmit("9e885d49", "d7d59dd2", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Button 1"});
-    RequestHelper.registerSubmit("9e885d49", "875ac000", null, [], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Button 4"});
     RequestHelper.registerSubmit("9e885d49", "954a291a", "navigate", ["1b650e66","22d343bd"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Button 3"});
     RequestHelper.registerSubmit("9e885d49", "b2b66792", "navigate", ["1b650e66","22d343bd","d3de6c93"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Button 1"});
 		RequestHelper.registerInput('1b650e66', "document", "User", "email");
