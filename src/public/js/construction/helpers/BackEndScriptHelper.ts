@@ -866,7 +866,7 @@ ${CLASS_END_BEGIN}`);
         }
         
         if (templateCode == TemplateCode.Connector) {
-					code = code.replace('constructor()', `constructor(SchemaHelper.getSchemaFromKey('${info['data-source-group-name']}'), SchemaHelper.getSchemaFromKey('${info['data-target-group-name']}'))`);
+					code = code.replace('constructor() {\n  	super()\n  	}', `constructor() {\n  	super(SchemaHelper.getSchemaFromKey('${info['data-source-group-name']}'), SchemaHelper.getSchemaFromKey('${info['data-target-group-name']}')\n  	}`);
 				} else if (templateCode == TemplateCode.Worker) {
 					beforeExecutions.push('    let count = 0;');
 					beforeExecutions.push('    let value = undefined;');
