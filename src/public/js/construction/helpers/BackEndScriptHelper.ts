@@ -711,9 +711,9 @@ class Scheduler extends Base {
  	
   // Auto[MergingBegin]--->  
   private initialize(): [number, number] {
-  	let days: number;
-  	let minutes: number;
-  	let delegate: () => Promise<void>;
+  	let days: number = 0;
+  	let minutes: number = 0;
+  	let delegate: () => Promise<void> = null;
 	  // <---Auto[MergingBegin]
 	  // Auto[Merging]--->
 	  // <---Auto[Merging]
@@ -870,7 +870,7 @@ ${CLASS_END_BEGIN}`);
         }
         
         if (templateCode == TemplateCode.Connector) {
-					code = code.replace('__REPLACEMENT_SUPER_MAKER__', `super(SchemaHelper.getSchemaFromKey('${info['data-source-group-name']}'), SchemaHelper.getSchemaFromKey('${info['data-target-group-name']}');`);
+					code = code.replace('__REPLACEMENT_SUPER_MAKER__', `super(SchemaHelper.getSchemaFromKey('${info['data-source-group-name']}'), SchemaHelper.getSchemaFromKey('${info['data-target-group-name']}'));`);
 				} else if (templateCode == TemplateCode.Worker) {
 					beforeExecutions.push('    let count = 0;');
 					beforeExecutions.push('    let value = undefined;');
