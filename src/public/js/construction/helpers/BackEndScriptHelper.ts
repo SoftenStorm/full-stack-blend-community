@@ -1,6 +1,23 @@
-import {USER_CODE_REGEX_GLOBAL, USER_CODE_REGEX_GROUP, SYSTEM_CODE_REGEX_BEGIN_GLOBAL, SYSTEM_CODE_REGEX_END_GLOBAL} from '../Constants';
+import {CAMEL_OF_EVENTS_DICTIONARY, CUSTOM_EVENT_TYPE_OF_CAMEL_OF_EVENTS, USER_CODE_REGEX_GLOBAL, USER_CODE_REGEX_GROUP, SYSTEM_CODE_REGEX_BEGIN_GLOBAL, SYSTEM_CODE_REGEX_END_GLOBAL} from '../Constants';
 
-const DEFAULTS = {
+enum TemplateCode {
+	Controller,
+	Connector,
+	Worker,
+	Scheduler
+};
+
+enum DAYS {
+	SUNDAY=1,
+	MONDAY=2,
+	TUESDAY=4,
+	WEDNESDAY=8,
+	THURSDAY=16,
+	FRIDAY=32,
+	SATURDAY=64
+}
+
+const CONTROLLER_DEFAULTS = {
   Import: `
 
 // Import additional modules here:
@@ -289,9 +306,117 @@ const DEFAULTS = {
 //
 export default Controller;
 `
-}
+};
 
-const FULL_BOILERPLATE = `// Auto[File]--->// <---Auto[File]
+const CONNECTOR_DEFAULTS = {
+  Import: `
+
+// Import additional modules here:
+//
+`,
+  Declare: `
+
+// Declare private static variables here:
+//
+`,
+  Interface: `
+
+// Declare or extend interfaces here:
+//
+`,
+  ClassBegin: `
+  
+  // Declare class variables and functions here:
+  //
+  protected setup() {
+  	// Place your custom setup here (singleton):
+  	//
+    
+	}
+  `,
+  ClassEnd: `
+
+// Export variables here:
+//
+export default Connector;
+`
+};
+
+const WORKER_DEFAULTS = {
+  Import: `
+
+// Import additional modules here:
+//
+`,
+  Declare: `
+
+// Declare private static variables here:
+//
+`,
+  Interface: `
+
+// Declare or extend interfaces here:
+//
+`,
+  ClassBegin: `
+  
+  // Declare class variables and functions here:
+  //
+  protected async run(): Promise<void> {
+		for (const parameters of this.iterations) {
+      await this.perform(parameters);
+    }
+	}
+	
+  protected async perform(parameters: any[]): Promise<void> {
+  	// Place your custom setup here (instantaneous):
+  	//
+    
+	}
+  `,
+  ClassEnd: `
+
+// Export variables here:
+//
+export default Worker;
+`
+};
+
+const SCHEDULER_DEFAULTS = {
+  Import: `
+
+// Import additional modules here:
+//
+`,
+  Declare: `
+
+// Declare private static variables here:
+//
+`,
+  Interface: `
+
+// Declare or extend interfaces here:
+//
+`,
+  ClassBegin: `
+  
+  // Declare class variables and functions here:
+  //
+  protected setup() {
+  	// Place your custom setup here (singleton):
+  	//
+    
+	}
+  `,
+  ClassEnd: `
+
+// Export variables here:
+//
+export default Scheduler;
+`
+};
+
+const FULL_CONTROLLER_BOILERPLATE = `// Auto[File]--->// <---Auto[File]
 // Auto[Import]--->
 import {Request, Response} from "express";
 import {SourceType, ActionType, HierarchicalDataTable, HierarchicalDataRow, Input, DatabaseHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/DatabaseHelper';
@@ -379,7 +504,6 @@ class Controller extends Base {
   	let input: Input = null;
   	
 	  // <---Auto[MergingBegin]
-	  
 	  // Auto[Merging]--->
 	  // <---Auto[Merging]
 	  
@@ -394,27 +518,376 @@ class Controller extends Base {
 }
 // <---Auto[ClassEnd]`;
 
+const FULL_CONNECTOR_BOILERPLATE = `// Auto[File]--->// <---Auto[File]
+// Auto[Import]--->
+/* eslint-disable @typescript-eslint/camelcase */
+
+import {SourceType, ActionType, HierarchicalDataTable, HierarchicalDataRow} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/DatabaseHelper';
+import {ProjectConfigurationHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/ProjectConfigurationHelper';
+import {SchemaHelper, DataTableSchema} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchemaHelper';
+import {Base as $Base} from '{__IMPORT_DIRECTORY_PREFIX__}Base';
+
+// Assign to an another one to override the base class.
+// 
+let Base: any = $Base;
+
+// <---Auto[Import]
+// Auto[Declare]--->
+/*enum SourceType {
+  Relational,
+  PrioritizedWorker,
+  Document,
+  VolatileMemory,
+  RESTful,
+  Dictionary,
+  Collection
+}
+enum ActionType {
+  Insert,
+  Update,
+  Upsert,
+  Delete,
+  Retrieve,
+  Popup,
+  Navigate,
+  Test
+}*/
+// <---Auto[Declare]
+// Auto[Interface]--->
+/*interface HierarchicalDataTable {
+	source: SourceType;
+	group: string;
+  rows: HierarchicalDataRow[];
+  notification?: string;
+}
+interface HierarchicalDataRow {
+  keys: {[Identifier: string]: any};
+  columns: {[Identifier: string]: any};
+  relations: {[Identifier: string]: HierarchicalDataTable};
+  division?: number[];
+}*/
+// <---Auto[Interface]
+// Auto[ClassBegin]--->
+class Connector extends Base {
+  constructor() {
+  	__REPLACEMENT_SUPER_MAKER__
+  }
+  // <---Auto[ClassBegin]
+ 	
+  // Auto[MergingBegin]--->  
+  private initialize(): void {
+	  // <---Auto[MergingBegin]
+	  // Auto[Merging]--->
+	  // <---Auto[Merging]
+	  
+	  // Auto[MergingEnd]--->
+	}
+  // <---Auto[MergingEnd]
+  
+  // Auto[ClassEnd]--->
+}
+// <---Auto[ClassEnd]`;
+
+const FULL_WORKER_BOILERPLATE = `// Auto[File]--->// <---Auto[File]
+// Auto[Import]--->
+/* eslint-disable @typescript-eslint/camelcase */
+
+import {SourceType, ActionType, HierarchicalDataTable, HierarchicalDataRow} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/DatabaseHelper';
+import {ProjectConfigurationHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/ProjectConfigurationHelper';
+import {SchemaHelper, DataTableSchema} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchemaHelper';
+import {Base as $Base} from '{__IMPORT_DIRECTORY_PREFIX__}Base';
+
+// Assign to an another one to override the base class.
+// 
+let Base: any = $Base;
+
+// <---Auto[Import]
+// Auto[Declare]--->
+/*enum SourceType {
+  Relational,
+  PrioritizedWorker,
+  Document,
+  VolatileMemory,
+  RESTful,
+  Dictionary,
+  Collection
+}
+enum ActionType {
+  Insert,
+  Update,
+  Upsert,
+  Delete,
+  Retrieve,
+  Popup,
+  Navigate,
+  Test
+}*/
+// <---Auto[Declare]
+// Auto[Interface]--->
+/*interface HierarchicalDataTable {
+	source: SourceType;
+	group: string;
+  rows: HierarchicalDataRow[];
+  notification?: string;
+}
+interface HierarchicalDataRow {
+  keys: {[Identifier: string]: any};
+  columns: {[Identifier: string]: any};
+  relations: {[Identifier: string]: HierarchicalDataTable};
+  division?: number[];
+}*/
+// <---Auto[Interface]
+// Auto[ClassBegin]--->
+class Worker extends Base {
+  constructor(data: HierarchicalDataTable) {
+  	super(data);
+  }
+  // <---Auto[ClassBegin]
+ 	
+  // Auto[MergingBegin]--->  
+  private initialize(data: HierarchicalDataTable): void {
+	  // <---Auto[MergingBegin]
+	  // Auto[Merging]--->
+	  // <---Auto[Merging]
+	  
+	  // Auto[MergingEnd]--->
+	}
+  // <---Auto[MergingEnd]
+  
+  // Auto[ClassEnd]--->
+}
+// <---Auto[ClassEnd]`;
+
+const FULL_SCHEDULER_BOILERPLATE = `// Auto[File]--->// <---Auto[File]
+// Auto[Import]--->
+/* eslint-disable @typescript-eslint/camelcase */
+
+import {SourceType, ActionType, HierarchicalDataTable, HierarchicalDataRow} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/DatabaseHelper';
+import {ProjectConfigurationHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/ProjectConfigurationHelper';
+import {SchemaHelper, DataTableSchema} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchemaHelper';
+import {SchedulerHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchedulerHelper';
+import {Base as $Base} from '{__IMPORT_DIRECTORY_PREFIX__}Base';
+
+// Assign to an another one to override the base class.
+// 
+let Base: any = $Base;
+
+// <---Auto[Import]
+// Auto[Declare]--->
+/*enum SourceType {
+  Relational,
+  PrioritizedWorker,
+  Document,
+  VolatileMemory,
+  RESTful,
+  Dictionary,
+  Collection
+}
+enum ActionType {
+  Insert,
+  Update,
+  Upsert,
+  Delete,
+  Retrieve,
+  Popup,
+  Navigate,
+  Test
+}*/
+// <---Auto[Declare]
+// Auto[Interface]--->
+/*interface HierarchicalDataTable {
+	source: SourceType;
+	group: string;
+  rows: HierarchicalDataRow[];
+  notification?: string;
+}
+interface HierarchicalDataRow {
+  keys: {[Identifier: string]: any};
+  columns: {[Identifier: string]: any};
+  relations: {[Identifier: string]: HierarchicalDataTable};
+  division?: number[];
+}*/
+// <---Auto[Interface]
+// Auto[ClassBegin]--->
+class Scheduler extends Base {
+  constructor() {
+  	super();
+  }
+  // <---Auto[ClassBegin]
+ 	
+  // Auto[MergingBegin]--->  
+  private initialize(): [number, number] {
+  	let days: number = 0;
+  	let minutes: number = 0;
+  	let delegate: () => Promise<void> = null;
+	  // <---Auto[MergingBegin]
+	  // Auto[Merging]--->
+	  // <---Auto[Merging]
+	  
+	  // Auto[MergingEnd]--->
+	}
+  // <---Auto[MergingEnd]
+  
+  // Auto[ClassEnd]--->
+}
+// <---Auto[ClassEnd]`;
+
 const MERGING_BOILERPLATE = `// Auto[Merging:Begin]--->
 // <---Auto[Merging:Begin]
 
 // Auto[Merging:End]--->
 // <---Auto[Merging:End]`;
 
+const CLASS_END_BEGIN = `\n  // Auto[ClassEnd]--->`;
 const MAIN_MERGE_END_BEGIN = `	  // <---Auto[Merging]`;
 const SUB_MERGE_END_BEGIN = `\n// Auto[Merging:End]--->`;
 const FILE_BEGIN = `// Auto[File]--->`;
 const FILE_END = `// <---Auto[File]`;
 
 var BackEndScriptHelper = {
-		generateScriptCode: (info: any) => {
-				let code = FULL_BOILERPLATE;
-		    code = code.replace('// <---Auto[Import]', '// <---Auto[Import]' + (info['internal-fsb-data-code-import'] || DEFAULTS.Import));
-		    code = code.replace('// <---Auto[Declare]', '// <---Auto[Declare]' + (info['internal-fsb-data-code-declare'] || DEFAULTS.Declare));
-		    code = code.replace('// <---Auto[Interface]', '// <---Auto[Interface]' + (info['internal-fsb-data-code-interface'] || DEFAULTS.Interface));
-		    code = code.replace('// <---Auto[ClassBegin]', '// <---Auto[ClassBegin]' + (info['internal-fsb-data-code-body'] || DEFAULTS.ClassBegin));
-		    code = code.replace('// <---Auto[ClassEnd]', '// <---Auto[ClassEnd]' + (info['internal-fsb-data-code-footer'] || DEFAULTS.ClassEnd));
+		generateScriptCode: (info: any, boilerplate: string=FULL_CONTROLLER_BOILERPLATE, defaults: any=CONTROLLER_DEFAULTS, templateCode: TemplateCode=TemplateCode.Controller) => {
+				let code = boilerplate;
+				const beforeExecutions = [];
+				const afterExecutions = [];
+				
+		    code = code.replace('// <---Auto[Import]', '// <---Auto[Import]' + (info['internal-fsb-data-code-import'] || defaults.Import));
+		    code = code.replace('// <---Auto[Declare]', '// <---Auto[Declare]' + (info['internal-fsb-data-code-declare'] || defaults.Declare));
+		    code = code.replace('// <---Auto[Interface]', '// <---Auto[Interface]' + (info['internal-fsb-data-code-interface'] || defaults.Interface));
+		    code = code.replace('// <---Auto[ClassBegin]', '// <---Auto[ClassBegin]' + (info['internal-fsb-data-code-body'] || defaults.ClassBegin));
+		    code = code.replace('// <---Auto[ClassEnd]', '// <---Auto[ClassEnd]' + (info['internal-fsb-data-code-footer'] || defaults.ClassEnd));
 		        
 				let functionNameMapping = {};
+				
+				for (let name of Object.keys(CAMEL_OF_EVENTS_DICTIONARY)) {
+            let value = info[name];
+            if (value) value = JSON.parse(value);
+            else value = {};
+            
+            let FUNCTION_NAME = CAMEL_OF_EVENTS_DICTIONARY[name].replace(/^on/, 'on' + info['internal-fsb-class']) + '_' + info['internal-fsb-guid'];
+            let FUNCTION_COMPREHEND_NAME = CAMEL_OF_EVENTS_DICTIONARY[name].replace(/^on/, 'on' + info['internal-fsb-class']) + ' (' + info['internal-fsb-name'] + ')';
+            let FUNCTION_EVENT_TYPE = (CUSTOM_EVENT_TYPE_OF_CAMEL_OF_EVENTS.indexOf(name) == -1) ? 'Event' : 'CustomEvent';
+            let FUNCTION_CUSTOM_EVENT_CODING_GUIDE_1 = (FUNCTION_EVENT_TYPE == 'CustomEvent') ? `
+    // const params = event.detail.params;                  /* manipulation parameters */
+    // const response = event.detail.response;              /* manipulation response */` : '';
+            let FUNCTION_CUSTOM_EVENT_CODING_GUIDE_2 = (FUNCTION_EVENT_TYPE == 'CustomEvent') ? `
+    // return EventHelper.cancel(event);                    /* cancelling this manipulation */
+    // ` : '';
+            let FUNCTION_BEGIN_BEGIN = `\n  // Auto[${FUNCTION_NAME}:Begin]--->`;
+            let FUNCTION_BEGIN_END = `\n    // <---Auto[${FUNCTION_NAME}:Begin]`;
+            let FUNCTION_END_BEGIN = `// Auto[${FUNCTION_NAME}:End]--->`;
+            let FUNCTION_END_END = `\n  // <---Auto[${FUNCTION_NAME}:End]`;
+            let FUNCTION_BODY = `
+
+    // Handle the event of ${FUNCTION_COMPREHEND_NAME} here:
+    // ${FUNCTION_CUSTOM_EVENT_CODING_GUIDE_1}
+    // const target = EventHelper.getCurrentElement(event); /* current invoking element */
+    // const element1 = HTMLHelper.getElementById('ID');    /* accessing an element */
+    // const control1 = ReactDOM.findDOMNode(this.refs.ID); /* accessing a component */
+    // ${FUNCTION_CUSTOM_EVENT_CODING_GUIDE_2}
+    
+    `;
+    				if (templateCode == TemplateCode.Connector) FUNCTION_BODY = `
+    // Place your custom manipulation here:
+    // 
+    // const customEvent: CustomEvent = event as CustomEvent;
+    // const source: DataTableSchema = customEvent.detail.source;    					/* source of relation */
+    // const target: DataTableSchema = customEvent.detail.target;    					/* target of relation */
+    // const rows: HierarchicalDataRow[] = customEvent.detail.rows;    				/* data in-between */
+    // const transaction: any = customEvent.detail.transaction;    						/* transaction context */
+    // const crossRelationUpsert: boolean = customEvent.detail.crossRelationUpsert;    /* upsert for the next manipulation */
+    // const session: any = customEvent.detail.session;    										/* request session */
+    // const leavePermission: boolean = customEvent.detail.leavePermission;  	/* override permission */
+    // const innerCircleTags: string[] = customEvent.detail.innerCircleTags;  /* circle tags */
+    //
+    
+    return rows;
+    
+    `;
+            
+            if (value.event) {
+                if (code.indexOf(FUNCTION_BEGIN_BEGIN) == -1) {
+                    code = code.replace(CLASS_END_BEGIN,
+`${FUNCTION_BEGIN_BEGIN}
+  protected ${templateCode != TemplateCode.Controller ? 'async ' : ''}${FUNCTION_NAME}(event: ${FUNCTION_EVENT_TYPE})${templateCode != TemplateCode.Controller ? ': Promise<HierarchicalDataRow[]>' : ''} {${FUNCTION_BEGIN_END}${info['internal-fsb-react-code-' + name] || FUNCTION_BODY}${FUNCTION_END_BEGIN}${value['no-propagation'] ? NO_PROPAGATION : ''}
+  }${FUNCTION_END_END}
+${CLASS_END_BEGIN}`);
+                } else {
+                    code = `${code.split(FUNCTION_END_BEGIN)[0]}${FUNCTION_END_BEGIN}${value['no-propagation'] ? NO_PROPAGATION : ''}
+  }${FUNCTION_END_END}${code.split(FUNCTION_END_END)[1]}`;
+                }
+        				
+        				if (templateCode != TemplateCode.Controller) {
+	        				let type: string;
+	            		let destination: string;
+	            		
+	            		switch (name) {
+	            			case 'onfsbsourceinsert':
+	            				type = 'Insert';
+	            				destination = info['data-source-group-name'];
+	            				break;
+	            			case 'onfsbtargetinsert':
+	            				type = 'Insert';
+	            				destination = info['data-target-group-name'];
+	            				break;
+	            			case 'onfsbsourceupsert':
+	            				type = 'Upsert';
+	            				destination = info['data-source-group-name'];
+	            				break;
+	            			case 'onfsbtargetupsert':
+	            				type = 'Upsert';
+	            				destination = info['data-target-group-name'];
+	            				break;
+	            			case 'onfsbsourceupdate':
+	            				type = 'Update';
+	            				destination = info['data-source-group-name'];
+	            				break;
+	            			case 'onfsbtargetupdate':
+	            				type = 'Update';
+	            				destination = info['data-target-group-name'];
+	            				break;
+	            			case 'onfsbsourcedelete':
+	            				type = 'Delete';
+	            				destination = info['data-source-group-name'];
+	            				break;
+	            			case 'onfsbtargetdelete':
+	            				type = 'Delete';
+	            				destination = info['data-target-group-name'];
+	            				break;
+	            			case 'onfsbsourceretrieve':
+	            				type = 'Retrieve';
+	            				destination = info['data-source-group-name'];
+	            				break;
+	            			case 'onfsbtargetretrieve':
+	            				type = 'Retrieve';
+	            				destination = info['data-target-group-name'];
+	            				break;
+	            			default:
+	            				type = null;
+	            				break;
+	            		}
+	            		
+	            		if (type) beforeExecutions.push(`	  this.register(ActionType.${type}, SchemaHelper.getSchemaFromKey('${destination}'), this.${FUNCTION_NAME});`);
+	              }
+            } else {
+                if (code.indexOf(FUNCTION_BEGIN_BEGIN) != -1) {
+                    code = code.split(FUNCTION_BEGIN_BEGIN)[0] + code.split(FUNCTION_END_END + '\n')[1];
+                }
+            }
+            
+            functionNameMapping[`${FUNCTION_NAME}:Begin`] = 'internal-fsb-react-code-' + name;
+        }
+        
+        if (templateCode == TemplateCode.Connector) {
+					code = code.replace('__REPLACEMENT_SUPER_MAKER__', `super(SchemaHelper.getSchemaFromKey('${info['data-source-group-name']}'), SchemaHelper.getSchemaFromKey('${info['data-target-group-name']}'));`);
+				} else if (templateCode == TemplateCode.Worker) {
+					beforeExecutions.push('    let count = 0;');
+					beforeExecutions.push('    let value = undefined;');
+					beforeExecutions.push('    for (const [index, row] of data.rows.entries()) {');
+					beforeExecutions.push('      this.iterations[index] = this.iterations[index] || [];');
+					afterExecutions.push('    }');
+				} else if (templateCode == TemplateCode.Scheduler) {
+					
+				}
 				
 				let prerequisiteCode = info['autoGeneratedCodeForMergingBackEndScript'][0];
 				let mergingCode = info['autoGeneratedCodeForMergingBackEndScript'][1];
@@ -425,8 +898,9 @@ var BackEndScriptHelper = {
     		
     		mergingCode = mergingCode.replace(/(\n)+/g, '\n');
 				
-				code = code.replace(MAIN_MERGE_END_BEGIN, `${prerequisiteCode}
+				code = code.replace(MAIN_MERGE_END_BEGIN, `${prerequisiteCode}${beforeExecutions.join('\n')}
 ${mergingCode}
+${afterExecutions.join('\n')}
 ${MAIN_MERGE_END_BEGIN}`);
 				
 				code = `${code.split(FILE_END)[0]}
@@ -437,12 +911,13 @@ ${FILE_END}${code.split(FILE_END)[1]}`;
 				
 				return [code, functionNameMapping];
 		},
-		generateMergingCode: (info: any, executions: string[], removeAutoGeneratingWarning: boolean=false) => {
+		generateMergingCode: (info: any, executions: string[], removeAutoGeneratingWarning: boolean=false, templateCode: TemplateCode=TemplateCode.Controller) => {
 				let code = '';
 	      let functionNameMapping = {};
 	      
 	      let SECTION_GUID = info['internal-fsb-guid'];
 	      let SECTION_NAME = info['internal-fsb-name'];
+	      let SECTION_ENTITY = info['data-title-name'];
 	      let SECTION_TARGET = info['internal-fsb-data-source-type'];
 	      let SECTION_TABLE_NAME= info['internal-fsb-data-source-name'];
 	      let SECTION_COLUMN_NAME = info['internal-fsb-data-source-column'];
@@ -456,6 +931,16 @@ ${FILE_END}${code.split(FILE_END)[1]}`;
         let SECTION_BEGIN_END = `\n      // <---Auto[${SECTION_GUID}:Begin]`;
         let SECTION_END_BEGIN = `// Auto[${SECTION_GUID}:End]--->`;
         let SECTION_END_END = `    // <---Auto[${SECTION_GUID}:End]`;
+        
+        let SECTION_SCHEDULING_MONDAY = info['data-timing-day-monday'] ? DAYS.MONDAY : 0;
+        let SECTION_SCHEDULING_TUESDAY = info['data-timing-day-tuesday'] ? DAYS.TUESDAY : 0;
+        let SECTION_SCHEDULING_WEDNESDAY = info['data-timing-day-wednesday'] ? DAYS.WEDNESDAY : 0;
+        let SECTION_SCHEDULING_THURSDAY = info['data-timing-day-thursday'] ? DAYS.THURSDAY : 0;
+        let SECTION_SCHEDULING_FRIDAY = info['data-timing-day-friday'] ? DAYS.FRIDAY : 0;
+        let SECTION_SCHEDULING_SATURDAY = info['data-timing-day-saturday'] ? DAYS.SATURDAY : 0;
+        let SECTION_SCHEDULING_SUNDAY = info['data-timing-day-sunday'] ? DAYS.SUNDAY : 0;
+        let SECTION_SCHEDULING_DAYS = SECTION_SCHEDULING_MONDAY | SECTION_SCHEDULING_TUESDAY | SECTION_SCHEDULING_WEDNESDAY | SECTION_SCHEDULING_THURSDAY | SECTION_SCHEDULING_FRIDAY | SECTION_SCHEDULING_SATURDAY | SECTION_SCHEDULING_SUNDAY;
+        let SECTION_SCHEDULING_MINUTES = info['data-timing-minutes'] || 0;
         
         if (SECTION_VALIDATION_FORMAT != 'custom') SECTION_VALIDATION_REGEX = null;
         
@@ -479,13 +964,52 @@ ${FILE_END}${code.split(FILE_END)[1]}`;
 
     		if (code == '') code = MERGING_BOILERPLATE;
     		
-        if (code.indexOf(SECTION_BEGIN_BEGIN) == -1) {
+        if (templateCode == TemplateCode.Controller && code.indexOf(SECTION_BEGIN_BEGIN) == -1) {
             code = code.replace(SUB_MERGE_END_BEGIN,
 `${SECTION_BEGIN_BEGIN}
 		RequestHelper.registerInput('${SECTION_GUID}', ${SECTION_TARGET}, ${SECTION_TABLE_NAME}, ${SECTION_COLUMN_NAME});
 		ValidationHelper.registerInput('${SECTION_GUID}', ${SECTION_NAME}, ${!!SECTION_REQUIRED}, ${SECTION_VALIDATION_MESSAGE}, ${SECTION_VALIDATION_FORMAT}, ${SECTION_VALIDATION_REGEX});
     for (let input of RequestHelper.getInputs(this.pageId, request, '${SECTION_GUID}')) {${SECTION_VALUE_SOURCE || ''}${SECTION_BEGIN_END}${info['internal-fsb-data-code'] || SECTION_BODY}${SECTION_END_BEGIN}
       if (input != null) data.push(input);
+    }
+${SECTION_END_END}
+${SUB_MERGE_END_BEGIN}`);
+        } else if (templateCode == TemplateCode.Connector) {
+        		code = code.replace(SUB_MERGE_END_BEGIN,
+`${SECTION_BEGIN_BEGIN}
+		RequestHelper.registerInput('${SECTION_GUID}', ${SECTION_TARGET}, ${SECTION_TABLE_NAME}, ${SECTION_COLUMN_NAME});
+		ValidationHelper.registerInput('${SECTION_GUID}', ${SECTION_NAME}, ${!!SECTION_REQUIRED}, ${SECTION_VALIDATION_MESSAGE}, ${SECTION_VALIDATION_FORMAT}, ${SECTION_VALIDATION_REGEX});
+    for (let input of RequestHelper.getInputs(this.pageId, request, '${SECTION_GUID}')) {${SECTION_VALUE_SOURCE || ''}${SECTION_BEGIN_END}${info['internal-fsb-data-code'] || SECTION_BODY}${SECTION_END_BEGIN}
+      if (input != null) data.push(input);
+    }
+${SECTION_END_END}
+${SUB_MERGE_END_BEGIN}`);
+        } else if (templateCode == TemplateCode.Worker) {
+        		code = code.replace(SUB_MERGE_END_BEGIN,
+`${SECTION_BEGIN_BEGIN}
+      value = undefined;
+      
+      if (row.keys.hasOwnProperty('${SECTION_ENTITY}')) {
+        value = row.keys['${SECTION_ENTITY}'];
+      } else if (row.columns.hasOwnProperty('${SECTION_ENTITY}')) {
+        value = row.columns['${SECTION_ENTITY}'];
+      }
+${SECTION_VALUE_SOURCE || ''}${SECTION_BEGIN_END}${info['internal-fsb-data-code'] || SECTION_BODY}${SECTION_END_BEGIN}
+      
+      this.iterations[index][count] = value;
+      count += 1;
+${SECTION_END_END}
+${SUB_MERGE_END_BEGIN}`);
+        } else if (templateCode == TemplateCode.Scheduler) {
+        		code = code.replace(SUB_MERGE_END_BEGIN,
+`${SECTION_BEGIN_BEGIN}
+		days = ${SECTION_SCHEDULING_DAYS};
+		minutes = ${SECTION_SCHEDULING_MINUTES};
+		delegate = null;
+		
+    if (days != 0) {${SECTION_VALUE_SOURCE || ''}${SECTION_BEGIN_END}${info['internal-fsb-data-code'] || SECTION_BODY}${SECTION_END_BEGIN}
+      
+      if (delegate != null) SchedulerHelper.scheduling(days, minutes, delegate);
     }
 ${SECTION_END_END}
 ${SUB_MERGE_END_BEGIN}`);
@@ -504,7 +1028,7 @@ ${SUB_MERGE_END_BEGIN}`);
 	      functionNameMapping[`${SECTION_GUID}:Begin`] = 'internal-fsb-data-code';
 	      
 	      return [code, functionNameMapping];
-		},	
+		},
 	  extractCode: (code: string) => {
 		    if (!code) return {};
 		    
@@ -520,7 +1044,16 @@ ${SUB_MERGE_END_BEGIN}`);
 		    }
 		    
 		    return resultDictionary;
-	  }
+	  },
+		generateConnectorCode: (info: any) => {
+				return BackEndScriptHelper.generateScriptCode(info, FULL_CONNECTOR_BOILERPLATE, CONNECTOR_DEFAULTS, TemplateCode.Connector);
+		},
+		generateWorkerCode: (info: any) => {
+				return BackEndScriptHelper.generateScriptCode(info, FULL_WORKER_BOILERPLATE, WORKER_DEFAULTS, TemplateCode.Worker);
+		},
+		generateSchedulerCode: (info: any) => {
+				return BackEndScriptHelper.generateScriptCode(info, FULL_SCHEDULER_BOILERPLATE, SCHEDULER_DEFAULTS, TemplateCode.Scheduler);
+		}
 }
 
-export {BackEndScriptHelper, DEFAULTS};
+export {BackEndScriptHelper, CONTROLLER_DEFAULTS, CONNECTOR_DEFAULTS, WORKER_DEFAULTS, SCHEDULER_DEFAULTS, TemplateCode};

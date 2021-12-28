@@ -1,5 +1,5 @@
 import {HTMLHelper} from '../../helpers/HTMLHelper';
-import {BackEndScriptHelper, DEFAULTS} from '../../helpers/BackEndScriptHelper';
+import {BackEndScriptHelper, TemplateCode} from '../../helpers/BackEndScriptHelper';
 import {InternalProjectSettings} from './WorkspaceHelper';
 import {FORM_CONTROL_CLASS_LIST} from '../../Constants';
 
@@ -66,6 +66,38 @@ var BackEndDOMHelper = {
     	let children = [...element.childNodes];
       for (let child of children) {
         BackEndDOMHelper.recursiveGenerateCodeForMergingSection(body, child, key, executions, lines);
+      }
+    }
+  },
+	generateCodeForMergingSectionInData: function(element: HTMLElement) {
+  	let executions: string[] = [];
+  	let lines: string[] = [];
+  	BackEndDOMHelper.recursiveGenerateCodeForMergingSectionInData(element,
+  		(element.getAttribute('data-title-name') != 'Untitled') ? element.getAttribute('data-title-name') || element.getAttribute('internal-fsb-guid') : element.getAttribute('internal-fsb-guid'),
+  		executions, lines);
+    
+    executions = executions.filter((v, i, a) => a.indexOf(v) === i);
+    lines = lines.filter((v, i, a) => a.indexOf(v) === i);
+    
+    return [executions.join('\n'), lines.join('\n')];
+  },
+  recursiveGenerateCodeForMergingSectionInData: function(element: HTMLElement, key: string, executions: string[], lines: string[]) {
+  	if (HTMLHelper.hasClass(element, 'internal-fsb-accessory')) return;
+    
+    if (element && element.tagName) {
+    	if (['Parameter', 'Timing'].indexOf(HTMLHelper.getAttribute(element, 'internal-fsb-class')) != -1) {
+		    let info = HTMLHelper.getAttributes(element, false);
+    		
+	    	let code, mapping;
+	    	[code, mapping] = BackEndScriptHelper.generateMergingCode(info, [], false,
+	    		(HTMLHelper.getAttribute(element, 'internal-fsb-class') == 'Parameter') ? TemplateCode.Worker : TemplateCode.Scheduler);
+	    	
+	    	if (code) lines.push(code);
+    	}
+    	
+    	let children = [...element.childNodes];
+      for (let child of children) {
+        BackEndDOMHelper.recursiveGenerateCodeForMergingSectionInData(child, key, executions, lines);
       }
     }
   }
