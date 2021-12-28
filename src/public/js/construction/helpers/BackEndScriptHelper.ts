@@ -568,7 +568,7 @@ interface HierarchicalDataRow {
 // Auto[ClassBegin]--->
 class Connector extends Base {
   constructor() {
-  	super();
+  	__REPLACEMENT_SUPER_MAKER__
   }
   // <---Auto[ClassBegin]
  	
@@ -866,7 +866,7 @@ ${CLASS_END_BEGIN}`);
         }
         
         if (templateCode == TemplateCode.Connector) {
-					code = code.replace('constructor() {\n  	super()\n  	}', `constructor() {\n  	super(SchemaHelper.getSchemaFromKey('${info['data-source-group-name']}'), SchemaHelper.getSchemaFromKey('${info['data-target-group-name']}')\n  	}`);
+					code = code.replace('__REPLACEMENT_SUPER_MAKER__', `super(SchemaHelper.getSchemaFromKey('${info['data-source-group-name']}'), SchemaHelper.getSchemaFromKey('${info['data-target-group-name']}');`);
 				} else if (templateCode == TemplateCode.Worker) {
 					beforeExecutions.push('    let count = 0;');
 					beforeExecutions.push('    let value = undefined;');
