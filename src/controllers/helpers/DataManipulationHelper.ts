@@ -2,14 +2,22 @@
 // PLEASE DO NOT MODIFY BECUASE YOUR CHANGES MAY BE LOST.
 
 import {HierarchicalDataTable, HierarchicalDataRow} from "./DatabaseHelper";
+import {CodeHelper} from "./CodeHelper";
+import {strict as assert} from 'assert';
 
 let dataset: {[Identifier: string]: HierarchicalDataTable} = null;
 
 const DataManipulationHelper = {
 	setData: (data: {[Identifier: string]: HierarchicalDataTable}) => {
+		CodeHelper.assertOfPresent(data, 'data');
+		
 		dataset = data;
 	},
   getDataFromKey: (key: string, current: any, index: number=-1): any => {
+		CodeHelper.assertOfPresent(key, 'key');
+		CodeHelper.assertOfKeyName(key, 'key');
+		CodeHelper.assertOfPresent(current, 'current');
+		
 		if (Array.isArray(current)) {
 			current = current[0] || {};
 		}
@@ -19,7 +27,8 @@ const DataManipulationHelper = {
 		const table = (current.relations || {})[key];
 		if (table) {
 			if (index != -1) {
-				return table.rows[index];
+				if (table.rows[index] == undefined) return null;
+				else return table.rows[index];
 			} else {
 				return table.rows;
 			}
@@ -35,11 +44,8 @@ const DataManipulationHelper = {
 		}
   },
   getDataFromNotation: (notation: string, data: {[Identifier: string]: HierarchicalDataTable}=dataset, inArray: boolean=false): any => {
-    if (!notation) {
-      console.error("The notation is null, undefined or empty.");
-	  	alert("There is an error occured, please try again.");
-      return [];
-    }
+    CodeHelper.assertOfPresent(notation, 'notation');
+    CodeHelper.assertOfNotationFormat(notation, 'notation');
     
     const splited = notation.split(".");
     let current = {

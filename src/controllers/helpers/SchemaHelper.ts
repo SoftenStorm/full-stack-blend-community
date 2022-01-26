@@ -3,6 +3,7 @@
 
 import {SourceType} from "./DatabaseHelper";
 import {Permission} from "./PermissionHelper";
+import {CodeHelper} from "./CodeHelper";
 import {ProjectConfigurationHelper} from "./ProjectConfigurationHelper";
 
 enum FieldType {
@@ -47,20 +48,6 @@ interface DataRelationSchema {
 }
 
 const SchemaHelper = {
-	getFieldType: (value: string): FieldType => {
-		switch (value) {
-			case "auto":
-				return FieldType.AutoNumber;
-			case "number":
-				return FieldType.Number;
-			case "boolean":
-				return FieldType.Boolean;
-			case "datetime":
-				return FieldType.DateTime;
-			default:
-				return FieldType.String;
-		}
-	},
 	verifyDataSchema: (data: DataSchema=ProjectConfigurationHelper.getDataSchema()) => {
 	  for (const tableKey in data.tables) {
 	    if (data.tables.hasOwnProperty(tableKey)) {
@@ -77,7 +64,7 @@ const SchemaHelper = {
 	        if (table.keys.hasOwnProperty(primaryKey)) {
 	          const column = table.keys[primaryKey];
 	          if (column.name === undefined || column.name === null || column.name.trim() === "")
-  	          throw new Error(`There was an error verifying data schema (missing a column name: ${JSON.stringify(column)}).`);
+  	          throw new Error(`There was an error verifying data schema (missing a key name: ${JSON.stringify(column)}).`);
 	        
 		        if (column.modifyingPermission) SchemaHelper.verifyPermission(column.modifyingPermission);
 	  	    	if (column.retrievingPermission) SchemaHelper.verifyPermission(column.retrievingPermission);
@@ -121,6 +108,8 @@ const SchemaHelper = {
 	  }
 	},
 	verifyPermission: (permission: Permission, data: DataSchema=ProjectConfigurationHelper.getDataSchema()) => {
+		CodeHelper.assertOfNotUndefined(permission, 'permission');
+		
 		if (permission == null) return true;
 		
 		switch (permission.mode) {
@@ -158,7 +147,48 @@ const SchemaHelper = {
 		
 		return true;
 	},
+	verifyNotations: (tree: any, data: DataSchema=ProjectConfigurationHelper.getDataSchema()) => {
+		// TODO: fix bugs.
+		return true;
+		
+		CodeHelper.assertOfPresent(tree, 'tree');
+		CodeHelper.recursiveEvaluate(tree, (obj: any) => {
+			if (typeof obj !== 'object') CodeHelper.assertOfString(obj, 'children');
+		});
+		
+	  const notations = SchemaHelper.findAllPossibleNotations(tree || {});
+	  for (const notation of notations) {
+	    const splited = notation.split(".");
+  		let shifted: string = splited.shift();
+  		let current: DataTableSchema | DataColumnSchema = null;
+  		
+  		do {
+  		  current = SchemaHelper.getSchemaFromKey(shifted, current as DataTableSchema, data, splited.length == 0);
+  		  shifted = splited.shift();
+  		} while (current && shifted);
+  		
+  		if (current == null) throw new Error(`There was an error verifying dot notation (disconnected: ${notation}).`);
+	  }
+	},
+	getFieldType: (value: string): FieldType => {
+		CodeHelper.assertOfString(value, 'value');
+		
+		switch (value) {
+			case "auto":
+				return FieldType.AutoNumber;
+			case "number":
+				return FieldType.Number;
+			case "boolean":
+				return FieldType.Boolean;
+			case "datetime":
+				return FieldType.DateTime;
+			default:
+				return FieldType.String;
+		}
+	},
 	getSchemaFromKey: (key: string, current: DataTableSchema, data: DataSchema=ProjectConfigurationHelper.getDataSchema(), searchForDataTableSchema: boolean=false): DataTableSchema | DataColumnSchema => {
+		CodeHelper.assertOfPresent(key, 'key');
+		
 		if (!searchForDataTableSchema) {
 			// Search DataTableSchema
 			// 
@@ -175,7 +205,7 @@ const SchemaHelper = {
 		} else {
 			// Search DataColumnSchema
 			// 
-			const column = (current.keys || {})[key] || (current.columns || {})[key];
+			const column = (current && current.keys || {})[key] || (current && current.columns || {})[key];
 			if (column) {
 				return column;
 			} else {
@@ -183,6 +213,25 @@ const SchemaHelper = {
 			}
 		}
   },
+	getDataTableSchemaFromNotation: (notation: string, data: DataSchema=ProjectConfigurationHelper.getDataSchema()): DataTableSchema => {
+		CodeHelper.assertOfPresent(notation, 'notation');
+	  
+	  if (!notation) return null;
+	  
+    const splited = notation.split(".");
+		let shifted: string = splited.shift();
+		let current: DataTableSchema | DataColumnSchema = null;
+		
+		do {
+		  current = SchemaHelper.getSchemaFromKey(shifted, current as DataTableSchema, data, current !== null && splited.length == 0);
+		  shifted = splited.shift();
+		} while (current && shifted);
+		
+		if (current == null) throw new Error(`There was an error retreiving data schema ${notation} (invalid of dot notation).`);
+		if ("fieldType" in current) throw new Error("There was an error retreiving data schema (dot notation gave a column instead of a table).");
+		
+		return current;
+	},
   findAllPossibleNotations: (tree: any, accumulatedNotation: string=null, notations: string[]=[]): string[] => {
     for (const key in tree) {
       if (tree.hasOwnProperty(key)) {
@@ -202,41 +251,10 @@ const SchemaHelper = {
     
     return notations;
   },
-	verifyNotations: (tree: any, data: DataSchema=ProjectConfigurationHelper.getDataSchema()) => {
-		return;
-		
-	  const notations = SchemaHelper.findAllPossibleNotations(tree || {});
-	  for (const notation of notations) {
-	    const splited = notation.split(".");
-  		let shifted: string = splited.shift();
-  		let current: DataTableSchema | DataColumnSchema = null;
-  		
-  		do {
-  		  current = SchemaHelper.getSchemaFromKey(shifted, current as DataTableSchema, data, splited.length == 0);
-  		  shifted = splited.shift();
-  		} while (current && shifted);
-  		
-  		if (current == null) throw new Error(`There was an error verifying dot notation (disconnected: ${notation}).`);
-	  }
-	},
-	getDataTableSchemaFromNotation: (notation: string, data: DataSchema=ProjectConfigurationHelper.getDataSchema()): DataTableSchema => {
-	  if (!notation) return null;
-	  
-    const splited = notation.split(".");
-		let shifted: string = splited.shift();
-		let current: DataTableSchema | DataColumnSchema = null;
-		
-		do {
-		  current = SchemaHelper.getSchemaFromKey(shifted, current as DataTableSchema, data, current !== null && splited.length == 0);
-		  shifted = splited.shift();
-		} while (current && shifted);
-		
-		if (current == null) throw new Error("There was an error retreiving data schema (invalid of dot notation).");
-		if ("fieldType" in current) throw new Error("There was an error retreiving data schema (dot notation gave a column instead of a table).");
-		
-		return current;
-	},
 	findShortestPathOfRelations: (from: DataTableSchema, to: DataTableSchema, data: DataSchema=ProjectConfigurationHelper.getDataSchema()): DataTableSchema[] => {
+		CodeHelper.assertOfPresent(from, 'from');
+		CodeHelper.assertOfPresent(to, 'to');
+		
 		const results = [];
 		
 		SchemaHelper.recursiveFindShortestPathOfRelations(from, to, results);
@@ -244,6 +262,10 @@ const SchemaHelper = {
 		return results;
 	},
 	recursiveFindShortestPathOfRelations: (from: DataTableSchema, to: DataTableSchema, results: DataTableSchema[], walked: any={}, data: DataSchema=ProjectConfigurationHelper.getDataSchema()): boolean => {
+		CodeHelper.assertOfPresent(from, 'from');
+		CodeHelper.assertOfPresent(to, 'to');
+		CodeHelper.assertOfPresent(results, 'results');
+		
 		if (walked[from.group]) return false;
 		walked[from.group] = true;
 		
