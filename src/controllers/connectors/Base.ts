@@ -15,6 +15,7 @@ class Base {
 		this.target = target;
 		
 		this.setup();
+		this.initialize();
   }
   
 	protected register(action: ActionType, source: DataTableSchema, method: (Event) => Promise<HierarchicalDataRow[]>) {
@@ -26,6 +27,10 @@ class Base {
 	}
 	
 	protected setup() {
+		void(0);
+	}
+	
+	protected initialize() {
 		void(0);
 	}
 	
@@ -51,21 +56,19 @@ class Base {
 				throw new Error('Wrong of an action.');
 		}
 		
-		const event = new CustomEvent(type, {
-			detail: {
-				source: source,
-				target: target,
-				rows: rows,
-				transaction: transaction,
-				crossRelationUpsert: crossRelationUpsert,
-				session: session,
-				leavePermission: leavePermission,
-				innerCircleTags: innerCircleTags
-			}
-		});
+		const info = {
+			source: source,
+			target: target,
+			rows: rows,
+			transaction: transaction,
+			crossRelationUpsert: crossRelationUpsert,
+			session: session,
+			leavePermission: leavePermission,
+			innerCircleTags: innerCircleTags
+		};
 
 		if (dictionary[`${source.guid}:${target.guid}:${action}`]) {		
-			return await dictionary[`${source.guid}:${target.guid}:${action}`](event);
+			return await dictionary[`${source.guid}:${target.guid}:${action}`](info);
 		} else {
 			return rows;
 		}

@@ -1,11 +1,88 @@
 // Auto[Generating:V1]--->
 // PLEASE DO NOT MODIFY BECUASE YOUR CHANGES MAY BE LOST.
+import { strict as assert } from 'assert';
 
 const CodeHelper = {
+	recursiveEvaluate: (obj: any, evaluate: any) => {
+		if (Array.isArray(obj)) {
+			for (const value of obj) {
+				CodeHelper.recursiveEvaluate(value, evaluate);
+			}
+		} else if (typeof obj === 'object' && obj !== null && obj.constructor === Object) {
+			for (const key in obj) {
+				if (obj.hasOwnProperty(key)) {
+					CodeHelper.recursiveEvaluate(obj[key], evaluate);
+				}
+			}
+		} else {
+			evaluate(obj);
+		}
+	},
+	generateInfo: (obj: any) => {
+		if (!obj) return '';
+		else return ' ' + JSON.stringify(obj);
+	},
+	assertOfSimpleType: (obj: any, name: string='parameter', message: string='can be number, boolean, string, date, simple array, or simple object only.', info: any=null) => {
+		CodeHelper.recursiveEvaluate(obj, (obj: any) => {
+			assert(['number', 'boolean', 'string', 'undefined'].indexOf(typeof obj) != -1 ||
+				obj instanceof Date ||
+				Array.isArray(obj) ||
+				obj === null ||
+				obj && obj.constructor === Object, `${name} ${message}${CodeHelper.generateInfo(info)}`);
+		});
+	},
+	assertOfPresent: (obj: any, name: string='parameter', message: string='cannot be null, undefined, and empty string.', info: any=null) => {
+		assert(obj !== undefined &&
+			obj !== null &&
+			(typeof obj !== 'string' || obj.trim() !== ''), `${name} ${message}${CodeHelper.generateInfo(info)}`);
+	},
+	assertOfNotUndefined: (obj: any, name: string='parameter', message: string='cannot be undefined.', info: any=null) => {
+		assert(obj !== undefined, `${name} ${message}${CodeHelper.generateInfo(info)}`);
+	},
+	assertOfNotInfinity: (obj: any, name: string='parameter', message: string='cannot be infinity.', info: any=null) => {
+		assert(!(typeof obj === 'number' && (obj === Infinity || obj === -Infinity)), `${name} ${message}${CodeHelper.generateInfo(info)}`);
+	},
+	assertOfNotNaN: (obj: any, name: string='parameter', message: string='cannot be NaN.', info: any=null) => {
+		assert(!(typeof obj === 'number' && isNaN(obj)), `${name} ${message}${CodeHelper.generateInfo(info)}`);
+	},
+	assertOfString: (obj: any, name: string='parameter', message: string='must be a string.', info: any=null) => {
+		assert(obj === null || obj === undefined || typeof obj === 'string', `${name} ${message}${CodeHelper.generateInfo(info)}`);
+	},
+	assertOfKeyName: (obj: any, name: string='parameter', message: string='must contain only a-z, 0-9, and underscore in lowercase or uppercase.', info: any=obj) => {
+		CodeHelper.assertOfPresent(obj);
+		CodeHelper.assertOfString(obj);
+		
+		assert(obj.match(/^[a-zA-Z0-9_]+$/), `${name} ${message}${CodeHelper.generateInfo(info)}`);
+	},
+	assertOfNotationFormat: (obj: any, name: string='parameter', message: string='has a wrong of notation format.', info: any=obj) => {
+		CodeHelper.assertOfPresent(obj);
+		CodeHelper.assertOfString(obj);
+		
+		assert(obj.match(/^(@|!|@!|!@)?[a-zA-Z0-9_]+(\[\-?[0-9]+(\,\-?[0-9]+)*\])?(\.(@|!|@!|!@)?[a-zA-Z0-9_]+(\[\-?[0-9]+(\,\-?[0-9]+)*\])?)*$/), `${name} ${message}${CodeHelper.generateInfo(info)}`);
+	},
   clone: (obj: any) => {
+  	// TODO: to support Infinity, NaN, RegEX (, undefined)
+    //
+    CodeHelper.recursiveEvaluate(obj, (obj: any) => {
+    	CodeHelper.assertOfSimpleType(obj, 'obj');
+    	CodeHelper.assertOfNotInfinity(obj, 'obj');
+    });
+    // TODO: undo and enforce strictness.
+    /*CodeHelper.recursiveEvaluate(obj, (obj: any) => {
+    	CodeHelper.assertOfSimpleType(obj, 'obj');
+    	CodeHelper.assertOfNotUndefined(obj, 'obj');
+    	CodeHelper.assertOfNotInfinity(obj, 'obj');
+    	CodeHelper.assertOfNotNaN(obj, 'obj');
+    });*/
+    
     return JSON.parse(JSON.stringify(obj));
   },
   equals: (x: any, y: any) => {
+  	// Credit: https://stackoverflow.com/questions/30476150/javascript-deep-comparison-recursively-objects-and-properties
+    // TODO: to support NaN == NaN
+    // 
+    assert(!(typeof x === 'number' && isNaN(x) && typeof y === 'number' && isNaN(y)), 'Cannot compare NaN with NaN.');
+    
     "use strict";
 
     if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
@@ -14,7 +91,7 @@ const CodeHelper = {
     // if they are functions, they should exactly refer to same one (because of closures)
     if (x instanceof Function) { return x === y; }
     // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
-    if (x instanceof RegExp) { return x === y; }
+    if (x instanceof RegExp) { return String(x) === String(y); }
     if (x === y || x.valueOf() === y.valueOf()) { return true; }
     if (Array.isArray(x) && x.length !== y.length) { return false; }
 

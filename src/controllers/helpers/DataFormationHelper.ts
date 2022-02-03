@@ -2,9 +2,17 @@
 // PLEASE DO NOT MODIFY BECUASE YOUR CHANGES MAY BE LOST.
 
 import {HierarchicalDataTable, HierarchicalDataRow, SourceType} from "./DatabaseHelper";
+import {CodeHelper} from "./CodeHelper";
+import { strict as assert } from 'assert';
 
 const DataFormationHelper = {
 	convertFromJSONToHierarchicalDataTable: (data: any, group: string="Collection"): HierarchicalDataTable => {
+		CodeHelper.assertOfPresent(data, 'data');
+		CodeHelper.assertOfKeyName(group, 'group');
+		CodeHelper.recursiveEvaluate(data, (obj: any) => {
+    	CodeHelper.assertOfSimpleType(obj, 'data');
+    });
+		
 		const table = {
 			source: SourceType.Collection,
 			group: group,
@@ -16,6 +24,8 @@ const DataFormationHelper = {
 		return table;
 	},
 	recursiveExtractNodesIntoDataRow: (data: any): HierarchicalDataRow => {
+		CodeHelper.assertOfNotUndefined(data, 'data');
+		
 		const row = {
 			keys: {},
 		  columns: {},
@@ -32,9 +42,11 @@ const DataFormationHelper = {
 				table.rows.push(DataFormationHelper.recursiveExtractNodesIntoDataRow(item));
 			}
 			row.relations['Children'] = table;
-		} else if (typeof data === 'object') {
+		} else if (typeof data === 'object' && data !== null) {
 			for (let key in data) {
 				if (data.hasOwnProperty(key)) {
+					CodeHelper.assertOfKeyName(key.replace(/^\$/, ''), 'key');
+					
 					if (Array.isArray(data[key])) {
 						const table = {
 							source: SourceType.Collection,
@@ -69,25 +81,35 @@ const DataFormationHelper = {
 		return row;
 	},
 	convertFromHierarchicalDataTableToJSON: (data: HierarchicalDataTable): any => {
+		CodeHelper.assertOfPresent(data, 'data');
+		
 		return DataFormationHelper.recursiveExtractNodesIntoDictionary(data.rows[0]);
 	},
 	recursiveExtractNodesIntoDictionary: (row: HierarchicalDataRow): any => {
+		CodeHelper.assertOfPresent(row, 'row');
+		
 		if (row.columns.hasOwnProperty('_')) {
 			return row.columns['_'];
 		} else {
 			const dictionary = {};
 		
 			for (let key in row.keys) {
+				CodeHelper.assertOfKeyName(key.replace(/^\$/, ''), 'key');
+				
 				if (row.keys.hasOwnProperty(key)) {
 					dictionary['$' + key] = row.keys[key];
 				}
 			}
 			for (let key in row.columns) {
+				CodeHelper.assertOfKeyName(key.replace(/^\$/, ''), 'key');
+				
 				if (row.columns.hasOwnProperty(key)) {
 					dictionary[key] = row.columns[key];
 				}
 			}
 			for (let key in row.relations) {
+				CodeHelper.assertOfKeyName(key, 'key');
+				
 				if (row.relations.hasOwnProperty(key)) {
 					if (key == 'Children') {
 						const results = [];
