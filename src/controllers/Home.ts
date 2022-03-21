@@ -2,6 +2,10 @@
 // PLEASE DO NOT MODIFY BECAUSE YOUR CHANGES MAY BE LOST.
 
 import {Request, Response} from "express";
+import {ActionHelper} from "./helpers/ActionHelper";
+import {WorkerHelper} from "./helpers/WorkerHelper";
+import {SchedulerHelper} from "./helpers/SchedulerHelper";
+
 import Component3cb10a6e from "./components/account/settings/_3cb10a6e";
 import Component9e885d49 from "./components/account/authenticate/_9e885d49";
 import Componentb160aa0e from "./components/developer/_b160aa0e";

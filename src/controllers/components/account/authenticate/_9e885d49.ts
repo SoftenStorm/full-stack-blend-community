@@ -13,7 +13,7 @@ import {Base as $Base} from '../../Base';
 
 // Assign to an another one to override the base class.
 // 
-let Base: any = $Base;
+let Base: typeof $Base = $Base;
 
 // <---Auto[Import]
 
@@ -309,12 +309,16 @@ class Controller extends Base {
               return;
             }
             
-            this.request.logIn(existingUser, (err) => {
-              if (err) {
-                reject(new Error('There was an internal server error, please try again. (1103)'));
-                return;
-              }
-              resolve('/editor');
+            existingUser.comparePassword(password, (err, isMatch: boolean) => {
+              if (!isMatch) reject(new Error('Password doesn\'t match. (1102)'));
+              
+              this.request.logIn(existingUser, (err) => {
+                if (err) {
+                  reject(new Error('There was an internal server error, please try again. (1103)'));
+                  return;
+                }
+                resolve('/editor');
+              });
             });
           });
       	}
@@ -325,13 +329,12 @@ class Controller extends Base {
   }
  	
   // Auto[MergingBegin]--->  
-  private initialize(request: Request): [ActionType, DataTableSchema, Input[]] {
+  protected initialize(request: Request): [ActionType, DataTableSchema, Input[]] {
   	let schema: DataTableSchema = RequestHelper.getSchema(this.pageId, request);
   	let data: Input[] = [];
   	let input: Input = null;
   	
 	  // <---Auto[MergingBegin]
-	  
 	  // Auto[Merging]--->
     RequestHelper.registerSubmit("9e885d49", "954a291a", "navigate", ["1b650e66","22d343bd"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Button 3"});
     RequestHelper.registerSubmit("9e885d49", "b2b66792", "navigate", ["1b650e66","22d343bd","d3de6c93"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Button 1"});

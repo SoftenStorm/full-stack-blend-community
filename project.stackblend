@@ -16,10 +16,10 @@ d0e675b7      "groupState": null
 d0e675b7    }
   },
   "backEndControllerBlobSHADict": {
-    "3cb10a6e": "a48a08854ccd60ff64150270954ddc867e64f773#1156580262",
-    "9e885d49": "4339efe8394ec83c5fe81b1343e379eac4179088#-2107443872",
+    "3cb10a6e": "3996f832d6b36dfb6211b07ac683aff8b6ef7e11#-1996975364",
+    "9e885d49": "927c79e6257f6425cce921389d57d4a0af27e335#-689666802",
     "b160aa0e": "6ccbcb4263feb53442094922db039968e89cb16e#-848467370",
-    "index": "e44e44d3901efc947a77f2a6e4ab4d676c3c616d#-261302794"
+    "index": "a79f50e2ec388e776fdfba706f1e4d24ee34ed06#-1186724806"
   },
   "components": {
 245bc127    "245bc127": {
@@ -1367,7 +1367,7 @@ d0e675b7    }
 4d816ba8      "state": "create"
 4d816ba8    }
   },
-  "controllerBlobSHA": "cd92c846c90726e02eb6a2ffbe1647416beb2d42#-2104013774",
+  "controllerBlobSHA": "c24b7a8102d052407801f74139eb341e1351b739#-1563014269",
   "currentPersistingFiles": [
     "src/controllers/components/account/settings/_3cb10a6e.ts",
     "src/controllers/components/account/authenticate/_9e885d49.ts",
@@ -2651,7 +2651,7 @@ ce8b8488          }
     ],
     "popups": []
   },
-  "headerBlobSHA": "fd646a2ae3367cdf1a55f24cef4e84b1b88ea039#-2039291774",
+  "headerBlobSHA": "0a27085d048be0c4146fec95c0a3761c7086cc7f#-822192136",
   "popups": {},
   "routeBlobSHA": "0f684434e19e65e24f74c9718614fddbde47f62a#-1117206934",
   "services": {
@@ -3370,12 +3370,16 @@ ce8b8488          }
 9e885d49          "              return;",
 9e885d49          "            }",
 9e885d49          "            ",
-9e885d49          "            this.request.logIn(existingUser, (err) => {",
-9e885d49          "              if (err) {",
-9e885d49          "                reject(new Error('There was an internal server error, please try again. (1103)'));",
-9e885d49          "                return;",
-9e885d49          "              }",
-9e885d49          "              resolve('/editor');",
+9e885d49          "            existingUser.comparePassword(password, (err, isMatch: boolean) => {",
+9e885d49          "              if (!isMatch) reject(new Error('Password doesn\\'t match. (1102)'));",
+9e885d49          "              ",
+9e885d49          "              this.request.logIn(existingUser, (err) => {",
+9e885d49          "                if (err) {",
+9e885d49          "                  reject(new Error('There was an internal server error, please try again. (1103)'));",
+9e885d49          "                  return;",
+9e885d49          "                }",
+9e885d49          "                resolve('/editor');",
+9e885d49          "              });",
 9e885d49          "            });",
 9e885d49          "          });",
 9e885d49          "      \t}",
