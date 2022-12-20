@@ -37,7 +37,7 @@
     "@types/socket.io": "^2.1.11",
     "amd-module": "0.0.20151203",
     "assert": "^2.0.0",
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "babel-polyfill": "^6.26.0",
     "bcrypt-nodejs": "^0.0.3",
     "bluebird": "^3.5.5",
