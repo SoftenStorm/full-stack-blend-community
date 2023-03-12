@@ -2,6 +2,7 @@ import {FullStackBlend} from '../helpers/DeclarationHelper';
 import {EventHelper} from '../helpers/EventHelper';
 import {HTMLHelper} from '../helpers/HTMLHelper';
 import {RequestHelper} from '../helpers/RequestHelper';
+import {CodeHelper} from '../helpers/CodeHelper';
 import {WORKSPACE_TOGGLING_ATTRIBUTES, WORKSPACE_TOGGLING_STYLES, WORKSPACE_TOGGLING_EXTENSIONS} from '../Constants';
 
 import './components/layout/GridPicker';
@@ -61,7 +62,9 @@ import './components/animation/TimelineManager';
 import './components/animation/KeyframeManager';
 import './components/animation/Keyframe';
 
-//import GitHub from 'github-api';
+// Some manual polyfills for old browsers
+//
+CodeHelper.polyfill(window);
 
 declare let React: any;
 declare let ReactDOM: any;
@@ -415,7 +418,7 @@ let cachedUpdateEditorProperties = {};
   window.messageFnArray.push(messageFn);
   window.postMessage = (data: any) => {
     if (typeof data === 'string') data = JSON.parse(data);
-    for (const messageFn of window.messageFnArray) {
+    for (const messageFn of Array.from(window.messageFnArray)) {
       messageFn({
         data: data
       });

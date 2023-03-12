@@ -1,10 +1,15 @@
 import {HTMLHelper} from '../helpers/HTMLHelper';
 import {EventHelper} from '../helpers/EventHelper';
+import {CodeHelper} from '../helpers/CodeHelper';
 import {WorkspaceHelper} from './helpers/WorkspaceHelper';
 import {CursorHelper} from './helpers/CursorHelper';
 import {CapabilityHelper} from './helpers/CapabilityHelper';
 import {EditorHelper} from './helpers/EditorHelper';
 import {AnimationHelper} from './helpers/AnimationHelper';
+
+// Some manual polyfills for old browsers
+//
+CodeHelper.polyfill(window);
 
 (() => {
   let isLoaded: boolean = false;
@@ -68,7 +73,7 @@ import {AnimationHelper} from './helpers/AnimationHelper';
   window.messageFnArray.push(messageFn);
   window.postMessage = (data: any) => {
     if (typeof data === 'string') data = JSON.parse(data);
-    for (const messageFn of window.messageFnArray) {
+    for (const messageFn of Array.from(window.messageFnArray)) {
       messageFn({
         data: data
       });

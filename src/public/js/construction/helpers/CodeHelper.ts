@@ -276,6 +276,14 @@ var CodeHelper = {
     }
 
     return lines.join('\n');
+  },
+  polyfill: (window: Window): void => {
+    if (window.HTMLCollection) window.HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+    if (window.NodeList) window.NodeList.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+    if (window.NamedNodeMap) window.NamedNodeMap.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+    if (window.HTMLCollection) window.HTMLCollection.prototype.forEach = Array.prototype.forEach;
+    if (window.NodeList) window.NodeList.prototype.forEach = Array.prototype.forEach;
+    if (window.NamedNodeMap) window.NamedNodeMap.prototype.forEach = Array.prototype.forEach;
   }
 };
 

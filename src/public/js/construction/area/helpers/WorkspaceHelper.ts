@@ -627,7 +627,10 @@ var WorkspaceHelper = {
     let holder = document.createElement('iframe');
     document.body.appendChild(holder);
 
-    let holderWindow = holder.contentWindow || holder.contentDocument.document || holder.contentDocument;
+    const _document = holder.contentDocument || holder.contentWindow.document;
+    const holderWindow = _document.parentWindow || _document.defaultView;
+
+    CodeHelper.polyfill(_document.parentWindow || _document.defaultView);
 
     holderWindow.document.open('text/htmlreplace');
     if (document.domain == 'stackblend.org') holderWindow.document.write(`<html><head><script type="text/javascript">document.domain = '${document.domain}';</script></head>${html}</html>`);
@@ -971,6 +974,7 @@ var WorkspaceHelper = {
     document.body.appendChild(temp);
 
     const _document = temp.contentDocument || temp.contentWindow.document;
+    CodeHelper.polyfill(_document.parentWindow || _document.defaultView); 
 
     _document.open();
     _document.write('<html><head /><body /></html>');
