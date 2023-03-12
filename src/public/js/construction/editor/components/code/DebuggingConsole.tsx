@@ -77,8 +77,8 @@ class DebuggingConsole extends Base<Props, State> {
 
       let output = document.createElement('div');
       output.className = 'jsconsole eclipse';
-      output.append(HTMLHelper.getElementByClassName('jsconsole-input'));
-      document.body.append(output);
+      output.appendChild(HTMLHelper.getElementByClassName('jsconsole-input'));
+      document.body.appendChild(output);
 
       repl.on('entry', ((event) => {
         this.props.window.setTimeout((() => {
