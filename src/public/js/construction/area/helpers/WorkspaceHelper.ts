@@ -632,7 +632,7 @@ var WorkspaceHelper = {
 
     CodeHelper.polyfill(_document.parentWindow || _document.defaultView);
 
-    holderWindow.document.open('text/htmlreplace');
+    holderWindow.document.open('text/html');
     if (document.domain == 'stackblend.org') holderWindow.document.write(`<html><head><script type="text/javascript">document.domain = '${document.domain}';</script></head>${html}</html>`);
     else holderWindow.document.write(`<html><head></head>${html}</html>`);
     holderWindow.document.close();
