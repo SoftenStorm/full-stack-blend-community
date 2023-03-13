@@ -66,14 +66,20 @@ var StyleHelper = {
   getComputedStyle(element: HTMLElement) {
     var computedStyle;
 
-    if (typeof element.currentStyle != 'undefined') {
+    if (element.constructor == Window || element.constructor == HTMLDocument) {
+      try {
+        computedStyle = element.currentStyle;
+      } catch(error) {
+        computedStyle = {};
+      }
+    } else if (typeof element.currentStyle != 'undefined') {
       computedStyle = element.currentStyle;
     }
     else {
       computedStyle = document.defaultView.getComputedStyle(element, null);
     }
 
-    return computedStyle;
+    return computedStyle || {};
   }
 };
 
