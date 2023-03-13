@@ -173,63 +173,65 @@ class ScreenRelaxation extends Base<Props, State> {
   constructor(props) {
     super(props);
     Object.assign(this.state, CodeHelper.clone(ExtendedDefaultState));
-    
-		const makeShader = require("gl-shader");
-		let shader, buffer, last = Date.now();
-		
-		shell.on("gl-init", (() => {
-		  const gl = shell.gl;
-		
-		  shader = makeShader(gl, vertexSource, fragmentSource);
-		
-		  buffer = gl.createBuffer();
-		  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-		  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+
+    if (!this.isWebGLSupport()) return;
+
+    const makeShader = require("gl-shader");
+    let shader, buffer, last = Date.now();
+
+    shell.on("gl-init", (() => {
+      const gl = shell.gl;
+
+      shader = makeShader(gl, vertexSource, fragmentSource);
+
+      buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 		    -1, -1, 0,
 		    -1, 1, 0,
 		    1, 1, 0,
 		    1, 1, 0,
 		    1, -1, 0,
 		    -1, -1, 0
-		  ]), gl.STATIC_DRAW);
+      ]), gl.STATIC_DRAW);
 		  
-		  if (this.refs.screen) {
-		    const screen = ReactDOM.findDOMNode(this.refs.screen);
-		    if (screen && shell.element) screen.appendChild(shell.element);
-		  }
-		}).bind(this));
-		
-		shell.on("gl-render", ((t) => {
-		  const now = Date.now();
-		  const diff = now - last;
-		  if (diff < SCREEN_RELAXATION_BEGIN) {
-		    shader.uniforms.seed = Math.random() * 9999999;
-		    return;
-		  }
-		  
-		  const gl = shell.gl;
-		
-		  shader.bind();
-		  
-		  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-		  shader.attributes.position.pointer();
-		  
-		  shader.uniforms.t = diff - SCREEN_RELAXATION_BEGIN;
-		
-		  gl.drawArrays(gl.TRIANGLES, 0, 6);
-		}).bind(this));
-		
-		document.addEventListener('mousemove', () => {
-		  last = Date.now();
-		}, false);
-		document.addEventListener('keydown', () => {
-		  last = Date.now();
-		}, false);
+      if (this.refs.screen) {
+        const screen = ReactDOM.findDOMNode(this.refs.screen);
+	if (screen && shell.element) screen.appendChild(shell.element);
+      }
+    }).bind(this));
+
+    shell.on("gl-render", ((t) => {
+      const now = Date.now();
+      const diff = now - last;
+      if (diff < SCREEN_RELAXATION_BEGIN) {
+        shader.uniforms.seed = Math.random() * 9999999;
+        return;
+      }
+
+      const gl = shell.gl;
+
+      shader.bind();
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      shader.attributes.position.pointer();
+
+      shader.uniforms.t = diff - SCREEN_RELAXATION_BEGIN;
+
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }).bind(this));
+
+    document.addEventListener('mousemove', () => {
+      last = Date.now();
+    }, false);
+    document.addEventListener('keydown', () => {
+      last = Date.now();
+    }, false);
 		
     window.setInterval(() => {
       try {
-    		const iframe = document.getElementById('area') as HTMLFrameElement;
-    		if (!iframe) return;
+    	const iframe = document.getElementById('area') as HTMLFrameElement;
+    	if (!iframe) return;
     		
         const contentWindow = iframe.contentWindow;
         if (!contentWindow || !contentWindow.document) return;
@@ -237,31 +239,36 @@ class ScreenRelaxation extends Base<Props, State> {
         if (contentWindow.document._init_screen_relaxation) return;
         
         contentWindow.document.addEventListener('mousemove', () => {
-    		  last = Date.now();
-    		}, false);
-    		contentWindow.document.addEventListener('keydown', () => {
-    		  last = Date.now();
-    		}, false);
-    		
-    		contentWindow.document._init_screen_relaxation = true;
+    	  last = Date.now();
+    	}, false);
+    	contentWindow.document.addEventListener('keydown', () => {
+    	  last = Date.now();
+    	}, false);
+    	
+    	contentWindow.document._init_screen_relaxation = true;
       } catch(error) { /* void */ }
     }, 1000);
   }
   
   public componentDidMount() {
     if (this.refs.screen) {
-	    const screen = ReactDOM.findDOMNode(this.refs.screen);
-	    if (screen && shell.element) screen.appendChild(shell.element);
-	  }
+      const screen = ReactDOM.findDOMNode(this.refs.screen);
+      if (screen && shell.element) screen.appendChild(shell.element);
+    }
   }
 
   public update(properties: any) {
     if (!super.update(properties)) return;
   }
 
+  isWebGLSupport() {
+    const canvas = document.createElement('canvas');
+    return !!window.WebGLRenderingContext && canvas.getContext('webgl');
+  }
+
   render() {
     return pug`
-        div(ref='screen' style={pointerEvents: 'none', width: '100vw', height: '100vh', position: 'fixed', zIndex: 16777222, left: 0, right: 0, mixBlendMode: 'hard-light'})
+      div(ref='screen' style={pointerEvents: 'none', width: '100vw', height: '100vh', position: 'fixed', zIndex: 16777222, left: 0, right: 0, mixBlendMode: 'hard-light'})
         `
   }
 }
