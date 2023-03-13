@@ -175,7 +175,8 @@ app.get('/js/libraries/polyfills/polyfill.io.js', (req, res) => {
     features: {
       'es5': {flags: ['gated']},
       'es6': {flags: ['gated']},
-      'es7': {flags: ['gated']}
+      'es7': {flags: ['gated']},
+      'URLSearchParams': {flags: ['gated']}
     }
   }).then(function(bundle) {
     res.set('Content-Type', 'text/javascript');
