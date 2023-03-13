@@ -61,10 +61,14 @@ class Transformer extends Base<Props, State> {
   }
 
   protected currentTransform: string = null;
+  protected isSuspended: boolean = false;
 
   componentDidMount() {
-    this.init();
-    this.render3D();
+    this.isSuspended = !this.isWebGLSupport();
+    if (!this.isSuspended) {
+      this.init();
+      this.render3D();
+    }
   }
 
   public update(properties: any) {
@@ -83,20 +87,27 @@ class Transformer extends Base<Props, State> {
           f.push(parseFloat(splited[i]));
         }
 
-        this.webGLMesh.position.x = f[0];
-        this.webGLMesh.position.y = f[1];
-        this.webGLMesh.position.z = f[2];
-        this.webGLMesh.quaternion.x = f[3];
-        this.webGLMesh.quaternion.y = f[4];
-        this.webGLMesh.quaternion.z = f[5];
-        this.webGLMesh.scale.x = f[6];
-        this.webGLMesh.scale.y = f[7];
-        this.webGLMesh.scale.z = f[8];
+        if (!this.isSuspended) {
+          this.webGLMesh.position.x = f[0];
+          this.webGLMesh.position.y = f[1];
+          this.webGLMesh.position.z = f[2];
+          this.webGLMesh.quaternion.x = f[3];
+          this.webGLMesh.quaternion.y = f[4];
+          this.webGLMesh.quaternion.z = f[5];
+          this.webGLMesh.scale.x = f[6];
+          this.webGLMesh.scale.y = f[7];
+          this.webGLMesh.scale.z = f[8];
+        }
       }
 
       this.render3D();
       this.forceUpdate();
     }
+  }
+
+  isWebGLSupport() {
+    const canvas = document.createElement('canvas');
+    return !!window.WebGLRenderingContext && canvas.getContext('webgl');
   }
 
   init() {
@@ -183,7 +194,9 @@ class Transformer extends Base<Props, State> {
       this.setState({
         mode: mode
       });
-      this.webGLControl.setMode(mode);
+      if (!this.isSuspended) {
+        this.webGLControl.setMode(mode);
+      }
     }
   }
 
@@ -200,12 +213,16 @@ class Transformer extends Base<Props, State> {
   }
 
   reset() {
+    if (this.isSuspended) return;
+
     this.webGLMesh.position.set(0, 0, 0);
     this.webGLMesh.quaternion.set(-1, ZERO, ZERO, ZERO);
     this.webGLMesh.scale.set(1, 1, 1);
   }
 
   render3D() {
+    if (this.isSuspended) return;
+
     this.css3DElement.position.copy(this.webGLMesh.position);
     this.css3DElement.position.negate();
     this.css3DElement.quaternion.copy(this.webGLMesh.quaternion);
@@ -298,7 +315,9 @@ class Transformer extends Base<Props, State> {
     let number = parseFloat(value);
     if (isNaN(number)) number = 0;
 
-    this.webGLMesh.position.x = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.position.x = number;
+    }
 
     this.render3D();
   }
@@ -307,7 +326,9 @@ class Transformer extends Base<Props, State> {
     let number = parseFloat(value);
     if (isNaN(number)) number = 0;
 
-    this.webGLMesh.position.y = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.position.y = number;
+    }
 
     this.render3D();
   }
@@ -316,7 +337,9 @@ class Transformer extends Base<Props, State> {
     let number = parseFloat(value);
     if (isNaN(number)) number = 0;
 
-    this.webGLMesh.position.z = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.position.z = number;
+    }
 
     this.render3D();
   }
@@ -326,7 +349,9 @@ class Transformer extends Base<Props, State> {
     if (isNaN(number)) number = 0;
     if (number == 0) number = ZERO;
 
-    this.webGLMesh.quaternion.x = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.quaternion.x = number;
+    }
 
     this.render3D();
   }
@@ -336,7 +361,9 @@ class Transformer extends Base<Props, State> {
     if (isNaN(number)) number = 0;
     if (number == 0) number = ZERO;
 
-    this.webGLMesh.quaternion.y = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.quaternion.y = number;
+    }
 
     this.render3D();
   }
@@ -346,7 +373,9 @@ class Transformer extends Base<Props, State> {
     if (isNaN(number)) number = 0;
     if (number == 0) number = ZERO;
 
-    this.webGLMesh.quaternion.z = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.quaternion.z = number;
+    }
 
     this.render3D();
   }
@@ -355,7 +384,9 @@ class Transformer extends Base<Props, State> {
     let number = parseFloat(value);
     if (isNaN(number)) number = 0;
 
-    this.webGLMesh.scale.x = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.scale.x = number;
+    }
 
     this.render3D();
   }
@@ -364,7 +395,9 @@ class Transformer extends Base<Props, State> {
     let number = parseFloat(value);
     if (isNaN(number)) number = 0;
 
-    this.webGLMesh.scale.y = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.scale.y = number;
+    }
 
     this.render3D();
   }
@@ -373,7 +406,9 @@ class Transformer extends Base<Props, State> {
     let number = parseFloat(value);
     if (isNaN(number)) number = 0;
 
-    this.webGLMesh.scale.z = number;
+    if (!this.isSuspended) {
+      this.webGLMesh.scale.z = number;
+    }
 
     this.render3D();
   }
