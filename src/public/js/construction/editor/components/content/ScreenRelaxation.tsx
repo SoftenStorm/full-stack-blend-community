@@ -6,7 +6,7 @@ import {SCREEN_RELAXATION_BEGIN} from '../../../Constants';
 declare let React: any;
 declare let ReactDOM: any;
 
-const shell = require("gl-now")();
+let shell = null;
 
 const vertexSource = `
 precision highp float;
@@ -176,6 +176,7 @@ class ScreenRelaxation extends Base<Props, State> {
 
     if (!this.isWebGLSupport()) return;
 
+    shell = require("gl-now")();
     const makeShader = require("gl-shader");
     let shader, buffer, last = Date.now();
 
