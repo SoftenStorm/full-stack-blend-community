@@ -7,7 +7,7 @@ import {WorkspaceHelper} from './WorkspaceHelper';
 import {SchemaHelper} from './SchemaHelper';
 import {LocalizationHelper} from './LocalizationHelper';
 import {FrontEndReactHelper, DEFAULTS} from '../../helpers/FrontEndReactHelper';
-import {CAMEL_OF_EVENTS_DICTIONARY, REQUIRE_FULL_CLOSING_TAGS, CONTAIN_TEXT_CONTENT_TAGS, INHERITING_COMPONENT_RESERVED_ATTRIBUTE_NAMES, INHERITING_COMPONENT_RESERVED_STYLE_NAMES, INHERITING_COMPONENT_RESERVED_STYLE_NAMES_IN_CAMEL, ALL_RESPONSIVE_SIZE_REGEX, ALL_RESPONSIVE_OFFSET_REGEX, FORWARD_PROPS_AND_EVENTS_TO_CHILDREN_CLASS_LIST, DOT_NOTATION_CONSUMABLE_TAG_LIST, DOT_NOTATION_CONSUMABLE_CLASS_LIST, NONE_NATIVE_SUPPORT_OF_CAMEL_OF_EVENTS, FORWARD_STYLE_TO_CHILDREN_CLASS_LIST, ALL_DOCUMENT_SUPPORT_OF_CAMEL_OF_EVENTS, DOT_NOTATION_CONSUMABLE_TAG_LIST_FALLBACK, DOT_NOTATION_CONSUMABLE_CLASS_LIST_FALLBACK} from '../../Constants';
+import {CAMEL_OF_EVENTS_DICTIONARY, REQUIRE_FULL_CLOSING_TAGS, CONTAIN_TEXT_CONTENT_TAGS, INHERITING_COMPONENT_RESERVED_ATTRIBUTE_NAMES, INHERITING_COMPONENT_RESERVED_STYLE_NAMES, INHERITING_COMPONENT_RESERVED_STYLE_NAMES_IN_CAMEL, ALL_RESPONSIVE_SIZE_REGEX, ALL_RESPONSIVE_OFFSET_REGEX, FORWARD_PROPS_AND_EVENTS_TO_CHILDREN_CLASS_LIST, DOT_NOTATION_CONSUMABLE_TAG_LIST, DOT_NOTATION_CONSUMABLE_CLASS_LIST, NONE_NATIVE_SUPPORT_OF_CAMEL_OF_EVENTS, FORWARD_STYLE_TO_CHILDREN_CLASS_LIST, ALL_DOCUMENT_SUPPORT_OF_CAMEL_OF_EVENTS, DOT_NOTATION_CONSUMABLE_TAG_LIST_FALLBACK, DOT_NOTATION_CONSUMABLE_CLASS_LIST_FALLBACK, DOT_NOTATION_CONSUMABLE_TAG_DIVISIVE_SKIPPING_LIST } from '../../Constants';
 
 let cachedGenerateCodeForReactRenderMethodElement = null;
 let cachedGenerateCodeForReactRenderMethodResults = null;
@@ -1109,6 +1109,14 @@ ${rootScript}`;
             } else {
               lines.push(composed);
 
+              if (_leafNode && DOT_NOTATION_CONSUMABLE_TAG_DIVISIVE_SKIPPING_LIST.indexOf(tag) != -1) {
+                const tokens = cumulatedDotNotation.split('.');
+                tokens.pop();
+                tokens.pop();
+                
+                cumulatedDotNotation = tokens.join('.');
+              }
+              
               for (let child of children) {
                 FrontEndDOMHelper.recursiveGenerateCodeForFallbackRendering(body, child, indent + '  ', executions, lines, false, cumulatedDotNotation, dotNotationChar, _forwardAttributes);
               }
