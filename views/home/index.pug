@@ -68,6 +68,9 @@ html(lang=headers && headers.language || 'en')
                   button.btn.btn-md.btn-secondary.col-8.col-lg-6.internal-fsb-element.offset-2.offset-lg-3(style={'margin-top': '5px'}, type="button", internal-fsb-guid="d85b2bd4")
                     .internal-fsb-element(internal-fsb-guid="d85b2bd4-text").
                       !{loc('Development Workarounds')}
+                  button.btn.btn-md.btn-secondary.col-8.col-lg-6.internal-fsb-element.offset-2.offset-lg-3(style={'margin-top': '5px'}, type="button", internal-fsb-guid="269c6485")
+                    .-fsb-self-957edb8e.internal-fsb-element(style={'-fsb-reusable-id': '957edb8e', '-fsb-reusable-name': ''}, internal-fsb-guid="957edb8e").
+                      !{loc('About SoftenStorm Foundation')}
                   h3.col-10.col-lg-8.internal-fsb-element.offset-1.offset-lg-2(style={'color': 'rgba(214, 226, 255, 1)', 'font-size': '13px', 'font-weight': '400', 'margin-top': '15px', 'text-align': 'center'}, internal-fsb-guid="99d4ab8e").
                     !{loc('We often deploy regular updates on stackblend.org for demonstration and philanthropy volunteering purpose. For company, please run the editor cloned from releases instead. See workarounds for more information. It also works on Ubuntu and Chrome OS.')}
               .internal-fsb-element.internal-fsb-strict-layout(style={'-ms-overflow-x': 'hidden', '-ms-overflow-y': 'hidden', '-webkit-border-radius': '0px 0px 3px 3px', 'border-radius': '0px 0px 3px 3px', 'overflow-x': 'hidden', 'overflow-y': 'hidden', 'padding-bottom': '20px', 'padding-top': '100px', 'position': 'relative'}, internal-fsb-class="FlowLayout", internal-fsb-guid="cc58c821")
@@ -191,7 +194,10 @@ html(lang=headers && headers.language || 'en')
                       !{loc('Privacy Policy and Terms of Use')}
                   a.btn.btn-secondary.col-8.col-lg-6.internal-fsb-element.offset-2.offset-lg-3(style={'margin-top': '5px'}, href="https://github.com/SoftenStorm/full-stack-blend", internal-fsb-guid="a1319b2e")
                     .internal-fsb-element(internal-fsb-guid="5d868e5d").
-                      !{loc('StackBlend Studio on GitHub.com')}
+                      !{loc('StackBlend Studio on GitHub')}
+                  button.btn.btn-md.btn-secondary.col-8.col-lg-6.internal-fsb-element.offset-2.offset-lg-3(style={'margin-top': '5px'}, type="button", internal-fsb-guid="c4726748")
+                    .internal-fsb-element(internal-fsb-guid="64c27911").
+                      !{loc('About SoftenStorm Foundation')}
           .col-12.col-md-10.internal-fsb-element.internal-fsb-strict-layout.offset-0.offset-md-1(style={'margin-top': '30px', 'padding-left': '0px', 'padding-right': '0px'}, internal-fsb-class="FlowLayout", internal-fsb-guid="8080e753")
             .col-10.col-lg-12.internal-fsb-element.internal-fsb-strict-layout.offset-1.offset-lg-0(style={'border-top-color': 'rgba(166, 166, 166, 1)', 'border-top-style': 'solid', 'border-top-width': '1px', 'margin-bottom': '30px', 'min-height': '0px', 'padding-left': '0px', 'padding-right': '0px', 'padding-top': '5px', 'text-align': 'center'}, internal-fsb-class="FlowLayout", internal-fsb-guid="74791030")
               h3.col-12.internal-fsb-element.offset-0(style={'font-family': 'Roboto', 'font-size': '14px', 'font-weight': '300'}, internal-fsb-guid="c1ec7cb3").
@@ -254,6 +260,11 @@ html(lang=headers && headers.language || 'en')
               // 
               window.location = '/development/workarounds';
           };
+          Controller.prototype.onButtonClick_269c6485 = function (event) {
+              // Handle the event of onButtonClick (Button 3) here:
+              // 
+              window.location = 'https://www.softenstorm.com';
+          };
           Controller.prototype.onButtonClick_55a08958 = function (event) {
               // Handle the event of onButtonClick (Button 1) here:
               // 
@@ -278,6 +289,11 @@ html(lang=headers && headers.language || 'en')
               // Handle the event of onButtonClick (Button 2) here:
               // 
               window.location = 'https://www.softenstorm.com/stackblend-policy-and-terms';
+          };
+          Controller.prototype.onButtonClick_c4726748 = function (event) {
+              // Handle the event of onButtonClick (Button 3) here:
+              // 
+              window.location = 'https://www.softenstorm.com';
           };
           Controller.prototype.register = function (guid, eventName, functionName, capturing, forward) {
               if (!this.dictionary[guid])
@@ -311,11 +327,13 @@ html(lang=headers && headers.language || 'en')
       controller.register('651393e4', 'click', 'onButtonClick_651393e4', false, false);
       controller.register('513d8787', 'click', 'onButtonClick_513d8787', false, false);
       controller.register('d85b2bd4', 'click', 'onButtonClick_d85b2bd4', false, false);
+      controller.register('269c6485', 'click', 'onButtonClick_269c6485', false, false);
       controller.register('55a08958', 'click', 'onButtonClick_55a08958', false, false);
       controller.register('45925c27', 'click', 'onButtonClick_45925c27', false, false);
       controller.register('c0e9321c', 'click', 'onButtonClick_c0e9321c', false, false);
       controller.register('d66b00c4', 'click', 'onButtonClick_d66b00c4', false, false);
       controller.register('57bd398a', 'click', 'onButtonClick_57bd398a', false, false);
+      controller.register('c4726748', 'click', 'onButtonClick_c4726748', false, false);
       TestHelper.identify();
       function ready(a) { "loading" != document.readyState ? a(new Event('ready')) : document.addEventListener ? document.addEventListener("DOMContentLoaded", a) : (document.onreadystatechange = function (e) { "complete" == document.readyState && a(e); }); }
       ;
@@ -324,11 +342,13 @@ html(lang=headers && headers.language || 'en')
       controller.listen('651393e4');
       controller.listen('513d8787');
       controller.listen('d85b2bd4');
+      controller.listen('269c6485');
       controller.listen('55a08958');
       controller.listen('45925c27');
       controller.listen('c0e9321c');
       controller.listen('d66b00c4');
       controller.listen('57bd398a');
+      controller.listen('c4726748');
       
     <link internal-fsb-link="true" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@1,400;1,700&amp;display=swap" rel="stylesheet" class="internal-fsb-accessory internal-fsb-font">
     <link internal-fsb-link="true" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet" class="internal-fsb-accessory internal-fsb-font">
