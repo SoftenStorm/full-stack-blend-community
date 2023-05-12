@@ -99,7 +99,7 @@ class Settings extends Base {
     TestHelper.identify();
     function ready(a){"loading"!=document.readyState?a(new Event('ready')):document.addEventListener?document.addEventListener("DOMContentLoaded",a):(document.onreadystatechange=function(e){"complete"==document.readyState&&a(e)})};
         
-    DataManipulationHelper.register("ea9268d1", "update", ["0762b97d","098c6ea6","1da99335","25254217","27d35136","33832ba7","3478b9ac","49da134d","74d68ec6","d3e700b6","ece2d619"], {initClass: null, submitCrossType: null, enabledRealTimeUpdate: false, manipulateInto: () => { return null; }});
+    DataManipulationHelper.register("ea9268d1", "update", ["0762b97d","098c6ea6","1da99335","25254217","27d35136","33832ba7","3478b9ac","46a8347a","49da134d","74d68ec6","d3e700b6","e80795e3","ece2d619"], {initClass: null, submitCrossType: null, enabledRealTimeUpdate: false, manipulateInto: () => { return null; }});
   }
   // <---Auto[ClassBegin]
   
@@ -159,6 +159,32 @@ class Settings extends Base {
     // Handle the event of onButtonSubmitted (Button 2) here:
     // 
     this.setState({submitting: false});
+    
+  }
+
+  protected onButtonSuccess_ea9268d1(event: CustomEvent) {
+
+    // Handle the event of onButtonSuccess (Submit Button) here:
+    // 
+    // const params = event.detail.params;                  /* manipulation parameters */
+    // const response = event.detail.response;              /* manipulation response */
+    // const target = EventHelper.getCurrentElement(event); /* current invoking element */
+    // const element1 = HTMLHelper.getElementById('ID');    /* accessing an element */
+    // const control1 = ReactDOM.findDOMNode(this.refs.ID); /* accessing a component */
+    // 
+    // return EventHelper.cancel(event);                    /* cancelling this manipulation */
+    // 
+    const password1 = ReactDOM.findDOMNode(this.refs.password1);
+    if (password1) password1.value = '';
+    
+    const password2 = ReactDOM.findDOMNode(this.refs.password2);
+    if (password2) password2.value = '';
+    
+    const password3 = ReactDOM.findDOMNode(this.refs.password3);
+    if (password3) password3.value = '';
+    
+    const password4 = ReactDOM.findDOMNode(this.refs.password4);
+    if (password4) password4.value = '';
     
   }
 
@@ -231,7 +257,7 @@ class Settings extends Base {
               | 🔐 
             .internal-fsb-element(style={'FsbInheritedPresets': '', 'color': (()=>{return (this.state.currentTab == 2) ? 'rgba(3, 115, 252, 1)' : 'rgba(255, 255, 255, 1)';})() || 'rgba(255, 255, 255, 1)', 'display': 'inline-block'}, dangerouslySetInnerHTML={__html: loc('Account')}, internal-fsb-guid="c7844719")
         .col-9.internal-fsb-element.internal-fsb-strict-layout.offset-3(style={'WebkitBorderRadius': '0px 8px 0px 0px', 'background': 'rgba(255, 255, 255, 0.95)', 'borderRadius': '0px 8px 0px 0px', 'height': '45px', 'left': '0px', 'paddingRight': '10px', 'paddingTop': '10px', 'position': 'absolute', 'right': '0px', 'top': '0px', 'zIndex': '900'}, internal-fsb-class="FlowLayout", internal-fsb-guid="ea965490")
-          Button.btn.btn-primary.btn-sm.col-2.internal-fsb-element.offset-10(onClick=((event) => { window.internalFsbSubmit('ea9268d1', 'User', event, ((results) => { this.manipulate('ea9268d1', 'User', results); }).bind(this)); }).bind(this), disabled=this.state.submitting || undefined, type="button", onSubmitted=this.onButtonSubmitted_ea9268d1.bind(this), onSubmitting=this.onButtonSubmitting_ea9268d1.bind(this), internal-fsb-guid="ea9268d1")
+          Button.btn.btn-primary.btn-sm.col-2.internal-fsb-element.offset-10(onClick=((event) => { window.internalFsbSubmit('ea9268d1', 'User', event, ((results) => { this.manipulate('ea9268d1', 'User', results); }).bind(this)); }).bind(this), disabled=this.state.submitting || undefined, type="button", onSubmitted=this.onButtonSubmitted_ea9268d1.bind(this), onSubmitting=this.onButtonSubmitting_ea9268d1.bind(this), onSuccess=this.onButtonSuccess_ea9268d1.bind(this), internal-fsb-guid="ea9268d1")
             .internal-fsb-element(dangerouslySetInnerHTML={__html: loc('Save')}, internal-fsb-guid="ea9268d1-text")
         .col-9.internal-fsb-element.internal-fsb-strict-layout.offset-3(style={'MsOverflowX': 'hidden', 'MsOverflowY': 'scroll', 'background': 'rgba(255, 255, 255, 0)', 'bottom': '0px', 'overflowX': 'hidden', 'overflowY': 'scroll', 'paddingTop': '10px', 'position': 'absolute', 'right': '0px', 'top': '0px'}, internal-fsb-class="FlowLayout", internal-fsb-guid="3096eb71")
           .col-12.internal-fsb-element.internal-fsb-strict-layout(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 0) ? 'block' : 'none';})()}, internal-fsb-class="FlowLayout", internal-fsb-guid="ce3c1a1c")
@@ -249,6 +275,12 @@ class Settings extends Base {
                   .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, dangerouslySetInnerHTML={__html: loc('Full name:')}, internal-fsb-guid="e40410b7")
                   .col-7.internal-fsb-element.offset-0(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="ece2d619")
                     input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, type="text", disabled=this.state.submitting, defaultValue=this.getDataFromNotation("User.name"))
+            label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae'}, internal-fsb-guid="e9b6b178")
+              .container-fluid
+                .internal-fsb-strict-layout.row
+                  .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, dangerouslySetInnerHTML={__html: loc('Current password:')}, internal-fsb-guid="5394d786")
+                  .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="e80795e3")
+                    input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, ref="password1", autocomplete="off", type="password", disabled=this.state.submitting)
           .col-12.internal-fsb-element.internal-fsb-strict-layout(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 1) ? 'block' : 'none';})()}, internal-fsb-class="FlowLayout", internal-fsb-guid="17704a94")
             .-fsb-preset-7003c7d5.col-8.internal-fsb-element.offset-2(style={'FsbInheritedPresets': '7003c7d5', 'fontSize': '18px', 'textAlign': 'center'}, dangerouslySetInnerHTML={__html: loc('Repository Settings')}, internal-fsb-guid="36835b75")
             .-fsb-preset-12bc19e4.col-12.internal-fsb-element(style={'FsbInheritedPresets': '12bc19e4'}, dangerouslySetInnerHTML={__html: loc('GitHub Reference')}, internal-fsb-guid="4b6deb72")
@@ -304,18 +336,24 @@ class Settings extends Base {
           .col-12.internal-fsb-element.internal-fsb-strict-layout(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 2) ? 'block' : 'none';})()}, internal-fsb-class="FlowLayout", internal-fsb-guid="d7b6b2c3")
             .-fsb-preset-7003c7d5.col-8.internal-fsb-element.offset-2(style={'FsbInheritedPresets': '7003c7d5', 'fontSize': '18px', 'textAlign': 'center'}, dangerouslySetInnerHTML={__html: loc('Account Settings')}, internal-fsb-guid="4e0342bd")
             .-fsb-preset-12bc19e4.col-12.internal-fsb-element(style={'FsbInheritedPresets': '12bc19e4'}, dangerouslySetInnerHTML={__html: loc('Change Password')}, internal-fsb-guid="a379e3b8")
+            label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae'}, internal-fsb-guid="e3585c2e")
+              .container-fluid
+                .internal-fsb-strict-layout.row
+                  .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, dangerouslySetInnerHTML={__html: loc('Current password:')}, internal-fsb-guid="820b41b8")
+                  .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="46a8347a")
+                    input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, ref="password2", autocomplete="off", type="password", disabled=this.state.submitting)
             label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae'}, internal-fsb-guid="06cb46e5")
               .container-fluid
                 .internal-fsb-strict-layout.row
                   .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, dangerouslySetInnerHTML={__html: loc('New password:')}, internal-fsb-guid="0bd07ebe")
                   .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="3478b9ac")
-                    input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, autocomplete="off", type="password", disabled=this.state.submitting)
+                    input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, ref="password3", autocomplete="off", type="password", disabled=this.state.submitting)
             label.-fsb-preset-24bc9bae.col-12.internal-fsb-element(style={'FsbInheritedPresets': '24bc9bae'}, internal-fsb-guid="76574a2d")
               .container-fluid
                 .internal-fsb-strict-layout.row
                   .-fsb-preset-c8d71ae6.col-4.internal-fsb-element(style={'FsbInheritedPresets': 'c8d71ae6'}, dangerouslySetInnerHTML={__html: loc('Confirm password:')}, internal-fsb-guid="b4d97ce1")
                   .col-7.internal-fsb-element(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="33832ba7")
-                    input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, autocomplete="off", type="password", disabled=this.state.submitting)
+                    input.form-control.form-control-sm(style={'display': 'block', 'width': '100%'}, ref="password4", autocomplete="off", type="password", disabled=this.state.submitting)
             .-fsb-preset-12bc19e4.col-12.internal-fsb-element(style={'FsbInheritedPresets': '12bc19e4'}, dangerouslySetInnerHTML={__html: loc('Delete Account')}, internal-fsb-guid="d577da61")
             .-fsb-preset-baed14b5.col-12.internal-fsb-element(style={'FsbInheritedPresets': 'baed14b5'}, dangerouslySetInnerHTML={__html: loc('⚠️ You can delete your account, but keep in mind this action is irreversible.')}, internal-fsb-guid="1bdb6469")
             Button.btn.btn-danger.btn-sm.col-6.internal-fsb-element.offset-3(disabled=this.state.submitting, type="button", onClick=this.onButtonClick_b391283e.bind(this), internal-fsb-guid="b391283e")

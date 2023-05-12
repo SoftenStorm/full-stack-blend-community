@@ -241,7 +241,7 @@ class Controller extends Base {
     return new Promise(async (resolve, reject) => {
     	try {
       	let options = RequestHelper.getOptions(this.pageId, this.request);
-      	let email, name, alias, project, feature, develop, staging, endpoint, password, confirmPassword, progressivelyUpdate;
+      	let email, name, alias, project, feature, develop, staging, endpoint, password, confirmPassword, currentPassword, progressivelyUpdate;
       	
       	for (let input of data) {
         	switch (input.name) {
@@ -272,6 +272,9 @@ class Controller extends Base {
         	  case 'password':
         	    password = input.value;
         	    break;
+        	  case 'currentPassword':
+        	    currentPassword = currentPassword || input.value;
+        	    break;
         	  case 'progressivelyUpdate':
         	    progressivelyUpdate = input.value;
         	    break;
@@ -284,9 +287,42 @@ class Controller extends Base {
             if (err) {
               reject(new Error('Please login before continuing.'));
               return;
+            } else if (user.email != email || user.profile.name != name || password) {
+              if (!currentPassword) {
+                reject(new Error('Need the current password.'));
+              } else {
+                user.comparePassword(currentPassword, (err, isMatch: boolean) => {
+                  if (!isMatch) {
+                    reject(new Error('Password doesn\'t match.'));
+                  } else {
+                    user.email = email || "";
+                    user.profile.name = name || "";
+                    user.alias = alias || "";
+                    user.project = project || "";
+                    user.feature = feature || "";
+                    user.develop = develop || "";
+                    user.staging = staging || "";
+                    user.endpoint = endpoint || "";
+                    user.progressivelyUpdate = progressivelyUpdate !== 'false'
+                    
+                    if (!!password) {
+                      user.password = password;
+                      user.passwordResetToken = undefined;
+                      user.passwordResetExpires = undefined;
+                    }
+                    
+                    user.save((err: WriteError) => {
+                      if (err) {
+                        reject(new Error('Please login before continuing.'));
+                        return;
+                      } else {
+                        resolve([]);
+                      }
+                    });
+                  }
+                });
+              }
             } else {
-              user.email = email || "";
-              user.profile.name = name || "";
               user.alias = alias || "";
               user.project = project || "";
               user.feature = feature || "";
@@ -294,12 +330,6 @@ class Controller extends Base {
               user.staging = staging || "";
               user.endpoint = endpoint || "";
               user.progressivelyUpdate = progressivelyUpdate !== 'false'
-              
-              if (!!password) {
-                user.password = password;
-                user.passwordResetToken = undefined;
-                user.passwordResetExpires = undefined;
-              }
               
               user.save((err: WriteError) => {
                 if (err) {
@@ -373,7 +403,7 @@ class Controller extends Base {
     
     // <---Auto[MergingBegin]
     // Auto[Merging]--->
-    RequestHelper.registerSubmit("3cb10a6e", "ea9268d1", "update", ["0762b97d","098c6ea6","1da99335","25254217","27d35136","33832ba7","3478b9ac","49da134d","74d68ec6","d3e700b6","ece2d619"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Submit Button"});
+    RequestHelper.registerSubmit("3cb10a6e", "ea9268d1", "update", ["0762b97d","098c6ea6","1da99335","25254217","27d35136","33832ba7","3478b9ac","46a8347a","49da134d","74d68ec6","d3e700b6","e80795e3","ece2d619"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Submit Button"});
     RequestHelper.registerInput('27d35136', "document", "User", "email");
     ValidationHelper.registerInput('27d35136', "[user.email]", false, undefined, undefined, null);
     for (let input of RequestHelper.getInputs(this.pageId, request, '27d35136')) {
@@ -388,6 +418,15 @@ class Controller extends Base {
     for (let input of RequestHelper.getInputs(this.pageId, request, 'ece2d619')) {
     
       // Override data parsing and manipulation of [user.name] here:
+      // 
+      
+      if (input != null) data.push(input);
+    }
+    RequestHelper.registerInput('e80795e3', "document", "User", "currentPassword");
+    ValidationHelper.registerInput('e80795e3', "[user.currentPassword]", false, undefined, undefined, null);
+    for (let input of RequestHelper.getInputs(this.pageId, request, 'e80795e3')) {
+    
+      // Override data parsing and manipulation of [user.currentPassword] here:
       // 
       
       if (input != null) data.push(input);
@@ -451,6 +490,15 @@ class Controller extends Base {
     for (let input of RequestHelper.getInputs(this.pageId, request, '49da134d')) {
     
       // Override data parsing and manipulation of [user.progressivelyUpdate] here:
+      // 
+      
+      if (input != null) data.push(input);
+    }
+    RequestHelper.registerInput('46a8347a', "document", "User", "currentPassword");
+    ValidationHelper.registerInput('46a8347a', "[user.currentPassword]", false, undefined, undefined, null);
+    for (let input of RequestHelper.getInputs(this.pageId, request, '46a8347a')) {
+    
+      // Override data parsing and manipulation of [user.currentPassword] here:
       // 
       
       if (input != null) data.push(input);
