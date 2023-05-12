@@ -162,7 +162,7 @@ class Controller extends Base {
           const captcha = new CaptchaGenerator()
             .setDimension(150, 450)
             .setCaptcha({text: answer, size: 60, color: "black"})
-            .setDecoy({opacity: 0.85})
+            .setDecoy({size: 30, opacity: 0.9})
             .setTrace({color: "black"});
           const buffer = captcha.generateSync();
           
