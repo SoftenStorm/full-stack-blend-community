@@ -146,6 +146,14 @@ class Settings extends Base {
     
   }
 
+  protected onRectangleClick_621132a8(event: Event) {
+
+    // Handle the event of onRectangleClick (Account Menu) here:
+    // 
+    this.setState({currentTab: 3});
+    
+  }
+
   protected onButtonSubmitting_ea9268d1(event: CustomEvent) {
 
     // Handle the event of onButtonSubmitting (Button 2) here:
@@ -244,18 +252,22 @@ class Settings extends Base {
       div(style=Object.assign({}, this.props.forward && this.props.forward.styles || {}), internal-fsb-class="FlowLayout", className="-fsb-self-245bc127 internal-fsb-element internal-fsb-strict-layout " + (this.props.forward && this.props.forward.classes || ''), internal-fsb-guid="245bc127")
         .col-3.internal-fsb-element(style={'MsFlexDirection': 'column', 'WebkitFlexDirection': 'column', 'bottom': '0px', 'display': 'flex', 'flexDirection': 'column', 'left': '0px', 'paddingLeft': '0px', 'paddingRight': '0px', 'position': 'absolute', 'top': '0px'}, internal-fsb-guid="e2601245")
           .-fsb-self-14382c35.internal-fsb-element(style={'FsbReusableId': '14382c35', 'FsbReusableName': '', 'background': (()=>{return (this.state.currentTab == 0) ? 'transparent' : 'rgba(3, 115, 252, 1)';})() || 'rgba(255, 255, 255, 1)', 'paddingBottom': '10px', 'paddingLeft': '15px', 'paddingTop': '10px', cursor: (()=>{return (this.state.currentTab == 0) ? 'default' : 'pointer';})()}, onClick=this.onRectangleClick_14382c35.bind(this), internal-fsb-guid="14382c35")
-            .internal-fsb-element(style={'display': 'inline-block'}, internal-fsb-guid="be0d0387")
-              | 👤 
+            .internal-fsb-element(style={'display': 'inline-block', 'minWidth': '25px', 'textAlign': 'center'}, internal-fsb-guid="be0d0387")
+              | 👤
             .-fsb-self-99e5677d.internal-fsb-element(style={'FsbReusableId': '99e5677d', 'color': (()=>{return (this.state.currentTab == 0) ? 'rgba(3, 115, 252, 1)' : 'rgba(255, 255, 255, 1)';})() || 'rgba(3, 115, 252, 1)', 'display': 'inline-block'}, dangerouslySetInnerHTML={__html: loc('Profile')}, internal-fsb-guid="99e5677d")
           .internal-fsb-element(style={'FsbInheritedPresets': '', 'background': (()=>{return (this.state.currentTab == 1) ? 'transparent' : 'rgba(3, 115, 252, 1)';})() || 'rgba(3, 115, 252, 1)', 'paddingBottom': '10px', 'paddingLeft': '15px', 'paddingTop': '10px', cursor: (()=>{return (this.state.currentTab == 1) ? 'default' : 'pointer';})()}, onClick=this.onRectangleClick_5b9e63bb.bind(this), internal-fsb-guid="5b9e63bb")
-            .internal-fsb-element(style={'display': 'inline-block'}, internal-fsb-guid="e7896154")
-              | 📎 
+            .internal-fsb-element(style={'display': 'inline-block', 'minWidth': '25px', 'textAlign': 'center'}, internal-fsb-guid="e7896154")
+              | 📎
             .internal-fsb-element(style={'FsbInheritedPresets': '', 'color': (()=>{return (this.state.currentTab == 1) ? 'rgba(3, 115, 252, 1)' : 'rgba(255, 255, 255, 1)';})() || 'rgba(255, 255, 255, 1)', 'display': 'inline-block'}, dangerouslySetInnerHTML={__html: loc('Repository')}, internal-fsb-guid="a345a908")
           .internal-fsb-element(style={'WebkitFlexGrow': '1', 'background': 'rgba(3, 115, 252, 1)', 'color': 'rgba(3, 115, 252, 1)', 'flexGrow': '1'}, internal-fsb-guid="5c40caec")
           .internal-fsb-element(style={'FsbInheritedPresets': '', 'background': (()=>{return (this.state.currentTab == 2) ? 'transparent' : 'rgba(3, 115, 252, 1)';})() || 'rgba(3, 115, 252, 1)', 'paddingBottom': '10px', 'paddingLeft': '15px', 'paddingTop': '10px', cursor: (()=>{return (this.state.currentTab == 2) ? 'default' : 'pointer';})()}, onClick=this.onRectangleClick_dbcddce6.bind(this), internal-fsb-guid="dbcddce6")
-            .internal-fsb-element(style={'display': 'inline-block'}, internal-fsb-guid="9aab58ec")
-              | 🔐 
+            .internal-fsb-element(style={'display': 'inline-block', 'minWidth': '25px', 'textAlign': 'center'}, internal-fsb-guid="9aab58ec")
+              | 🔐
             .internal-fsb-element(style={'FsbInheritedPresets': '', 'color': (()=>{return (this.state.currentTab == 2) ? 'rgba(3, 115, 252, 1)' : 'rgba(255, 255, 255, 1)';})() || 'rgba(255, 255, 255, 1)', 'display': 'inline-block'}, dangerouslySetInnerHTML={__html: loc('Account')}, internal-fsb-guid="c7844719")
+          .internal-fsb-element(style={'FsbInheritedPresets': '', 'background': (()=>{return (this.state.currentTab == 3) ? 'transparent' : 'rgba(3, 115, 252, 1)';})() || 'rgba(3, 115, 252, 1)', 'paddingBottom': '10px', 'paddingLeft': '15px', 'paddingTop': '10px', cursor: (()=>{return (this.state.currentTab == 3) ? 'default' : 'pointer';})()}, onClick=this.onRectangleClick_621132a8.bind(this), internal-fsb-guid="621132a8")
+            .internal-fsb-element(style={'display': 'inline-block', 'minWidth': '25px', 'textAlign': 'center'}, internal-fsb-guid="0dc47bca")
+              | 🗒
+            .internal-fsb-element(style={'FsbInheritedPresets': '', 'color': (()=>{return (this.state.currentTab == 3) ? 'rgba(3, 115, 252, 1)' : 'rgba(255, 255, 255, 1)';})() || 'rgba(255, 255, 255, 1)', 'display': 'inline-block'}, dangerouslySetInnerHTML={__html: loc('Help')}, internal-fsb-guid="2bb0330b")
         .col-9.internal-fsb-element.internal-fsb-strict-layout.offset-3(style={'WebkitBorderRadius': '0px 8px 0px 0px', 'background': 'rgba(255, 255, 255, 0.95)', 'borderRadius': '0px 8px 0px 0px', 'height': '45px', 'left': '0px', 'paddingRight': '10px', 'paddingTop': '10px', 'position': 'absolute', 'right': '0px', 'top': '0px', 'zIndex': '900'}, internal-fsb-class="FlowLayout", internal-fsb-guid="ea965490")
           Button.btn.btn-primary.btn-sm.col-2.internal-fsb-element.offset-10(onClick=((event) => { window.internalFsbSubmit('ea9268d1', 'User', event, ((results) => { this.manipulate('ea9268d1', 'User', results); }).bind(this)); }).bind(this), disabled=this.state.submitting || undefined, type="button", onSubmitted=this.onButtonSubmitted_ea9268d1.bind(this), onSubmitting=this.onButtonSubmitting_ea9268d1.bind(this), onSuccess=this.onButtonSuccess_ea9268d1.bind(this), internal-fsb-guid="ea9268d1")
             .internal-fsb-element(dangerouslySetInnerHTML={__html: loc('Save')}, internal-fsb-guid="ea9268d1-text")
@@ -367,6 +379,10 @@ class Settings extends Base {
               .internal-fsb-element(dangerouslySetInnerHTML={__html: loc('Unlink your Facebook account')}, internal-fsb-guid="82975b43-text")
             Button.btn.btn-danger.btn-sm.col-6.internal-fsb-element.offset-3(style={'marginBottom': '5px', display: (()=>{return (this.getDataFromNotation('User.github')) ? 'block' : 'none';})()}, disabled=this.state.submitting, type="button", onClick=this.onButtonClick_4e677128.bind(this), internal-fsb-guid="4e677128")
               .internal-fsb-element(dangerouslySetInnerHTML={__html: loc('Unlink your GitHub account')}, internal-fsb-guid="4e677128-text")
+          .col-12.internal-fsb-element.internal-fsb-strict-layout(style={'paddingLeft': '0px', 'paddingRight': '0px', display: (()=>{return (this.state.currentTab == 3) ? 'block' : 'none';})()}, internal-fsb-class="FlowLayout", internal-fsb-guid="d0cee3d1")
+            .-fsb-preset-7003c7d5.col-8.internal-fsb-element.offset-2(style={'FsbInheritedPresets': '7003c7d5', 'fontSize': '18px', 'textAlign': 'center'}, dangerouslySetInnerHTML={__html: loc('How to Use StackBlend Studio?')}, internal-fsb-guid="10cb35a6")
+            .-fsb-preset-12bc19e4.col-12.internal-fsb-element(style={'FsbInheritedPresets': '12bc19e4'}, dangerouslySetInnerHTML={__html: loc('Overview')}, internal-fsb-guid="cdc39406")
+            .-fsb-preset-baed14b5.col-12.internal-fsb-element(style={'FsbInheritedPresets': 'baed14b5'}, dangerouslySetInnerHTML={__html: loc('Please follow the overview at: https://www.studiodx.org')}, internal-fsb-guid="666bb178")
     `
   }
 }
