@@ -123,6 +123,18 @@ class FlowLayout_4d816ba8 extends Base {
   }
   
   // Auto[Merging]--->
+  protected onTextElementClick_08a05b72(event: Event) {
+
+    // Handle the event of onTextElementClick (Product Name) here:
+    // 
+    // const target = EventHelper.getCurrentElement(event); /* current invoking element */
+    // const element1 = HTMLHelper.getElementById('ID');    /* accessing an element */
+    // const control1 = ReactDOM.findDOMNode(this.refs.ID); /* accessing a component */
+    // 
+    window.location = '/';
+    
+  }
+
   protected onButtonClick_d7d59dd2(event: Event) {
 
     // Handle the event of onButtonClick (Button 1) here:
@@ -178,7 +190,7 @@ class FlowLayout_4d816ba8 extends Base {
     return pug `
       div(style=Object.assign({'FsbInheritedPresets': '245bc127'}, this.props.forward && this.props.forward.styles || {}), internal-fsb-class="FlowLayout", className="-fsb-preset-245bc127 internal-fsb-element internal-fsb-strict-layout " + (this.props.forward && this.props.forward.classes || ''), internal-fsb-guid="4d816ba8")
         .col-6.internal-fsb-element.offset-0(style={'MsFlexDirection': 'column', 'MsFlexWrap': 'nowrap', 'MsOverflowX': 'hidden', 'MsOverflowY': 'auto', 'WebkitFlexDirection': 'column', 'WebkitFlexWrap': 'nowrap', 'background': 'rgba(3, 115, 252, 1)', 'bottom': '-1px', 'display': 'flex', 'flexDirection': 'column', 'flexWrap': 'nowrap', 'left': '-1px', 'overflowX': 'hidden', 'overflowY': 'auto', 'paddingBottom': '15px', 'paddingTop': '15px', 'position': 'absolute', 'top': '-1px'}, internal-fsb-guid="257894ed")
-          h1.internal-fsb-element(style={'color': 'rgba(255, 255, 255, 1)', 'display': 'block', 'fontSize': '24px', 'fontWeight': '400', 'width': '100%'}, dangerouslySetInnerHTML={__html: loc('StackBlend Studio')}, internal-fsb-guid="08a05b72")
+          h1.internal-fsb-element(style={'color': 'rgba(255, 255, 255, 1)', 'cursor': 'default', 'display': 'block', 'fontSize': '24px', 'fontWeight': '400', 'width': '100%'}, dangerouslySetInnerHTML={__html: loc('StackBlend Studio')}, onClick=this.onTextElementClick_08a05b72.bind(this), internal-fsb-guid="08a05b72")
           .internal-fsb-element(style={'WebkitFlexGrow': '1', 'flexGrow': '1', 'width': '100%'}, internal-fsb-guid="e80dd7c1")
           h2.internal-fsb-element(style={'MozHyphens': 'auto', 'MsHyphens': 'auto', 'MsOverflowY': 'auto', 'MsWordBreak': 'break-word', 'WebkitHyphens': 'auto', 'color': 'rgba(255, 255, 255, 1)', 'display': 'block', 'fontSize': '10px', 'fontWeight': '400', 'hyphens': 'auto', 'overflowY': 'auto', 'textAlign': 'justify', 'textTransform': 'uppercase', 'width': '100%', 'wordBreak': 'break-word'}, dangerouslySetInnerHTML={__html: loc('ALL SOFTWARES AND GENERATED OUTPUT FILES ON GITHUB ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n\nBY USING THIS STACKBLEND STUDIO, YOU ARE FURTHER AGREEING THAT YOUR SOFTWARE ISN\'T INCLUDE CONTENT THAT IS OFFENSIVE, INSENSITIVE, UPSETTING, AND INTENDED TO DISGUST, FOR EXAMPLES:\n- DEFAMATORY, DISCRIMINATORY, OR MEAN-SPIRITED CONTENT\n- ENCOURAGE VIOLENCE\n- ENCOURAGE ILLEGAL OR RECKLESS USE OF WEAPONS\n- SEXUAL OR PORNOGRAPHIC MATERIAL\n- INACCURATE OR MISLEADING QUOTATIONS OF RELIGIOUS\n- FALSE INFORMATION AND FEATURES\n- LIQUORS, BEER, NARCOTIC DRUG, OR TOBACCO\n\nCOPYRIGHT (C) SOFTENSTORM FOUNDATION AND OTHER CONTRIBUTORS. ALL RIGHTS RESERVED UNDER BSD 4-CLAUSE LICENSE. ANY ALLEGED SOFTWARES ARE SUBJECT TO LOCAL LAW ENFORCEMENT AND WILL BE REMOVED WITHOUT ANY CONSENT.')}, internal-fsb-guid="e55072d1")
         .col-6.internal-fsb-element.offset-6(style={'MsFlexDirection': 'column', 'MsOverflowX': 'hidden', 'MsOverflowY': 'auto', 'WebkitFlexDirection': 'column', 'bottom': '0px', 'display': 'flex', 'flexDirection': 'column', 'overflowX': 'hidden', 'overflowY': 'auto', 'position': 'absolute', 'right': '0px', 'top': '0px'}, internal-fsb-guid="b20bb476")
