@@ -99,8 +99,8 @@ class FlowLayout_4d816ba8 extends Base {
     TestHelper.identify();
     function ready(a){"loading"!=document.readyState?a(new Event('ready')):document.addEventListener?document.addEventListener("DOMContentLoaded",a):(document.onreadystatechange=function(e){"complete"==document.readyState&&a(e)})};
         
-    DataManipulationHelper.register("954a291a", "navigate", ["0820677c","1b650e66","22d343bd","cd6d7e1b"], {initClass: null, submitCrossType: null, enabledRealTimeUpdate: false, manipulateInto: () => { return null; }});
-    DataManipulationHelper.register("b2b66792", "navigate", ["0820677c","1b650e66","22d343bd","cd6d7e1b","d3de6c93"], {initClass: null, submitCrossType: null, enabledRealTimeUpdate: false, manipulateInto: () => { return null; }});
+    DataManipulationHelper.register("954a291a", "navigate", ["0820677c","1b650e66","22d343bd"], {initClass: null, submitCrossType: null, enabledRealTimeUpdate: false, manipulateInto: () => { return null; }});
+    DataManipulationHelper.register("b2b66792", "navigate", ["0820677c","1b650e66","22d343bd","d3de6c93"], {initClass: null, submitCrossType: null, enabledRealTimeUpdate: false, manipulateInto: () => { return null; }});
   }
   // <---Auto[ClassBegin]
   
@@ -215,7 +215,6 @@ class FlowLayout_4d816ba8 extends Base {
                 img(style={'display': 'none'}, internalFsbRatioExpand="true", src=this.getDataFromNotation("info.challenge"))
             .-fsb-preset-1b650e66.col-10.internal-fsb-element.offset-1(style={padding: '0px'}, internal-fsb-forward="1", internal-fsb-guid="0820677c")
               input.form-control.form-control-sm(style={'FsbInheritedPresets': '1b650e66', 'display': 'block', 'height': '34px', 'marginTop': '10px', 'width': '100%'}, placeholder="Captcha", type="password", disabled=this.state.submitting, required=true)
-            input.col-12.internal-fsb-element(type="hidden", value=this.getDataFromNotation("info.answer"), internal-fsb-guid="cd6d7e1b")
             Button.btn.btn-md.btn-primary.col-6.internal-fsb-element.offset-3(style={'marginTop': '10px', display: (()=>{return (this.state.currentTab == 0) ? 'block' : 'none';})()}, onClick=((event) => { window.internalFsbSubmit('954a291a', 'info', event, ((results) => { this.manipulate('954a291a', 'info', results); }).bind(this)); }).bind(this), disabled=this.state.submitting || undefined, type="button", onFailed=this.onButtonFailed_954a291a.bind(this), onSubmitting=this.onButtonSubmitting_954a291a.bind(this), internal-fsb-guid="954a291a")
               .internal-fsb-element(dangerouslySetInnerHTML={__html: loc('Continue')}, internal-fsb-guid="954a291a-text")
             Button.btn.btn-md.btn-primary.col-6.internal-fsb-element.offset-3(style={'marginTop': '10px', display: (()=>{return (this.state.currentTab == 1) ? 'block' : 'none';})()}, onClick=((event) => { window.internalFsbSubmit('b2b66792', 'info', event, ((results) => { this.manipulate('b2b66792', 'info', results); }).bind(this)); }).bind(this), disabled=this.state.submitting || undefined, type="button", onFailed=this.onButtonFailed_b2b66792.bind(this), onSubmitting=this.onButtonSubmitting_b2b66792.bind(this), internal-fsb-guid="b2b66792")

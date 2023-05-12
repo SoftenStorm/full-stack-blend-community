@@ -166,23 +166,25 @@ class Controller extends Base {
             .setTrace({color: "black"});
           const buffer = captcha.generateSync();
           
-          resolve(Object.assign({},
-            await super.get(data),
-            {
-              info: {
-                source: SourceType.Collection,
-                group: 'info',
-                rows: [{
-                  keys: {},
-                  columns: {
-                    challenge: `data:image/png;base64,${buffer.toString("base64")}`,
-                    answer: await bcrypt.hash(answer, 10)
-                  },
-                  relations: {},
-                }]
+          this.request.session.challenge = await bcrypt.hash(answer, 10);
+          this.request.session.save(async () => {
+            resolve(Object.assign({},
+              await super.get(data),
+              {
+                info: {
+                  source: SourceType.Collection,
+                  group: 'info',
+                  rows: [{
+                    keys: {},
+                    columns: {
+                      challenge: `data:image/png;base64,${buffer.toString("base64")}`
+                    },
+                    relations: {},
+                  }]
+                }
               }
-            }
-          ));
+            ));
+          });
         }
       } catch(error) {
         reject(error);
@@ -279,7 +281,7 @@ class Controller extends Base {
   protected async navigate(data: Input[], schema: DataTableSchema): Promise<string> {
     return new Promise(async (resolve, reject) => {
     	try {
-    	  let email, password, confirmPassword, answer, challenge;
+    	  let email, password, confirmPassword, challenge;
       	
       	for (let input of data) {
         	switch (input.name) {
@@ -292,17 +294,14 @@ class Controller extends Base {
         	  case 'confirmPassword':
         	    confirmPassword = input.value;
         	    break;
-        	  case 'answer':
-        	    answer = input.value;
-        	    break;
         	  case 'challenge':
         	    challenge = input.value;
         	    break;
         	}
       	}
       	
-      	if (!answer) return reject(new Error('Challenge information isn\'t found. (1201)'));
-      	if (!await bcrypt.compare(challenge, answer)) return reject(new Error('You have entered an incorrect of displaying captcha. (1202)'));
+      	if (!this.request.session.challenge) return reject(new Error('Challenge information isn\'t found. (1201)'));
+      	if (!await bcrypt.compare(challenge, this.request.session.challenge)) return reject(new Error('You have entered an incorrect of displaying captcha. (1202)'));
       	
       	if (!!password && !!confirmPassword) {
       	  const user = new User({
@@ -379,8 +378,8 @@ class Controller extends Base {
     
     // <---Auto[MergingBegin]
     // Auto[Merging]--->
-    RequestHelper.registerSubmit("9e885d49", "954a291a", "navigate", ["0820677c","1b650e66","22d343bd","cd6d7e1b"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Login Button"});
-    RequestHelper.registerSubmit("9e885d49", "b2b66792", "navigate", ["0820677c","1b650e66","22d343bd","cd6d7e1b","d3de6c93"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Signup Button"});
+    RequestHelper.registerSubmit("9e885d49", "954a291a", "navigate", ["0820677c","1b650e66","22d343bd"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Login Button"});
+    RequestHelper.registerSubmit("9e885d49", "b2b66792", "navigate", ["0820677c","1b650e66","22d343bd","d3de6c93"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Signup Button"});
     RequestHelper.registerInput('1b650e66', "document", "User", "email");
     ValidationHelper.registerInput('1b650e66', "[user.email]", true, "Please enter your email", undefined, null);
     for (let input of RequestHelper.getInputs(this.pageId, request, '1b650e66')) {
@@ -413,15 +412,6 @@ class Controller extends Base {
     for (let input of RequestHelper.getInputs(this.pageId, request, '0820677c')) {
     
       // Override data parsing and manipulation of [info.challenge] here:
-      // 
-      
-      if (input != null) data.push(input);
-    }
-    RequestHelper.registerInput('cd6d7e1b', "document", "info", "answer");
-    ValidationHelper.registerInput('cd6d7e1b', "[info.answer]", false, undefined, undefined, null);
-    for (let input of RequestHelper.getInputs(this.pageId, request, 'cd6d7e1b')) {
-    
-      // Override data parsing and manipulation of [info.answer] here:
       // 
       
       if (input != null) data.push(input);
