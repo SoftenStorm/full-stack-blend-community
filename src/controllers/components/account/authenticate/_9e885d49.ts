@@ -159,12 +159,7 @@ class Controller extends Base {
           resolve({});
         } else {
           const answer = this.generateAnswer();
-          const captcha = new CaptchaGenerator()
-            .setDimension(150, 450)
-            .setCaptcha({text: answer, size: 60, color: "black"})
-            .setDecoy({size: 30, opacity: 0.9})
-            .setTrace({color: "black"});
-          const buffer = captcha.generateSync();
+          const buffer = this.generateChallenge(answer);
           
           this.request.session.challenge = await bcrypt.hash(answer, 10);
           this.request.session.save(async () => {
@@ -175,7 +170,9 @@ class Controller extends Base {
                   source: SourceType.Collection,
                   group: 'info',
                   rows: [{
-                    keys: {},
+                    keys: {
+                      id: 'default'
+                    },
                     columns: {
                       challenge: `data:image/png;base64,${buffer.toString("base64")}`
                     },
@@ -237,10 +234,117 @@ class Controller extends Base {
   }
   
   protected async update(data: Input[], schema: DataTableSchema): Promise<HierarchicalDataRow[]> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
+      const reject = (async (error) => {
+        const answer = this.generateAnswer();
+        const buffer = this.generateChallenge(answer);
+        
+        this.request.session.challenge = await bcrypt.hash(answer, 10);
+        this.request.session.save(async () => {
+          resolve([{
+            keys: {
+              id: 'default'
+            },
+            columns: {
+              challenge: `data:image/png;base64,${buffer.toString("base64")}`,
+              success: false,
+              error: error.toString()
+            },
+            relations: {},
+          }]);
+        });
+      }).bind(this);
+      
     	try {
       	let options = RequestHelper.getOptions(this.pageId, this.request);
-        resolve(await DatabaseHelper.update(data, schema, options.crossRelationUpsert, this.request.session));
+      	let email, password, confirmPassword, challenge;
+      	
+      	for (let input of data) {
+        	switch (input.name) {
+        	  case 'email':
+        	    email = input.value;
+        	    break;
+        	  case 'password':
+        	    password = input.value;
+        	    break;
+        	  case 'confirmPassword':
+        	    confirmPassword = input.value;
+        	    break;
+        	  case 'challenge':
+        	    challenge = input.value;
+        	    break;
+        	}
+      	}
+      	
+      	if (!this.request.session.challenge) return reject(new Error('Challenge information isn\'t found. (1201)'));
+      	if (!await bcrypt.compare(challenge, this.request.session.challenge)) return reject(new Error('You have entered an incorrect of displaying captcha. (1202)'));
+      	
+      	if (!!password && !!confirmPassword) {
+      	  const user = new User({
+            email: email,
+            password: password
+          });
+
+          User.findOne({email: email}, (err, existingUser) => {
+            if (err) {
+              return reject(new Error('There was an internal server error, please try again. (1001)'));
+            }
+            if (existingUser) {
+              return reject(new Error('Account with that email address already exists.'));
+            }
+            
+            user.save((err) => {
+              if (err) {
+                return reject(new Error('There was an internal server error, please try again. (1002)'));
+              }
+              
+              this.request.logIn(user, (err) => {
+                if (err) {
+                  return reject(new Error('There was an internal server error, please try again. (1003)'));
+                }
+                resolve([{
+                  keys: {
+                    id: 'default'
+                  },
+                  columns: {
+                    success: true
+                  },
+                  relations: {},
+                }]);
+              });
+            });
+          });
+      	} else {
+      	  User.findOne({email: email}, (err, existingUser) => {
+            if (err) {
+              return reject(new Error('There was an internal server error, please try again. (1101)'));
+            }
+            if (!existingUser) {
+              return reject(new Error('An account with the email address doesn\'t exist.'));
+            }
+            
+            existingUser.comparePassword(password, (err, isMatch: boolean) => {
+              if (!isMatch) {
+                return reject(new Error('Password doesn\'t match. (1102)'));
+              } else {
+                this.request.logIn(existingUser, (err) => {
+                  if (err) {
+                    return reject(new Error('There was an internal server error, please try again. (1103)'));
+                  }
+                  resolve([{
+                    keys: {
+                      id: 'default'
+                    },
+                    columns: {
+                      success: true
+                    },
+                    relations: {},
+                  }]);
+                });
+              }
+            });
+          });
+      	}
       } catch(error) {
         reject(error);
       }
@@ -281,85 +385,7 @@ class Controller extends Base {
   protected async navigate(data: Input[], schema: DataTableSchema): Promise<string> {
     return new Promise(async (resolve, reject) => {
     	try {
-    	  let email, password, confirmPassword, challenge;
-      	
-      	for (let input of data) {
-        	switch (input.name) {
-        	  case 'email':
-        	    email = input.value;
-        	    break;
-        	  case 'password':
-        	    password = input.value;
-        	    break;
-        	  case 'confirmPassword':
-        	    confirmPassword = input.value;
-        	    break;
-        	  case 'challenge':
-        	    challenge = input.value;
-        	    break;
-        	}
-      	}
-      	
-      	if (!this.request.session.challenge) return reject(new Error('Challenge information isn\'t found. (1201)'));
-      	if (!await bcrypt.compare(challenge, this.request.session.challenge)) return reject(new Error('You have entered an incorrect of displaying captcha. (1202)'));
-      	
-      	if (!!password && !!confirmPassword) {
-      	  const user = new User({
-            email: email,
-            password: password
-          });
-
-          User.findOne({email: email}, (err, existingUser) => {
-            if (err) {
-              reject(new Error('There was an internal server error, please try again. (1001)'));
-              return;
-            }
-            if (existingUser) {
-              reject(new Error('Account with that email address already exists.'));
-              return;
-            }
-            
-            user.save((err) => {
-              if (err) {
-                reject(new Error('There was an internal server error, please try again. (1002)'));
-                return;
-              }
-              
-              this.request.logIn(user, (err) => {
-                if (err) {
-                  reject(new Error('There was an internal server error, please try again. (1003)'));
-                  return;
-                }
-                resolve('/editor');
-              });
-            });
-          });
-      	} else {
-      	  User.findOne({email: email}, (err, existingUser) => {
-            if (err) {
-              reject(new Error('There was an internal server error, please try again. (1101)'));
-              return;
-            }
-            if (!existingUser) {
-              reject(new Error('An account with the email address doesn\'t exist.'));
-              return;
-            }
-            
-            existingUser.comparePassword(password, (err, isMatch: boolean) => {
-              if (!isMatch) {
-                reject(new Error('Password doesn\'t match. (1102)'));
-              } else {
-                this.request.logIn(existingUser, (err) => {
-                  if (err) {
-                    reject(new Error('There was an internal server error, please try again. (1103)'));
-                    return;
-                  }
-                  resolve('/editor');
-                });
-              }
-            });
-          });
-      	}
+    	  throw new Error("Not Implemented Error");
       } catch(error) {
         reject(error);
       }
@@ -368,6 +394,17 @@ class Controller extends Base {
   
   private generateAnswer(): string {
     return crypto.randomBytes(8).toString("hex");
+  }
+  
+  private generateChallenge(answer): Buffer {
+    const captcha = new CaptchaGenerator()
+      .setDimension(150, 450)
+      .setCaptcha({text: answer, size: 60, color: "black"})
+      .setDecoy({size: 30, opacity: 0.9})
+      .setTrace({color: "black"});
+    const buffer = captcha.generateSync();
+    
+    return buffer;
   }
  	
   // Auto[MergingBegin]--->  
@@ -378,8 +415,8 @@ class Controller extends Base {
     
     // <---Auto[MergingBegin]
     // Auto[Merging]--->
-    RequestHelper.registerSubmit("9e885d49", "954a291a", "navigate", ["0820677c","1b650e66","22d343bd"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Login Button"});
-    RequestHelper.registerSubmit("9e885d49", "b2b66792", "navigate", ["0820677c","1b650e66","22d343bd","d3de6c93"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Signup Button"});
+    RequestHelper.registerSubmit("9e885d49", "954a291a", "update", ["0820677c","1b650e66","22d343bd"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Login Button"});
+    RequestHelper.registerSubmit("9e885d49", "b2b66792", "update", ["0820677c","1b650e66","22d343bd","d3de6c93"], {initClass: null, crossRelationUpsert: false, enabledRealTimeUpdate: false, name: "Signup Button"});
     RequestHelper.registerInput('1b650e66', "document", "User", "email");
     ValidationHelper.registerInput('1b650e66', "[user.email]", true, "Please enter your email", undefined, null);
     for (let input of RequestHelper.getInputs(this.pageId, request, '1b650e66')) {
