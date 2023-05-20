@@ -2207,8 +2207,8 @@ const DatabaseHelper = {
                 for (const record of records) {
                   if (!leavePermission && !await PermissionHelper.allowActionOnTable(ActionType.Delete, schema, requestModifyingKeys, record, session, transaction)) throw new Error(`You have no permission to delete any row in ${schema.group}.`);
                   
-                  transaction.documentDatabaseConnection.db(DEFAULT_DOCUMENT_DATABASE_NAME).collection(schema.group).deleteOne({
-                    '_id': {$eq: new ObjectID(record['_id'])}
+                  await transaction.documentDatabaseConnection.db(DEFAULT_DOCUMENT_DATABASE_NAME).collection(schema.group).deleteOne({
+                    'id': record['_id']
                   }, {session: transaction.documentDatabaseSession});
                 }
               } else if (input.source == SourceType.VolatileMemory) {
