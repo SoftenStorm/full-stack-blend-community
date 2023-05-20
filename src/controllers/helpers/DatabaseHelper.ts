@@ -2181,7 +2181,9 @@ const DatabaseHelper = {
 
               const requestModifyingKeys = [...Object.keys(dataColumns), ...Object.keys(dataKeys)];
 
-              if (!runBulkProcess && !leavePermission && !await PermissionHelper.allowActionOnTable(ActionType.Delete, schema, requestModifyingKeys, Object.assign({}, dataColumns, dataKeys), session, transaction)) throw new Error(`You have no permission to delete any row in ${schema.group}.`);
+              if (input.source != SourceType.Document) {
+                if (!runBulkProcess && !leavePermission && !await PermissionHelper.allowActionOnTable(ActionType.Delete, schema, requestModifyingKeys, Object.assign({}, dataColumns, dataKeys), session, transaction)) throw new Error(`You have no permission to delete any row in ${schema.group}.`);
+              }
 
               let records = [];
               if (input.source == SourceType.Relational) {
@@ -2203,6 +2205,8 @@ const DatabaseHelper = {
                 });
 
                 for (const record of records) {
+                  if (!leavePermission && !await PermissionHelper.allowActionOnTable(ActionType.Delete, schema, requestModifyingKeys, record, session, transaction)) throw new Error(`You have no permission to delete any row in ${schema.group}.`);
+                  
                   transaction.documentDatabaseConnection.db(DEFAULT_DOCUMENT_DATABASE_NAME).collection(schema.group).deleteOne({
                     '_id': {$eq: new ObjectID(record['_id'])}
                   }, {session: transaction.documentDatabaseSession});
