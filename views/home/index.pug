@@ -82,11 +82,6 @@ html(lang=headers && headers.language || 'en')
                   button.btn.btn-md.btn-secondary.col-8.col-lg-6.internal-fsb-element.offset-2.offset-lg-3(style={'margin-top': '5px', 'pointer-events': 'auto'}, type="button", internal-fsb-guid="513d8787")
                     .internal-fsb-element(internal-fsb-guid="a43cbbee").
                       !{loc('Try the Editor')}
-                  button.btn.btn-md.btn-secondary.col-8.col-lg-6.internal-fsb-element.offset-2.offset-lg-3(style={'margin-top': '5px', 'pointer-events': 'auto'}, type="button", internal-fsb-guid="c51260c7")
-                    .internal-fsb-element(internal-fsb-guid="9de7c4d1").
-                      !{loc('Traditional DX Edition')}
-                    .internal-fsb-element(style={'-webkit-opacity': '0.5', 'font-size': '10px', 'font-weight': '500', 'line-height': '1.15em', 'opacity': '0.5', 'padding-top': '5px', 'text-transform': 'uppercase'}, internal-fsb-guid="dde60710").
-                      !{loc('THE EDITION WHICH HAS THE TRADITIONAL DEVELOPMENT EXPERIENCE AND THE FOCUSING TOWARDS SELF-CENTER DEVELOPMENT BASED ON PRE-EXISTING INTERNET TUTORIALS - FOR BETA OBSERVER')}
                   button.btn.btn-md.btn-secondary.col-8.col-lg-6.internal-fsb-element.offset-2.offset-lg-3(style={'margin-top': '5px', 'pointer-events': 'auto'}, type="button", internal-fsb-guid="d85b2bd4")
                     .internal-fsb-element(internal-fsb-guid="d85b2bd4-text").
                       !{loc('Development Workarounds')}
@@ -277,11 +272,6 @@ html(lang=headers && headers.language || 'en')
               // 
               window.location = '/editor?evaluation=community';
           };
-          Controller.prototype.onButtonClick_c51260c7 = function (event) {
-              // Handle the event of onButtonClick (Button 1) here:
-              // 
-              window.location = 'https://traditional.stackblend.org';
-          };
           Controller.prototype.onButtonClick_d85b2bd4 = function (event) {
               // Handle the event of onButtonClick (Button 3) here:
               // 
@@ -353,7 +343,6 @@ html(lang=headers && headers.language || 'en')
       controller.register('4ceae99b', 'mouseleave', 'onRectangleMouseLeave_4ceae99b', false, false);
       controller.register('651393e4', 'click', 'onButtonClick_651393e4', false, false);
       controller.register('513d8787', 'click', 'onButtonClick_513d8787', false, false);
-      controller.register('c51260c7', 'click', 'onButtonClick_c51260c7', false, false);
       controller.register('d85b2bd4', 'click', 'onButtonClick_d85b2bd4', false, false);
       controller.register('269c6485', 'click', 'onButtonClick_269c6485', false, false);
       controller.register('55a08958', 'click', 'onButtonClick_55a08958', false, false);
@@ -369,7 +358,6 @@ html(lang=headers && headers.language || 'en')
       controller.listen('4ceae99b');
       controller.listen('651393e4');
       controller.listen('513d8787');
-      controller.listen('c51260c7');
       controller.listen('d85b2bd4');
       controller.listen('269c6485');
       controller.listen('55a08958');
