@@ -6026,7 +6026,7 @@ d3deb54e          },
       }
     }
   },
-  "footerBlobSHA": "54b85369d8469d3dde07ddcbe4ac9515f41f467c#2141070797",
+  "footerBlobSHA": "8fee45c32947c2e62519037f56b21619bbb5ce78#1729969900",
   "frontEndComponentsBlobSHADict": {
     "Project.Controls.FlowLayout_4d816ba8": "9979a52d3c465936f9443d7913eb412931382911#513631958",
     "Project.Controls.FlowLayout_52d0514b": "307ad2d3a2835aa11ac103d70b6f250aed690617#-105820285",
@@ -6156,7 +6156,7 @@ d3deb54e          },
     "workspaceStrictnessRevertMode": "P1",
     "workspaceStrictnessSentenceMode": "meaningful"
   },
-  "headerBlobSHA": "285effcf194f676cdea57c0fc905f325f0540b4a#1095276013",
+  "headerBlobSHA": "ba6aa083b3075ff9197bd4614aafbfb90a2e024c#271703636",
   "popups": {},
   "properties": {},
   "routeBlobSHA": "c360423e9a5d917b643da205193e5b4117e014e2#-478532818",
@@ -8638,7 +8638,7 @@ b351d3a2    },
         "    internal-fsb-name=\"Box Container\"",
         "    internal-fsb-event-no-propagate=\"1\"",
         "    internal-fsb-class=\"Rectangle\"",
-        "    style=\"-ms-overflow-x: hidden; -ms-overflow-y: hidden; -webkit-border-radius: 3px 3px 3px 3px; -webkit-box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.375); background: rgba(212, 212, 212, 1); border-radius: 3px 3px 3px 3px; box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.375); cursor: help; margin-bottom: 40px; overflow-x: hidden; overflow-y: hidden; padding-left: 0px; padding-right: 0px; position: relative; width: 100%; z-index: 500\"",
+        "    style=\"-ms-overflow-x: hidden; -ms-overflow-y: hidden; -webkit-border-radius: 3px 3px 3px 3px; -webkit-box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.375); background: rgba(212, 212, 212, 1); border-radius: 3px 3px 3px 3px; box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.375); cursor: help; margin-bottom: 75px; overflow-x: hidden; overflow-y: hidden; padding-left: 0px; padding-right: 0px; position: relative; width: 100%; z-index: 500\"",
         "    onfsbmouseenter=\"{&quot;event&quot;:true,&quot;add-animation-tracks&quot;:[&quot;b7965b87&quot;],&quot;animation-at-element&quot;:true}\"",
         "    onfsbmouseleave=\"{&quot;event&quot;:true,&quot;remove-animation-tracks&quot;:[&quot;b7965b87&quot;],&quot;animation-at-element&quot;:true}\">",
         "<div",
@@ -9771,7 +9771,7 @@ b351d3a2    },
     "1b650e66": "-fsb-for-children: true; -fsb-reusable-id: 1b650e66; -fsb-reusable-name: box; display: block; height: 34px; width: 100%",
     "245bc127": "-fsb-background-type: linear; -fsb-reusable-id: 245bc127; -fsb-reusable-name: settings; -webkit-border-radius: 8px 8px 8px 8px; background: linear-gradient(0deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 1) 100%); border-bottom-color: rgba(3, 115, 252, 1); border-bottom-style: solid; border-bottom-width: 5px; border-left-color: rgba(3, 115, 252, 1); border-left-style: solid; border-left-width: 5px; border-radius: 8px 8px 8px 8px; border-right-color: rgba(3, 115, 252, 1); border-right-style: solid; border-right-width: 5px; border-top-color: rgba(3, 115, 252, 1); border-top-style: solid; border-top-width: 5px; bottom: 20vh; left: 15vw; position: absolute; top: 20vh; width: 70vw",
     "24bc9bae": "-fsb-reusable-id: 24bc9bae; -fsb-reusable-name: settings_option; padding-left: 0px; padding-right: 0px",
-    "45925c27": "-fsb-reusable-id: 45925c27; -fsb-reusable-name: demo; -webkit-box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); background: rgba(3, 115, 252, 0.25); box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); height: 250px; margin-bottom: 15px; margin-left: 10px; margin-right: 10px; position: relative; width: 175px",
+    "45925c27": "-fsb-reusable-id: 45925c27; -fsb-reusable-name: demo; -webkit-box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); background: rgba(3, 115, 252, 0.25); border-bottom-style: none; border-left-style: none; border-right-style: none; border-top-style: none; box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5); height: 250px; margin-bottom: 15px; margin-left: 10px; margin-right: 10px; position: relative; width: 175px",
     "49d77136": "-fsb-reusable-id: 49d77136; -fsb-reusable-name: feature_hr; background: rgba(255, 255, 255, 1); height: 3px; margin-bottom: 15px; margin-top: 10px",
     "4d8aded9": "-fsb-reusable-id: 4d8aded9; -fsb-reusable-name: feature; background: rgba(0, 196, 255, 0.95); border-bottom-color: rgba(255, 255, 255, 1); border-bottom-style: solid; border-bottom-width: 1px; padding-bottom: 50px; padding-top: 50px",
     "57ce55d2": "-fsb-reusable-id: 57ce55d2; -fsb-reusable-name: demo_subtitle; font-size: 11px; font-weight: 400; line-height: 1.25em; margin-top: 15px",
@@ -9793,6 +9793,6 @@ b351d3a2    },
     "7bc56453": "8155ac24d8bea4e67daedc3fdad14b27bfca4ce7#1198326242",
     "9e885d49": "125ef751502fef4fdc981c4903b7dd01180ea4d7#623082912",
     "b160aa0e": "c64e9efdfa1671fdfca212ad286e2097270de758#1581082345",
-    "index": "eface1eacd794570ab4079f66fd1180d8b36a61c#1427359815"
+    "index": "a3b897e9983eef155606aee1667c359de2a55040#1884243369"
   }
 }
