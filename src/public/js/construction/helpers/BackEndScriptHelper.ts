@@ -426,7 +426,7 @@ import {RequestHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/RequestHelp
 import {RenderHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/RenderHelper';
 import {SchemaHelper, DataTableSchema} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchemaHelper';
 import {loc} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/LocalizationHelper';
-import {Base as $Base} from '{__IMPORT_DIRECTORY_PREFIX__}Base';
+import $Base from '{__IMPORT_DIRECTORY_PREFIX__}Base';
 
 // Assign to an another one to override the base class.
 // 
@@ -527,7 +527,7 @@ import {ProjectConfigurationHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helper
 import {RequestHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/RequestHelper';
 import {SchemaHelper, DataTableSchema} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchemaHelper';
 import {loc} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/LocalizationHelper';
-import {Base as $Base} from '{__IMPORT_DIRECTORY_PREFIX__}Base';
+import $Base from '{__IMPORT_DIRECTORY_PREFIX__}Base';
 
 // Assign to an another one to override the base class.
 // 
@@ -598,7 +598,7 @@ import {ProjectConfigurationHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helper
 import {RequestHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/RequestHelper';
 import {SchemaHelper, DataTableSchema} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchemaHelper';
 import {loc} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/LocalizationHelper';
-import {Base as $Base} from '{__IMPORT_DIRECTORY_PREFIX__}Base';
+import $Base from '{__IMPORT_DIRECTORY_PREFIX__}Base';
 
 // Assign to an another one to override the base class.
 // 
@@ -670,7 +670,7 @@ import {RequestHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/RequestHelp
 import {SchemaHelper, DataTableSchema} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchemaHelper';
 import {SchedulerHelper} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/SchedulerHelper';
 import {loc} from '{__IMPORT_DIRECTORY_PREFIX__}../helpers/LocalizationHelper';
-import {Base as $Base} from '{__IMPORT_DIRECTORY_PREFIX__}Base';
+import $Base from '{__IMPORT_DIRECTORY_PREFIX__}Base';
 
 // Assign to an another one to override the base class.
 // 

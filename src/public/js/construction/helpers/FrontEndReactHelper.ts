@@ -112,7 +112,7 @@ import {AnimationHelper} from '../helpers/AnimationHelper';
 import {TestHelper} from '../helpers/TestHelper';
 import {SourceType, HierarchicalDataTable, HierarchicalDataRow} from '../helpers/DataManipulationHelper';
 import {loc as $loc} from '../helpers/LocalizationHelper';
-import {IBaseProps, IBaseState, DefaultBaseProps, DefaultBaseState, Button as $Button, Base as $Base} from './Base';
+import $Base, {IBaseProps, IBaseState, DefaultBaseProps, DefaultBaseState, Button as $Button} from './Base';
 
 // Assign to an another one to override the base class.
 // 
