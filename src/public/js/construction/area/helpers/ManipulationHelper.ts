@@ -1995,6 +1995,7 @@ var ManipulationHelper = {
           HTMLHelper.removeClass(document.documentElement, 'internal-fsb-guide-off');
           HTMLHelper.addClass(document.documentElement, 'internal-fsb-guide-on');
         }
+        break;
     }
 
     remember = false;

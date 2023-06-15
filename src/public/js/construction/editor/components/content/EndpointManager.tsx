@@ -137,9 +137,11 @@ class EndpointManager extends Base<Props, State> {
     for (const page of this.state.extensionValues['pages']) {
       const path = (page.path || '').replace(/"/g, '\\x22').replace(/'/g, '\\x27');
       const sitemap = page.sitemap || false;
+      const stashing = page.stashing || false;
       const frequency = page.frequency || undefined;
       const priority = page.priority || undefined;
 
+      if (stashing) continue;
       if (sitemap == 'true') {
         sitemapInfoDict[`${path}`] = {
           frequency: frequency,

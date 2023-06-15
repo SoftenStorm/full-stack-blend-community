@@ -105,6 +105,7 @@ class HTMLManager extends Base<Props, State> {
         image: null,
         path: null,
         sitemap: null,
+        stashing: null,
         frequency: null,
         priority: null
       });
@@ -125,6 +126,7 @@ class HTMLManager extends Base<Props, State> {
         image: node.tag.image,
         path: node.tag.path,
         sitemap: node.tag.sitemap,
+        stashing: node.tag.stashing,
         frequency: node.tag.frequency,
         priority: node.tag.priority
       });
@@ -163,6 +165,11 @@ class HTMLManager extends Base<Props, State> {
     this.forceUpdate();
   }
 
+  protected stashingOnUpdate(value: any) {
+    this.state.stashing = value;
+    this.forceUpdate();
+  }
+
   protected frequencyOnUpdate(identitty: any, value: any) {
     this.state.frequency = value;
     this.forceUpdate();
@@ -183,6 +190,7 @@ class HTMLManager extends Base<Props, State> {
         image: this.state.image,
         path: this.state.path,
         sitemap: this.state.sitemap,
+        stashing: this.state.stashing,
         frequency: this.state.frequency,
         priority: this.state.priority,
         state: 'update'
@@ -197,6 +205,7 @@ class HTMLManager extends Base<Props, State> {
         dragable: true,
         disabled: false,
         selected: false,
+        stashing: this.state.stashing,
         customClassName: 'item',
         nodes: [],
         tag: item
@@ -224,6 +233,7 @@ class HTMLManager extends Base<Props, State> {
       item.image = this.state.image;
       item.path = this.state.path;
       item.sitemap = this.state.sitemap;
+      item.stashing = this.state.stashing;
       item.frequency = this.state.frequency;
       item.priority = this.state.priority;
       item.state = 'update';
@@ -275,6 +285,7 @@ class HTMLManager extends Base<Props, State> {
         dragable: true,
         disabled: false,
         selected: (item.id == editingID),
+        stashing: item.stashing,
         customClassName: 'html',
         nodes: [],
         tag: item
@@ -312,45 +323,50 @@ class HTMLManager extends Base<Props, State> {
     return (
       <FullStackBlend.Components.ListManager ref="listManager" customClassName="non-insertable html-manager" customDraggerClassName="draging-html-item" nodes={this.state.nodes} onStartDragging={this.onStartDragging.bind(this)} onUpdate={this.onUpdate.bind(this)} onDragged={this.onDragged.bind(this)} onInsertOptionVisibleChanged={this.onInsertOptionVisibleChanged.bind(this)} onUpdateOptionVisibleChanged={this.onUpdateOptionVisibleChanged.bind(this)}>
         <div className="section-container" style={{width: '225px'}}>
-          <div className="section-title">{(this.state.isAdding) ? `New ${this.getCategoryName()}` : `Update ${this.getCategoryName()}`}</div>
-          <div className="section-subtitle">Title</div>
-          <div className="section-body">
-            <FullStackBlend.Controls.Textbox ref="name" value={this.state.name} preRegExp='.*' postRegExp='.*' onUpdate={this.nameOnUpdate.bind(this)} maxLength={50}></FullStackBlend.Controls.Textbox>
-          </div>
-          <div className="section-subtitle" style={{display: (this.state.id == 'index' || this.props.path == false) ? 'none' : 'block'}}>Path</div>
-          <div internal-fsb-not-for="workspaceMode:designer, workspaceMode:business">
-            <div className="section-body" style={{display: (this.state.id == 'index' || this.props.path == false) ? 'none' : 'block'}}>
-              <FullStackBlend.Controls.Textbox ref="value" value={this.state.path} placeholder="/path/name/:a/:b" preRegExp="(/|/([:a-zA-Z]|[:a-zA-Z][a-zA-Z0-9_\-]+|[:a-zA-Z][a-zA-Z0-9_\-]+/)+)?" postRegExp="[/:a-zA-Z0-9_\-]*" onUpdate={this.pathOnUpdate.bind(this)}></FullStackBlend.Controls.Textbox>
+          <div style={{opacity: !this.state.stashing ? '' : '0.15', pointerEvents: !this.state.stashing ? '' : 'none'}}>
+            <div className="section-title">{(this.state.isAdding) ? `New ${this.getCategoryName()}` : `Update ${this.getCategoryName()}`}</div>
+            <div className="section-subtitle">Title</div>
+            <div className="section-body">
+              <FullStackBlend.Controls.Textbox ref="name" value={this.state.name} preRegExp='.*' postRegExp='.*' onUpdate={this.nameOnUpdate.bind(this)} maxLength={50}></FullStackBlend.Controls.Textbox>
             </div>
-          </div>
-          <div className="section-subtitle">Description</div>
-          <div className="section-body">
-            <FullStackBlend.Controls.Textbox ref="description" value={this.state.description} preRegExp='.*' postRegExp='.*' onUpdate={this.descriptionOnUpdate.bind(this)} maxLength={165} multiline={true} resizable={false}></FullStackBlend.Controls.Textbox>
-          </div>
-          {['components', 'popups'].indexOf(currentMode) == -1 && (
-            <div>
-              <div className="section-subtitle">Keywords</div>
-              <div className="section-body" internal-fsb-not-for="workspaceMode:designer, workspaceMode:business">
-                <FullStackBlend.Controls.Textbox ref="keywords" value={this.state.keywords} placeholder="keyword, abc, ..." preRegExp='.*' postRegExp='.*' onUpdate={this.keywordsOnUpdate.bind(this)} rows={2} maxLength={1000} multiline={true} resizable={false}></FullStackBlend.Controls.Textbox>
+            <div className="section-subtitle" style={{display: (this.state.id == 'index' || this.props.path == false) ? 'none' : 'block'}}>Path</div>
+            <div internal-fsb-not-for="workspaceMode:designer, workspaceMode:business">
+              <div className="section-body" style={{display: (this.state.id == 'index' || this.props.path == false) ? 'none' : 'block'}}>
+                <FullStackBlend.Controls.Textbox ref="value" value={this.state.path} placeholder="/path/name/:a/:b" preRegExp="(/|/([:a-zA-Z]|[:a-zA-Z][a-zA-Z0-9_\-]+|[:a-zA-Z][a-zA-Z0-9_\-]+/)+)?" postRegExp="[/:a-zA-Z0-9_\-]*" onUpdate={this.pathOnUpdate.bind(this)}></FullStackBlend.Controls.Textbox>
               </div>
-              <div className="section-subtitle">Image</div>
-              <div className="section-body" internal-fsb-not-for="workspaceMode:business">
-                <FullStackBlend.Controls.Textbox ref="image" value={this.state.image} placeholder="URL" preRegExp='.*' postRegExp='.*' onUpdate={this.imageOnUpdate.bind(this)}></FullStackBlend.Controls.Textbox>
-              </div>
-              <div className="section-subtitle">Sitemap Option</div>
-              <div className="section-body" internal-fsb-not-for="workspaceMode:designer, workspaceMode:business">
-                <FullStackBlend.Components.RadioButtonPicker value={{sitemap: this.state.sitemap}} onValueChange={this.sitemapOnUpdate.bind(this)} options={[[['sitemap'], 'true', ["fa-power-off", "enable for this page"]]]} />
-                <div style={{opacity: this.state.sitemap ? '' : '0.15', pointerEvents: this.state.sitemap ? '' : 'none', height: '64px'}}>
-                  <FullStackBlend.Controls.DropDownList options={SEO_FREQUENCY_OPTIONS} onUpdate={this.frequencyOnUpdate.bind(this)} inline={true}>
-                    <span>frequency: {this.state.frequency}</span>
-                  </FullStackBlend.Controls.DropDownList>
-                  <FullStackBlend.Controls.DropDownList options={SEO_PRIORITY_OPTIONS} onUpdate={this.priorityOnUpdate.bind(this)} inline={true}>
-                    <span>priority: {this.state.priority}</span>
-                  </FullStackBlend.Controls.DropDownList>
+            </div>
+            <div className="section-subtitle">Description</div>
+            <div className="section-body">
+              <FullStackBlend.Controls.Textbox ref="description" value={this.state.description} preRegExp='.*' postRegExp='.*' onUpdate={this.descriptionOnUpdate.bind(this)} maxLength={165} multiline={true} resizable={false}></FullStackBlend.Controls.Textbox>
+            </div>
+            {['components', 'popups'].indexOf(currentMode) == -1 && (
+              <div>
+                <div className="section-subtitle">Keywords</div>
+                <div className="section-body" internal-fsb-not-for="workspaceMode:designer, workspaceMode:business">
+                  <FullStackBlend.Controls.Textbox ref="keywords" value={this.state.keywords} placeholder="keyword, abc, ..." preRegExp='.*' postRegExp='.*' onUpdate={this.keywordsOnUpdate.bind(this)} rows={2} maxLength={1000} multiline={true} resizable={false}></FullStackBlend.Controls.Textbox>
+                </div>
+                <div className="section-subtitle">Image</div>
+                <div className="section-body" internal-fsb-not-for="workspaceMode:business">
+                  <FullStackBlend.Controls.Textbox ref="image" value={this.state.image} placeholder="URL" preRegExp='.*' postRegExp='.*' onUpdate={this.imageOnUpdate.bind(this)}></FullStackBlend.Controls.Textbox>
+                </div>
+                <div className="section-subtitle">Sitemap Option</div>
+                <div className="section-body" internal-fsb-not-for="workspaceMode:designer, workspaceMode:business">
+                  <FullStackBlend.Components.RadioButtonPicker value={{sitemap: this.state.sitemap}} onValueChange={this.sitemapOnUpdate.bind(this)} options={[[['sitemap'], 'true', ["fa-power-off", "enable for this page"]]]} />
+                  <div style={{opacity: this.state.sitemap ? '' : '0.15', pointerEvents: this.state.sitemap ? '' : 'none', height: '64px'}}>
+                    <FullStackBlend.Controls.DropDownList options={SEO_FREQUENCY_OPTIONS} onUpdate={this.frequencyOnUpdate.bind(this)} inline={true}>
+                      <span>frequency: {this.state.frequency}</span>
+                    </FullStackBlend.Controls.DropDownList>
+                    <FullStackBlend.Controls.DropDownList options={SEO_PRIORITY_OPTIONS} onUpdate={this.priorityOnUpdate.bind(this)} inline={true}>
+                      <span>priority: {this.state.priority}</span>
+                    </FullStackBlend.Controls.DropDownList>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+          <div style={{display: (this.state.id == 'index' || this.props.path == false) ? 'none' : 'block'}}>
+            <FullStackBlend.Components.RadioButtonPicker value={{stashing: this.state.stashing}} onValueChange={this.stashingOnUpdate.bind(this)} options={[[['stashing'], 'true', ["fa-power-off", "stashing"]]]} />
+          </div>
           <div className="section-body" style={{display: (this.state.isAdding) ? '' : 'none'}}>
             <button className="btn btn-sm btn-primary" onClick={this.addOnClick.bind(this)} style={{padding: '3px 20px', borderRadius: '4px'}}>Create</button>
           </div>

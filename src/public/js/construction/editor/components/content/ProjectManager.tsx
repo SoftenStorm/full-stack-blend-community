@@ -312,9 +312,11 @@ class ProjectManager extends Base<Props, State> {
           for (const page of this.state.extensionValues['pages']) {
             const path = (page.path || '').replace(/"/g, '\\x22').replace(/'/g, '\\x27')
             const sitemap = page.sitemap || false;
+            const stashing = page.stashing || false;
             const frequency = page.frequency || undefined;
             const priority = page.priority || undefined;
 
+            if (stashing) continue;
             if (sitemap == 'true') {
               sitemapInfoDict[`${path}`] = {
                 frequency: frequency,
@@ -570,7 +572,7 @@ script(type="text/javascript" src="/js/Site.bundle.js?version=${(new Date()).get
 
           let persistingContent = document.createElement('div');
           let persistingGUIDs = {index: true};
-          for (let page of nextProjectData.globalSettings.pages.filter(page => page.state != 'delete')) {
+          for (let page of nextProjectData.globalSettings.pages.filter(page => page.state != 'delete' && !page.stashing)) {
             persistingGUIDs[page.id] = true;
             let element = document.createElement('div');
             element.innerHTML = nextProjectData.sites[page.id] && nextProjectData.sites[page.id].body.join('\n') || '';
@@ -634,7 +636,7 @@ script(type="text/javascript" src="/js/Site.bundle.js?version=${(new Date()).get
           nextProjectData.globalSettings.components = nextProjectData.globalSettings.components.filter(component => component.state != 'delete');
           nextProjectData.globalSettings.popups = nextProjectData.globalSettings.popups.filter(popup => popup.state != 'delete');
 
-          this.createRouteBlob(repo, nextProjectData.globalSettings.pages, nextProjectData.routeBlobSHA, (routeBlobSHA: string) => {
+          this.createRouteBlob(repo, nextProjectData.globalSettings.pages.filter(page => !page.stashing), nextProjectData.routeBlobSHA, (routeBlobSHA: string) => {
             this.createControllerBlob(repo, nextProjectData.globalSettings.pages, Object.keys(connectorControllerInfoDict), Object.keys(workerControllerInfoDict), Object.keys(schedulerControllerInfoDict), nextProjectData.controllerBlobSHA, sitemapInfoDict, (controllerBlobSHA: string) => {
               this.createViewBlob(repo, combinedHTMLPageDict, nextProjectData.globalSettings.pages, nextProjectData.viewBlobSHADict, (viewBlobSHADict: any) => {
                 this.createBackEndControllerBlob(repo, arrayOfControllerScripts, nextProjectData.backEndControllerBlobSHADict, (backEndControllerBlobSHADict: any) => {

@@ -108,6 +108,15 @@ let cachedUpdateEditorProperties = {};
       case 'layering':
         HTMLHelper.getElementById(name).style.display = HTMLHelper.hasClass(icon, 'fa-toggle-on') ? '' : 'none';
         break;
+      case 'stashing':
+        if (HTMLHelper.hasClass(document.body, 'internal-fsb-stashing-on')) {
+          HTMLHelper.removeClass(document.body, 'internal-fsb-stashing-on');
+          HTMLHelper.addClass(document.body, 'internal-fsb-stashing-off');
+        } else {
+          HTMLHelper.removeClass(document.body, 'internal-fsb-stashing-off');
+          HTMLHelper.addClass(document.body, 'internal-fsb-stashing-on');
+        }
+        break;
     }
 
     perform('toggle', name);

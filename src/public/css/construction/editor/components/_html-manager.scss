@@ -87,7 +87,12 @@
   	    }
       }
       
+      .treenode-container.stashing {
+        opacity: 0.15;
+      }
+      
       .treenode-container.selected {
+        opacity: 1.0;
         background-color: #007bff;
 		    color: #fff;
       }
