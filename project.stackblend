@@ -6154,7 +6154,7 @@ d3deb54e          },
     "workspaceStrictnessBranchingMode": null,
     "workspaceStrictnessCodeReviewMode": "incline",
     "workspaceStrictnessGrade": "company",
-    "workspaceStrictnessProtectLauchingMode": null,
+    "workspaceStrictnessProtectLaunchingMode": null,
     "workspaceStrictnessPrototypeEmphasizingMode": "decisive",
     "workspaceStrictnessRevertMode": "P1",
     "workspaceStrictnessSentenceMode": "meaningful"
