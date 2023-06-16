@@ -190,7 +190,7 @@ class FlowLayout_394e246c extends Base {
     // const element1 = HTMLHelper.getElementById('ID');    /* accessing an element */
     // const control1 = ReactDOM.findDOMNode(this.refs.ID); /* accessing a component */
     // 
-    this.setCookie('consent', 'true', 365);
+    this.setCookie('consent', 'best', 365);
     this.forceUpdate();
     
   }
@@ -209,13 +209,26 @@ class FlowLayout_394e246c extends Base {
     }, 0);
     
   }
+
+  protected onLinkClick_725a03b9(event: Event) {
+
+    // Handle the event of onLinkClick (Use Limiting Experience) here:
+    // 
+    // const target = EventHelper.getCurrentElement(event); /* current invoking element */
+    // const element1 = HTMLHelper.getElementById('ID');    /* accessing an element */
+    // const control1 = ReactDOM.findDOMNode(this.refs.ID); /* accessing a component */
+    // 
+    this.setCookie('consent', 'limit', 365);
+    this.forceUpdate();
+    
+  }
   // <---Auto[Merging]
   
   // Auto[ClassEnd]--->
   protected render(): any {
     TestHelper.identify();
     return pug `
-      div(style=Object.assign({'fontFamily': 'Inter', 'paddingLeft': '0px', 'paddingRight': '0px', 'zIndex': '1000', display: (()=>{return (this.getCookie("consent") != "true") ? undefined : "none";})()}, this.props.forward && this.props.forward.styles || {}), internal-fsb-class="FlowLayout", className="internal-fsb-element internal-fsb-strict-layout " + (this.props.forward && this.props.forward.classes || ''), internal-fsb-guid="394e246c")
+      div(style=Object.assign({'fontFamily': 'Inter', 'paddingLeft': '0px', 'paddingRight': '0px', 'zIndex': '1000', display: (()=>{return (!this.getCookie("consent")) ? undefined : "none";})()}, this.props.forward && this.props.forward.styles || {}), internal-fsb-class="FlowLayout", className="internal-fsb-element internal-fsb-strict-layout " + (this.props.forward && this.props.forward.classes || ''), internal-fsb-guid="394e246c")
         .internal-fsb-element.translucent(style={'paddingBottom': '8px', 'paddingLeft': '10px', 'paddingRight': '10px', 'paddingTop': '8px', 'width': '100%'}, internal-fsb-guid="cc38545a")
           .internal-fsb-element(style={'float': 'right', 'paddingLeft': '5px', 'paddingRight': '0px'}, internal-fsb-guid="36088ed2")
             Button.btn.btn-primary.btn-sm.internal-fsb-element(style={'marginBottom': '3px', 'paddingBottom': '3px', 'paddingTop': '3px', 'width': '100%'}, type="button", onClick=this.onButtonClick_bbb5bbc7.bind(this), internal-fsb-guid="bbb5bbc7")
@@ -228,6 +241,10 @@ class FlowLayout_394e246c extends Base {
               | =
             a.internal-fsb-element(style={'MozTextDecorationLine': 'none', 'WebkitTextDecorationLine': 'none', 'display': 'inline-block', 'fontSize': '11px', 'fontWeight': '700', 'textDecorationLine': 'none', 'width': 'auto'}, href="https://www.softenstorm.com/stackblend-policy-and-terms", target="_blank", internal-fsb-guid="72d9dca5")
               .internal-fsb-element(dangerouslySetInnerHTML={__html: loc('More information')}, internal-fsb-guid="72d9dca5-text")
+            .internal-fsb-element(style={'color': 'rgba(136, 136, 136, 0)', 'display': 'inline-block', 'fontSize': '5px', 'paddingRight': '0px', 'width': 'auto'}, internal-fsb-guid="64bc25b7")
+              | =
+            a.internal-fsb-element(style={'MozTextDecorationLine': 'none', 'WebkitTextDecorationLine': 'none', 'display': 'inline-block', 'fontSize': '11px', 'fontWeight': '700', 'textDecorationLine': 'none', 'width': 'auto'}, href="javascript:void(0)", onClick=this.onLinkClick_725a03b9.bind(this), internal-fsb-guid="725a03b9")
+              .internal-fsb-element(dangerouslySetInnerHTML={__html: loc('Use limiting experience')}, internal-fsb-guid="434d6642")
         .col-12.internal-fsb-element(style={'display': 'none'}, dangerouslySetInnerHTML={__html: "<style type=\"text/css\">\n.translucent {\n  background-color: rgba(255, 255, 255, 0.85);\n}\n@supports (-webkit-backdrop-filter: blur(5px)) or (backdrop-filter: blur(5px)) {\n  .translucent {\n    background-color: rgba(255, 255, 255, 0.75);\n    backdrop-filter: blur(10px);\n    -webkit-backdrop-filter: blur(10px);\n    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);\n  }\n}\n::-webkit-scrollbar {\n  -webkit-appearance: none;\n  width: 7px;\n  height: 7px;\n}\n::-webkit-scrollbar-thumb {\n  border-radius: 4px;\n  background-color: rgba(0, 0, 0, 0.5);\n  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);\n}\n</style>"}, internal-fsb-guid="eca9828e")
     `
   }
