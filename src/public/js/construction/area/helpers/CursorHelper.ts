@@ -17,7 +17,17 @@ var CursorHelper = {
   moveCursorToTheLeft: (link: any=Math.random()) => {
   	const cursorElement = Accessories.cursor.getDOMNode();
   	const isSkipEntering = cursorElement.previousElementSibling && !HTMLHelper.hasClass(cursorElement.previousElementSibling, 'internal-fsb-allow-cursor') || undefined;
+    
+    let parentNodeOfHavingRemovedGuide = Accessories.guide.getDOMNode().parentNode;
+    if (parentNodeOfHavingRemovedGuide != null) {
+      parentNodeOfHavingRemovedGuide.removeChild(Accessories.guide.getDOMNode());
+    }
+    
     let {theAllowCursorElement, theAllowCursorPosition} = CursorHelper.recusiveFindOnTheLeft(Accessories.cursor.getDOMNode(), isSkipEntering);
+    
+    if (parentNodeOfHavingRemovedGuide) {
+      parentNodeOfHavingRemovedGuide.insertBefore(Accessories.guide.getDOMNode(), parentNodeOfHavingRemovedGuide.firstElementChild);
+    }
     
     if (theAllowCursorElement.tagName == 'TR') {
     	const cursorElement = Accessories.cursor.getDOMNode();
@@ -95,7 +105,16 @@ var CursorHelper = {
     ManipulationHelper.perform('move[cursor]', walkPath);
   },
   moveCursorToTheRight: (link: any=Math.random()) => {
+    let parentNodeOfHavingRemovedGuide = Accessories.guide.getDOMNode().parentNode;
+    if (parentNodeOfHavingRemovedGuide != null) {
+      parentNodeOfHavingRemovedGuide.removeChild(Accessories.guide.getDOMNode());
+    }
+    
     let {theAllowCursorElement, theAllowCursorPosition} = CursorHelper.recusiveFindOnTheRight(Accessories.cursor.getDOMNode());
+    
+    if (parentNodeOfHavingRemovedGuide) {
+      parentNodeOfHavingRemovedGuide.insertBefore(Accessories.guide.getDOMNode(), parentNodeOfHavingRemovedGuide.firstElementChild);
+    }
     
     if (theAllowCursorElement.tagName == 'TR') {
     	const cursorElement = Accessories.cursor.getDOMNode();
@@ -230,6 +249,11 @@ var CursorHelper = {
     return CursorHelper.createWalkPathForCursor();
   },
   findWalkPathForCursor: function() {
+    let parentNodeOfHavingRemovedGuide = Accessories.guide.getDOMNode().parentNode;
+    if (parentNodeOfHavingRemovedGuide != null) {
+      parentNodeOfHavingRemovedGuide.removeChild(Accessories.guide.getDOMNode());
+    }
+    
     let referenceElement = HTMLHelper.findTheParentInClassName('internal-fsb-element', Accessories.cursor.getDOMNode()) || HTMLHelper.getElementByClassName('internal-fsb-begin');
     if (referenceElement) {
       let allowCursorElements = (SINGLE_DOM_CONTAINER_ELEMENTS.indexOf(HTMLHelper.getAttribute(referenceElement, 'internal-fsb-class')) != -1) ?
@@ -242,17 +266,29 @@ var CursorHelper = {
           let positionInTheAllowCursorElement = [...theAllowCursorElement.children].indexOf(Accessories.cursor.getDOMNode());
           
           if (positionInTheAllowCursorElement != -1) {
+            if (parentNodeOfHavingRemovedGuide) {
+              parentNodeOfHavingRemovedGuide.insertBefore(Accessories.guide.getDOMNode(), parentNodeOfHavingRemovedGuide.firstElementChild);
+            }
+            
             return CursorHelper.createWalkPathForCursor(HTMLHelper.getAttribute(referenceElement, 'internal-fsb-guid'),
                                                         indexOfAllowCursorElement,
                                                         positionInTheAllowCursorElement);
           }
         } else {
+          if (parentNodeOfHavingRemovedGuide) {
+            parentNodeOfHavingRemovedGuide.insertBefore(Accessories.guide.getDOMNode(), parentNodeOfHavingRemovedGuide.firstElementChild);
+          }
+          
           return CursorHelper.createWalkPathForCursor(HTMLHelper.getAttribute(referenceElement, 'internal-fsb-guid'),
                                                       indexOfAllowCursorElement,
                                                       parseInt(Accessories.cursor.getDOMNode().style.left),
                                                       parseInt(Accessories.cursor.getDOMNode().style.top));
         }
       }
+    }
+    
+    if (parentNodeOfHavingRemovedGuide) {
+      parentNodeOfHavingRemovedGuide.insertBefore(Accessories.guide.getDOMNode(), parentNodeOfHavingRemovedGuide.firstElementChild);
     }
     
     return CursorHelper.createWalkPathForCursor();
@@ -262,6 +298,7 @@ var CursorHelper = {
     if (positionXInTheAllowCursorElement == null) {
       let children = [...HTMLHelper.getElementByClassName('internal-fsb-begin-layout').children];
       let count = (children.indexOf(Accessories.cursor.getDOMNode()) !== -1) ? children.length - 1 : children.length;
+      count = (children.indexOf(Accessories.guide.getDOMNode()) !== -1) ? count - 1 : count;
       let maximum = count;
       positionXInTheAllowCursorElement = maximum;
     }
@@ -292,12 +329,21 @@ var CursorHelper = {
             Accessories.cursor.getDOMNode().parentNode.removeChild(Accessories.cursor.getDOMNode());
           }
           
+          let parentNodeOfHavingRemovedGuide = Accessories.guide.getDOMNode().parentNode;
+          if (parentNodeOfHavingRemovedGuide != null) {
+            parentNodeOfHavingRemovedGuide.removeChild(Accessories.guide.getDOMNode());
+          }
+          
           let isTheAllowCursorElementASingleDomElement = (SINGLE_DOM_CONTAINER_ELEMENTS.indexOf(HTMLHelper.getAttribute(theAllowCursorElement, 'internal-fsb-class')) != -1);
           
           Accessories.cursor.getDOMNode().style.left = '-1.0px';
           Accessories.cursor.getDOMNode().style.top = isTheAllowCursorElementASingleDomElement ? '0px' : '0px';
           HTMLHelper.setAttribute(Accessories.cursor.getDOMNode(), 'internal-cursor-mode', 'relative');
           theAllowCursorElement.insertBefore(Accessories.cursor.getDOMNode(), theAllowCursorElement.children[walkPath[2]] || null);
+          
+          if (parentNodeOfHavingRemovedGuide) {
+            parentNodeOfHavingRemovedGuide.insertBefore(Accessories.guide.getDOMNode(), parentNodeOfHavingRemovedGuide.firstElementChild);
+          }
         } else {
           Accessories.cursor.getDOMNode().style.left = walkPath[2] + 'px';
           Accessories.cursor.getDOMNode().style.top = walkPath[3] + 'px';
