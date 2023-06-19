@@ -146,7 +146,7 @@ function removeAllPresetReferences(presetId: string, link: string) {
 })(window, window.document);
 
 var ManipulationHelper = {
-  perform: (name: string, content: any, remember: boolean=true, skipAfterPromise: boolean=false, link: any=false) => {
+  perform: (name: string, content: any, remember: boolean = true, skipAfterPromise: boolean = false, link: any = false, forceRemember: boolean = false) => {
     let accessory = null;
     let resolve = null;
     let promise = new Promise((_resolve) => { resolve = _resolve; });
@@ -267,6 +267,11 @@ var ManipulationHelper = {
       case 'move[cursor]':
       	[accessory, remember, link] = ManipulationHelper.handleMoveCursor(name, content, remember, promise, link);
       	
+      	if (forceRemember) {
+          remember = true;
+          accessory = content;
+        }
+        
       	preview = false;
         break;
       case 'move[element]':
@@ -316,7 +321,13 @@ var ManipulationHelper = {
       		alert('Please unlock the layer first.');
       		remember = false;
       	} else {
+      	  link = link || Math.random();
+      	  
       		[accessory, remember, link] = ManipulationHelper.handleDeleteElement(name, content, remember, promise, link);
+      		promise.then(() => {
+            const walkPath = CursorHelper.findWalkPathForCursor();
+            ManipulationHelper.perform('move[cursor]', walkPath, true, false, link, true);
+          });
       	}
       	
         break;
@@ -343,7 +354,13 @@ var ManipulationHelper = {
       		alert('Please unlock the layer first.');
       		remember = false;
       	} else {
+      	  link = link || Math.random();
+      	  
       		[accessory, remember, link] = ManipulationHelper.handleDeleteElement(name, content, remember, promise, link, false, true);
+      		promise.then(() => {
+            const walkPath = CursorHelper.findWalkPathForCursor();
+            ManipulationHelper.perform('move[cursor]', walkPath, true, false, link, true);
+          });
       	}
       	
         break;
@@ -370,7 +387,14 @@ var ManipulationHelper = {
       		alert('Please unlock the layer first.');
       		remember = false;
       	} else {
+      	  link = link || Math.random();
+      	  
       		[accessory, remember, link] = ManipulationHelper.handleDeleteElement(name, content, remember, promise, link, true);
+      		
+      		promise.then(() => {
+            const walkPath = CursorHelper.findWalkPathForCursor();
+            ManipulationHelper.perform('move[cursor]', walkPath, true, false, link, true);
+          });
       	}
       	
         break;
