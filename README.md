@@ -121,7 +121,7 @@ You might also reset the project files by cloning a boilerplate from the release
 
 ## Enhanced License information of all using images
 
-Indicating on ShutterStock, the purchased digital photos used on StackBlend Studio by SoftenStorm (on the master branch) have an ability to use in digital templates, which include being forked or cloned the StackBlend Studio directly from GitHub, reserved under the agreement on our AWS S3 service. You must not download the photos, redistribute, or promote your customized studio using the photos from our service. Please change all of them or delete all the content. Otherwise, you may subject to any local law enforcement.
+Indicating on ShutterStock, the purchased digital photos used on StackBlend Studio by SoftenStorm have an ability to use in digital templates, which include being forked or cloned the StackBlend Studio directly from GitHub, and they are watermasked. You must not redistribute or promote your customized studio using these photos from your forked or cloned repository, including removing the watermask from the photos. Please change all of them or delete all the content. Otherwise, you may subject to any local law enforcement.
 
 ## Questions?
 
