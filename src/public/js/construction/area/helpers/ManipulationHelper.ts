@@ -208,11 +208,6 @@ var ManipulationHelper = {
 			      		if (indexOfAllowCursorElement != -1) {
 			            let children = [...theAllowCursorElement.children];
 			            let index = [...theAllowCursorElement.children].indexOf(element);
-			            let cursorIndex = [...theAllowCursorElement.children].indexOf(Accessories.cursor.getDOMNode());
-			            
-			            if (cursorIndex == -1 || cursorIndex >= index) {
-			            	index += 1;
-			            }
 			            
 			            let walkPath = CursorHelper.createWalkPathForCursor(
 			            	HTMLHelper.getAttribute(referenceElement, 'internal-fsb-guid'),
