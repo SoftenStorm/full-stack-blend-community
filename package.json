@@ -51,7 +51,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "express-force-https": "^1.0.0",
     "express-session": "^1.16.2",
     "geoip-lite": "^1.4.6",
